@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { Compass, ShieldCheck, Network, Rocket, ArrowUpRight } from 'lucide-react'
 
 const pillars = [
@@ -32,7 +32,7 @@ const pillars = [
   },
 ]
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -40,12 +40,12 @@ const containerVariants = {
   },
 }
 
-const cardVariants: import('framer-motion').Variants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 }
 
