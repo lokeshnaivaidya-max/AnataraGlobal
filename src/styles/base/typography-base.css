@@ -1,0 +1,131 @@
+/* ==========================================================================
+   src/styles/base/typography-base.css
+   Base Element Typography — Antara Global
+   Default styles for bare HTML elements, built from token layer only
+   ========================================================================== */
+
+body {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  color: var(--color-charcoal);
+  background-color: var(--color-warm-white);
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-h1);
+  line-height: var(--leading-heading-tight);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-charcoal);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-h2);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-charcoal);
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading-loose);
+  letter-spacing: 0;
+  color: var(--color-charcoal);
+}
+
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-h4);
+  line-height: var(--leading-h4);
+  letter-spacing: 0;
+  color: var(--color-charcoal);
+}
+
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-h4);
+  color: var(--color-charcoal);
+}
+
+p {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-slate);
+  max-width: 65ch;
+}
+
+small {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--color-slate);
+}
+
+a {
+  font-weight: var(--font-weight-medium);
+  transition: color var(--duration-fast) var(--ease-in-out-soft);
+}
+
+strong,
+b {
+  font-weight: var(--font-weight-semibold);
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+}
+
+blockquote {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-h4);
+  line-height: var(--leading-heading-loose);
+  color: var(--color-charcoal);
+  border-left: 2px solid var(--color-gold);
+  padding-left: var(--space-lg);
+}
+
+label {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-body-sm);
+  color: var(--color-charcoal);
+}
+
+/* Data/numeric emphasis — opt-in utility for figures, stats, tickers */
+.text-data {
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0;
+}
+
+/* Eyebrow/kicker label — opt-in utility for tags above headlines */
+.text-tag {
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-tag);
+  line-height: var(--leading-tag);
+  letter-spacing: var(--tracking-tag);
+  text-transform: uppercase;
+}
