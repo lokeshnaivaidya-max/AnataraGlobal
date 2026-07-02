@@ -1,0 +1,9 @@
+/* ==========================================================================
+   src/styles/primitives/index.css
+   Primitives Layer — Master Import
+   Antara Global — reusable low-level effects shared across components
+   ========================================================================== */
+
+@import './glass.css';
+@import './gradients.css';
+@import './focus-ring.css';

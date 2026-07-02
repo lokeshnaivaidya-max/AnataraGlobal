@@ -1,0 +1,101 @@
+/* ==========================================================================
+   src/styles/primitives/glass.css
+   Glassmorphism Primitives — Antara Global
+   Accent-only glass recipes. Apply to floating cards, nav, CTA panels —
+   never to full sections or full-page backgrounds.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------
+   Light Glass — for glass elements sitting over light backgrounds/photos
+---------------------------------------------------------------------- */
+.glass-light {
+  background: var(--color-glass-light-bg);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid var(--color-glass-light-border);
+  box-shadow: var(--shadow-md);
+}
+
+/* ----------------------------------------------------------------------
+   Dark Glass — for glass elements sitting over navy/dark backgrounds
+---------------------------------------------------------------------- */
+.glass-dark {
+  background: var(--color-glass-dark-bg);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--color-glass-dark-border);
+  box-shadow: var(--shadow-md);
+}
+
+/* ----------------------------------------------------------------------
+   Glass Reflection — one-time diagonal highlight sweep on hover.
+   Apply alongside .glass-light or .glass-dark on hoverable panels.
+---------------------------------------------------------------------- */
+.glass-reflective {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-reflective::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 45%,
+    rgba(255, 255, 255, 0.25) 55%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.glass-reflective:hover::before {
+  animation: glass-reflection-sweep 600ms var(--ease-premium) 1;
+}
+
+@keyframes glass-reflection-sweep {
+  from {
+    left: -150%;
+  }
+  to {
+    left: 150%;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Mobile performance fallback — reduce blur cost on smaller devices
+---------------------------------------------------------------------- */
+@media (max-width: 639px) {
+  .glass-light,
+  .glass-dark {
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Reduced motion — disable the reflection sweep entirely
+---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .glass-reflective::before {
+    display: none;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Fallback for browsers without backdrop-filter support
+---------------------------------------------------------------------- */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-light {
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .glass-dark {
+    background: rgba(15, 30, 54, 0.92);
+  }
+}
