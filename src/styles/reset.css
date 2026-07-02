@@ -1,0 +1,226 @@
+/* ==========================================================================
+   src/styles/reset.css
+   Modern CSS Reset — Antara Global
+   Cross-browser, accessibility-preserving, optimized for React + Tailwind v4
+   ========================================================================== */
+
+/* 1. Use a more intuitive box-sizing model everywhere */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin/padding across all elements */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. Root-level defaults */
+html {
+  /* Prevent font scaling in landscape on iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+  /* Smooth scrolling, respects reduced motion via override below */
+  scroll-behavior: smooth;
+
+  /* Prevent horizontal scroll from stray full-bleed elements */
+  overflow-x: hidden;
+
+  /* Consistent tab sizing across browsers */
+  tab-size: 4;
+
+  /* Avoid iOS font boosting inconsistencies */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 4. Body defaults */
+body {
+  min-height: 100svh;
+  line-height: 1.5;
+  overflow-x: hidden;
+  isolation: isolate;
+}
+
+/* 5. Media elements default to block and never overflow their container */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 6. Preserve aspect ratio on images with explicit dimensions */
+img {
+  object-fit: cover;
+}
+
+/* 7. Inherit fonts for form controls (major cross-browser inconsistency) */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+/* 8. Remove default button styling while preserving interactivity */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* 9. Reset textarea resize behavior to be intentional, not accidental */
+textarea {
+  resize: vertical;
+}
+
+/* 10. Remove default fieldset/legend browser styling */
+fieldset {
+  border: none;
+  min-width: 0;
+}
+
+/* 11. Normalize anchor defaults; color/decoration handled by components */
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 12. Lists: remove default markers only where a component opts in.
+   Kept semantic by default for accessibility (screen readers announce
+   list semantics regardless of list-style, so this is safe). */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 13. Table resets — collapse borders, inherit spacing intentionally */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+/* 14. Remove default blockquote/figure indentation */
+blockquote,
+figure {
+  margin: 0;
+}
+
+/* 15. Prevent long unbroken strings (URLs, emails) from breaking layout */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* 16. Balance heading text wrapping where supported */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+/* 17. Prevent orphans in body copy where supported */
+p {
+  text-wrap: pretty;
+}
+
+/* 18. Root stacking context + font rendering handled by app-level theme;
+   this file intentionally sets no font-family/color so tokens own it. */
+
+/* 19. Hidden attribute must always win, even against display utilities */
+[hidden] {
+  display: none !important;
+}
+
+/* 20. Disable animations/transitions for users who request reduced motion.
+   This is the single global accessibility override — component-level
+   motion utilities must still individually respect this media query
+   for JS-driven (Framer Motion) animations. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 21. Respect OS-level forced-colors / high-contrast mode */
+@media (forced-colors: active) {
+  * {
+    forced-color-adjust: auto;
+  }
+}
+
+/* 22. Focus visibility — never remove outlines without a replacement.
+   Default fallback ring; component-level focus-ring.css refines this
+   per interactive element. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* 23. Selection styling reset (brand-specific selection color applied
+   at token/theme layer, not here) */
+::selection {
+  background-color: rgba(15, 30, 54, 0.92);
+  color: #fcfcfd;
+}
+
+/* 24. Remove default number input spinners for custom form styling */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* 25. Normalize search input cancel button across WebKit browsers */
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* 26. Root React mount point — full viewport, isolated stacking context */
+#root {
+  isolation: isolate;
+  min-height: 100svh;
+}

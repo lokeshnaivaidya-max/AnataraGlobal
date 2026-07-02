@@ -1,0 +1,50 @@
+· CSS
+/* ==========================================================================
+   src/styles/tokens/spacing.css
+   Spacing Design Tokens — Antara Global
+   Tailwind v4 @theme layer — 4px base scale, container widths, section rhythm
+   ========================================================================== */
+ 
+@theme {
+  /* ----------------------------------------------------------------------
+     Core Spacing Scale (4px base unit)
+  ---------------------------------------------------------------------- */
+  --space-xs: 0.25rem;    /* 4px */
+  --space-sm: 0.5rem;     /* 8px */
+  --space-md: 1rem;       /* 16px */
+  --space-lg: 1.5rem;     /* 24px */
+  --space-xl: 2rem;       /* 32px */
+  --space-2xl: 3rem;      /* 48px */
+  --space-3xl: 4rem;      /* 64px */
+  --space-4xl: 6rem;      /* 96px */
+  --space-5xl: 8rem;      /* 128px */
+  --space-6xl: 10rem;     /* 160px */
+  --space-7xl: 12.5rem;   /* 200px */
+ 
+  /* ----------------------------------------------------------------------
+     Container Widths
+  ---------------------------------------------------------------------- */
+  --container-content: 80rem;   /* 1280px — editorial content */
+  --container-feature: 90rem;   /* 1440px — full-bleed feature sections */
+ 
+  /* ----------------------------------------------------------------------
+     Grid
+  ---------------------------------------------------------------------- */
+  --grid-columns: 12;
+  --grid-gutter-desktop: 1.5rem;  /* 24px */
+  --grid-gutter-tablet: 1rem;     /* 16px */
+  --grid-margin-mobile: 1rem;     /* 16px */
+ 
+  /* ----------------------------------------------------------------------
+     Section Vertical Rhythm (padding-block)
+  ---------------------------------------------------------------------- */
+  --section-padding-desktop: var(--space-6xl); /* 160px */
+  --section-padding-tablet: 5rem;              /* 80px */
+  --section-padding-mobile: 3.5rem;            /* 56px */
+ 
+  /* ----------------------------------------------------------------------
+     Minimum Tap Target (accessibility)
+  ---------------------------------------------------------------------- */
+  --tap-target-min: 2.75rem; /* 44px */
+}
+ 

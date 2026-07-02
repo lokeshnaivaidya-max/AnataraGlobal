@@ -1,0 +1,29 @@
+/* ==========================================================================
+   src/styles/tokens/motion.css
+   Motion Design Tokens — Antara Global
+   Tailwind v4 @theme layer — easing curves and duration scale
+   ========================================================================== */
+
+@theme {
+  /* ----------------------------------------------------------------------
+     Easing Curves
+  ---------------------------------------------------------------------- */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);      /* default — fast start, soft settle */
+  --ease-in-out-soft: cubic-bezier(0.4, 0, 0.2, 1);   /* hover states, toggles */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);              /* animated numbers */
+
+  /* ----------------------------------------------------------------------
+     Duration Scale
+  ---------------------------------------------------------------------- */
+  --duration-instant: 100ms;   /* icon/color micro-feedback */
+  --duration-fast: 200ms;      /* hover lifts, button states */
+  --duration-base: 400ms;      /* card reveals, small transitions */
+  --duration-slow: 700ms;      /* section/text reveals */
+  --duration-cinematic: 1200ms; /* hero entrance, large image reveals */
+
+  /* ----------------------------------------------------------------------
+     Ambient Loop Durations
+  ---------------------------------------------------------------------- */
+  --duration-mesh-drift: 75s;   /* background mesh / gradient flow loop */
+  --duration-float: 5s;         /* floating element vertical drift loop */
+}
