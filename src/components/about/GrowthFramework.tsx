@@ -6,28 +6,28 @@ const pillars = [
     icon: Compass,
     tag: '01',
     title: 'Strategy',
-    desc: 'Clarifying vision, positioning, and a defensible growth roadmap so every decision compounds toward the same outcome.',
+    desc: 'Helping businesses build strong foundations through structured planning, business advisory, and growth strategies.',
     accent: 'gold',
   },
   {
     icon: ShieldCheck,
     tag: '02',
     title: 'Readiness',
-    desc: 'Building investor-grade governance, financial hygiene, and due-diligence infrastructure ahead of capital conversations.',
+    desc: 'Preparing businesses for investment, partnerships, and expansion opportunities.',
     accent: 'emerald',
   },
   {
     icon: Network,
     tag: '03',
     title: 'Connectivity',
-    desc: 'Opening direct access to vetted advisors, venture capital, angel syndicates, and strategic ecosystem partners.',
+    desc: 'Creating meaningful connections between businesses, investors, advisors, and ecosystem partners.',
     accent: 'gold',
   },
   {
     icon: Rocket,
     tag: '04',
     title: 'Scale',
-    desc: 'Installing repeatable systems and leadership structures that let the business grow without founder bottlenecks.',
+    desc: 'Supporting sustainable growth and long-term business value creation.',
     accent: 'emerald',
   },
 ]
@@ -67,12 +67,12 @@ export default function GrowthFramework() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="h-px w-8 bg-gold" />
             <span className="text-xs font-semibold tracking-widest uppercase text-gold">
-              The Growth Framework
+              Positioning Pillars
             </span>
             <span className="h-px w-8 bg-gold" />
           </div>
           <h2 id="growth-framework-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-deep-navy tracking-tight">
-            Four Pillars of Structured Growth
+            Our Growth Framework
           </h2>
           <p className="mt-4 text-medium-gray text-base leading-relaxed">
             A disciplined, repeatable methodology that moves a business from ambiguity to institutional-grade scale.
