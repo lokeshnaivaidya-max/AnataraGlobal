@@ -4,6 +4,8 @@ import VisionMission from '../components/about/VisionMission'
 import PhilosophySection from '../components/about/PhilosophySection'
 import GrowthFramework from '../components/about/GrowthFramework'
 import ServicesSection from '../components/about/ServicesSection'
+import DifferentiatorSection from '../components/about/DifferentiatorSection'
+import CoreValuesSection from '../components/about/CoreValuesSection'
 import FutureRoadmap from '../components/about/FutureRoadmap'
 import ResourcesSection from '../components/about/ResourcesSection'
 import BrandClosingCTA from '../components/about/BrandClosingCTA'
@@ -16,6 +18,8 @@ export default function About() {
       <WhoWeAre />
       <VisionMission />
       <PhilosophySection />
+      <DifferentiatorSection />
+      <CoreValuesSection />
       <GrowthFramework />
       <ServicesSection />
       <FutureRoadmap />
