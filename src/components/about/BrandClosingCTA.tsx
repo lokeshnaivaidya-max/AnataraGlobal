@@ -24,13 +24,16 @@ export default function BrandClosingCTA() {
             </span>
           </div>
 
+          {/* Short Company Description */}
           <p className="text-sm sm:text-base text-white/60 leading-relaxed max-w-3xl mx-auto">
-            Antara Global is a strategic growth and capital-connectivity institution, built to structure businesses,
-            strengthen investor readiness, and connect founders to a trusted global ecosystem of advisors, capital,
-            and strategic partners.
+            Antara Global is a strategic business advisory, venture readiness, and capital connectivity
+            ecosystem helping startups and MSMEs become growth-ready and investment-ready. Through expert
+            guidance, financial knowledge, fundraising support, strategic partnerships, and investor
+            connectivity, Antara Global empowers businesses to unlock sustainable growth opportunities.
           </p>
         </motion.div>
 
+        {/* Closing Brand Statement */}
         <motion.h2
           id="closing-heading"
           initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
@@ -39,39 +42,63 @@ export default function BrandClosingCTA() {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white"
         >
-          Structured today.
+          Democratizing Business Knowledge.
           <br />
+          Connecting Opportunities.{' '}
           <span className="text-gradient-premium bg-gradient-to-r from-gold via-gold-light to-emerald bg-clip-text text-transparent">
-            Investable tomorrow.
+            Enabling Growth.
           </span>
         </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-6 text-sm sm:text-base text-white/60 leading-relaxed max-w-2xl mx-auto"
+        >
+          Antara Global exists to democratize business and financial knowledge, strengthen entrepreneurial
+          ecosystems, and create meaningful connections between businesses, advisors, investors, and
+          opportunities.
+        </motion.p>
+
+        {/* CTA Section */}
+        <motion.h3
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-14 text-lg sm:text-xl font-bold text-white tracking-tight"
+        >
+          Build Your Future With Antara Global
+        </motion.h3>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ duration: 0.6, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <motion.a
-            href="#contact"
+            href="/contact/partner-with-us"
             whileHover={{ y: -3, boxShadow: '0 12px 40px rgba(184,138,43,0.35)' }}
             whileTap={{ scale: 0.98 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-gold to-gold-dark px-8 py-4 text-sm font-bold text-white shadow-lg shadow-gold/20"
           >
-            Start Your Growth Journey
+            Partner With Us
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
           </motion.a>
 
           <motion.a
-            href="#contact"
+            href="/about"
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.98 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl px-8 py-4 text-sm font-bold text-white hover:bg-white/10 hover:border-white/25 transition-colors duration-300"
           >
-            Talk to an Advisor
+            Explore Our Ecosystem
           </motion.a>
         </motion.div>
       </div>

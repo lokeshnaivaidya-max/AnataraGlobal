@@ -5,26 +5,41 @@ const phases = [
   {
     icon: Flag,
     phase: 'Phase 01',
-    title: 'Foundation',
-    period: 'Establish the Framework',
-    desc: 'Standardize advisory delivery, onboard founding ecosystem partners, and launch the core readiness methodology.',
-    points: ['Advisory framework live', 'Founding partner cohort', 'Governance playbooks'],
+    title: 'Foundation & Advisory Ecosystem',
+    desc: 'Building the foundation by helping businesses become structured, prepared, and growth-ready.',
+    points: [
+      'Advisory Services',
+      'Funding Readiness Assessments',
+      'Fundraising Support',
+      'Workshops & Events',
+      'Knowledge Hub',
+      'Partner Network Development',
+    ],
   },
   {
     icon: Building2,
     phase: 'Phase 02',
-    title: 'Expansion',
-    period: 'Deepen the Ecosystem',
-    desc: 'Scale the capital network, widen sector coverage, and formalize structured deal-flow between founders and investors.',
-    points: ['150+ investor connections', 'Sector-specific playbooks', 'Regional advisory hubs'],
+    title: 'Digital Ecosystem Expansion',
+    desc: 'Creating technology-enabled tools to improve business collaboration and ecosystem access.',
+    points: [
+      'Founder Dashboard',
+      'Investor Engagement Portal',
+      'Advisory Progress Tracking',
+      'Document Management System',
+      'Ecosystem Marketplace',
+    ],
   },
   {
     icon: Globe2,
     phase: 'Phase 03',
-    title: 'Global Scale',
-    period: 'Institutionalize the Platform',
-    desc: 'Operate as a globally recognized growth and capital-connectivity institution trusted by founders and institutions alike.',
-    points: ['Cross-border capital access', 'Institutional-grade platform', 'Global partner network'],
+    title: 'Global Growth Network',
+    desc: 'Building a global platform connecting businesses, knowledge, innovation, and capital.',
+    points: [
+      'Venture Readiness Platform',
+      'Global Strategic Partnerships',
+      'Innovation & Capital Network Expansion',
+      'Technology-Enabled Ecosystem Services',
+    ],
   },
 ]
 
@@ -50,7 +65,7 @@ export default function FutureRoadmap() {
             <span className="h-px w-8 bg-gold" />
           </div>
           <h2 id="roadmap-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-deep-navy tracking-tight">
-            Our Path to Global Scale
+            Building The Future Business Ecosystem
           </h2>
           <p className="mt-4 text-medium-gray text-base leading-relaxed">
             A deliberate, three-phase expansion designed to compound trust, reach, and capital access over time.
@@ -101,7 +116,6 @@ export default function FutureRoadmap() {
                     </div>
 
                     <h3 className="text-xl font-extrabold text-deep-navy">{item.title}</h3>
-                    <p className="mt-1 text-xs font-semibold text-emerald uppercase tracking-wide">{item.period}</p>
                     <p className="mt-4 text-xs text-medium-gray leading-relaxed">{item.desc}</p>
 
                     <ul className="mt-6 space-y-2.5 pt-6 border-t border-border-gray">
