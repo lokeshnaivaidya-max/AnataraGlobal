@@ -237,8 +237,8 @@ export default function Ecosystem() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
               <span className="text-xs font-semibold tracking-widest uppercase text-gold">Ecosystem In Action</span>
@@ -262,8 +262,8 @@ export default function Ecosystem() {
 
             {/* Interactive Step Viewer */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="rounded-3xl bg-gradient-to-br from-deep-navy via-deep-navy to-deep-navy-dark border border-white/5 p-6 sm:p-8 shadow-2xl relative overflow-hidden"
             >

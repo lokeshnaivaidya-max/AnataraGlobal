@@ -75,8 +75,8 @@ export default function WhoWeAre() {
           {/* Left Column: Who We Are Text */}
           <div className="lg:col-span-5">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
@@ -116,8 +116,8 @@ export default function WhoWeAre() {
           {/* Right Column: Interactive Ecosystem Board */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="rounded-3xl border border-border-gray bg-light-gray p-6 sm:p-8 shadow-xl relative overflow-hidden"
