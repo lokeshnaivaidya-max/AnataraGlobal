@@ -28,9 +28,10 @@ export const navConfig: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
-  { label: 'Solutions', href: '/solutions' },
+  { label: 'Target Audience', href: '/target-audience' },
   { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'Knowledge Hub', href: '/knowledge' },
+  { label: 'What Makes Us Different', href: '/differentiator' },
+  { label: 'Core Values', href: '/core-values' },
   { label: 'Contact', href: '/contact' },
 ]
 
