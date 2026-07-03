@@ -41,6 +41,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
@@ -49,6 +50,12 @@
     background-color: #ffffff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  #app {
+    min-height: 100vh;
+    overflow-x: clip;
   }
 }
 
@@ -125,11 +132,6 @@
 /* ==========================================================================
    Navbar utilities
    ========================================================================== */
-
-/* Prevent page-content jump from fixed navbar */
-body {
-  padding-top: 72px; /* matches expanded nav height */
-}
 
 /* Desktop nav trigger — relative positioning for the gold underline */
 .nav-trigger {
