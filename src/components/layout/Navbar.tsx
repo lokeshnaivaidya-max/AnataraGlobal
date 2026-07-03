@@ -12,7 +12,6 @@ import { Link } from 'wouter'
 import {
   Menu,
   X,
-  ArrowRight,
   Sparkles,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -116,22 +115,6 @@ export default function Navbar() {
 
           {/* ── Right CTAs ── */}
           <div className="hidden lg:flex items-center gap-3 shrink-0">
-            {/* Secondary CTA */}
-            <a
-              href="/contact/partner-with-us"
-              className="text-xs font-bold uppercase tracking-wider text-medium-gray hover:text-deep-navy transition-colors duration-200 border border-border-gray/70 hover:border-deep-navy/30 rounded-xl px-4 py-2"
-            >
-              Become a Partner
-            </a>
-
-            {/* Primary CTA */}
-            <a
-              href="/contact/book-consultation"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-dark px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:shadow-gold/30 hover:scale-105 transition-all duration-300"
-            >
-              Book a Consultation
-              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform duration-200" />
-            </a>
           </div>
 
           {/* ── Mobile hamburger ── */}
@@ -211,27 +194,7 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Drawer footer CTAs */}
-            <div className="border-t border-border-gray/60 px-4 py-5 flex flex-col gap-3">
-              {/* Primary CTA */}
-              <a
-                href="/contact/book-consultation"
-                onClick={closeMobile}
-                className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-dark px-5 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"
-              >
-                Book a Consultation
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform duration-200" />
-              </a>
 
-              {/* Secondary CTA */}
-              <a
-                href="/contact/partner-with-us"
-                onClick={closeMobile}
-                className="flex items-center justify-center rounded-xl border border-deep-navy/20 px-5 py-3 text-sm font-bold uppercase tracking-wider text-deep-navy hover:bg-deep-navy/5 transition-all duration-200"
-              >
-                Become a Partner
-              </a>
-            </div>
           </motion.aside>
         )}
       </AnimatePresence>
