@@ -12,11 +12,21 @@ import {
   Sparkles,
   ChevronRight,
   LogOut,
+  BarChart3,
+  ClipboardCheck,
+  Store,
+  Briefcase,
 } from 'lucide-react'
 import { useAuth } from '../../lib/auth-context'
 import type { ReactNode } from 'react'
 
-const navItems = [
+export interface DashboardNavItem {
+  label: string
+  href: string
+  icon: typeof LayoutDashboard
+}
+
+export const founderNav: DashboardNavItem[] = [
   { label: 'Dashboard', href: '/dashboard/founder', icon: LayoutDashboard },
   { label: 'My Profile', href: '/dashboard/founder/profile', icon: User },
   { label: 'Startup', href: '/dashboard/founder/startup', icon: Building2 },
@@ -25,10 +35,21 @@ const navItems = [
   { label: 'KYC', href: '/dashboard/founder/kyc', icon: ShieldCheck },
 ]
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export const msmeNav: DashboardNavItem[] = [
+  { label: 'Dashboard', href: '/dashboard/msme', icon: LayoutDashboard },
+  { label: 'Business Details', href: '/dashboard/msme/business', icon: Store },
+  { label: 'Financial Health', href: '/dashboard/msme/financial-health', icon: BarChart3 },
+  { label: 'Compliance', href: '/dashboard/msme/compliance', icon: ClipboardCheck },
+  { label: 'Employees & Export', href: '/dashboard/msme/employees', icon: Briefcase },
+  { label: 'Documents', href: '/dashboard/msme/documents', icon: FileText },
+]
+
+export default function DashboardLayout({ children, navItems }: { children: ReactNode; navItems: DashboardNavItem[] }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [location] = useLocation()
   const { user, logout } = useAuth()
+
+  const dashboardName = location.startsWith('/dashboard/founder') ? 'Founder Dashboard' : 'MSME Dashboard'
 
   return (
     <div className="flex min-h-screen bg-light-gray">
@@ -115,7 +136,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-medium-gray/50" />
-            <span className="text-deep-navy font-semibold">Founder Dashboard</span>
+            <span className="text-deep-navy font-semibold">{dashboardName}</span>
           </div>
         </header>
 
