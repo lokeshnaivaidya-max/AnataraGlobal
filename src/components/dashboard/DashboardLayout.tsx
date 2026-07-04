@@ -25,6 +25,9 @@ import {
   TrendingUp,
   BookOpen,
   CheckSquare,
+  Handshake,
+  Banknote,
+  CreditCard,
 } from 'lucide-react'
 import { useAuth } from '../../lib/auth-context'
 import type { ReactNode } from 'react'
@@ -52,6 +55,10 @@ export const founderNav: DashboardNavItem[] = [
   { label: 'Knowledge Hub', href: '/dashboard/knowledge', icon: BookOpen },
   { label: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare },
   { label: 'CRM', href: '/dashboard/crm', icon: TrendingUp },
+  { label: 'Partner Network', href: '/dashboard/partners', icon: Handshake },
+  { label: 'Capital Connectivity', href: '/dashboard/capital', icon: Banknote },
+  { label: 'Payments', href: '/dashboard/payments', icon: CreditCard },
+  { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
 ]
 
 export const msmeNav: DashboardNavItem[] = [
