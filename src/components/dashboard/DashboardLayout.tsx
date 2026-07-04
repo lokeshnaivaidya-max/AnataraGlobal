@@ -16,6 +16,7 @@ import {
   ClipboardCheck,
   Store,
   Briefcase,
+  Gauge,
 } from 'lucide-react'
 import { useAuth } from '../../lib/auth-context'
 import type { ReactNode } from 'react'
@@ -33,6 +34,7 @@ export const founderNav: DashboardNavItem[] = [
   { label: 'Team', href: '/dashboard/founder/team', icon: Users },
   { label: 'Documents', href: '/dashboard/founder/documents', icon: FileText },
   { label: 'KYC', href: '/dashboard/founder/kyc', icon: ShieldCheck },
+  { label: 'Venture Readiness', href: '/dashboard/founder/venture-readiness', icon: Gauge },
 ]
 
 export const msmeNav: DashboardNavItem[] = [
