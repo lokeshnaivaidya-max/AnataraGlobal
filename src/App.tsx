@@ -27,6 +27,7 @@ import StartupPage from './pages/dashboard/founder/StartupPage'
 import TeamPage from './pages/dashboard/founder/TeamPage'
 import DocumentsPage from './pages/dashboard/founder/DocumentsPage'
 import KYCPage from './pages/dashboard/founder/KYCPage'
+import VentureReadiness from './pages/dashboard/founder/VentureReadiness'
 import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
 import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
 import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
@@ -88,6 +89,13 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={founderNav}>
               <KYCPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/venture-readiness">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <VentureReadiness />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
