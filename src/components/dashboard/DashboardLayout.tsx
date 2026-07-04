@@ -17,6 +17,8 @@ import {
   Store,
   Briefcase,
   Gauge,
+  Calendar,
+  UserCheck,
 } from 'lucide-react'
 import { useAuth } from '../../lib/auth-context'
 import type { ReactNode } from 'react'
@@ -35,6 +37,8 @@ export const founderNav: DashboardNavItem[] = [
   { label: 'Documents', href: '/dashboard/founder/documents', icon: FileText },
   { label: 'KYC', href: '/dashboard/founder/kyc', icon: ShieldCheck },
   { label: 'Venture Readiness', href: '/dashboard/founder/venture-readiness', icon: Gauge },
+  { label: 'Advisors', href: '/dashboard/founder/advisors', icon: UserCheck },
+  { label: 'My Sessions', href: '/dashboard/founder/sessions', icon: Calendar },
 ]
 
 export const msmeNav: DashboardNavItem[] = [
