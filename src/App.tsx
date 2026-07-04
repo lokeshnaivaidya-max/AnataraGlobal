@@ -1,4 +1,4 @@
-import { Route, Switch } from 'wouter'
+import { Route, Switch, useLocation } from 'wouter'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import About from './pages/About'
@@ -20,6 +20,14 @@ import MfaVerify from './pages/auth/MfaVerify'
 import DeviceManagement from './pages/auth/DeviceManagement'
 import SessionManagement from './pages/auth/SessionManagement'
 import OAuthCallback from './pages/auth/OAuthCallback'
+import DashboardHome from './pages/dashboard/founder/DashboardHome'
+import ProfilePage from './pages/dashboard/founder/ProfilePage'
+import StartupPage from './pages/dashboard/founder/StartupPage'
+import TeamPage from './pages/dashboard/founder/TeamPage'
+import DocumentsPage from './pages/dashboard/founder/DocumentsPage'
+import KYCPage from './pages/dashboard/founder/KYCPage'
+import DashboardLayout from './components/dashboard/DashboardLayout'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuth } from './lib/auth-context'
 
 function NavbarWithAuth() {
@@ -28,6 +36,58 @@ function NavbarWithAuth() {
 }
 
 export default function App() {
+  const [location] = useLocation()
+  const isDashboard = location.startsWith('/dashboard')
+
+  if (isDashboard) {
+    return (
+      <Switch>
+        <Route path="/dashboard/founder">
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DashboardHome />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/profile">
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ProfilePage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/startup">
+          <ProtectedRoute>
+            <DashboardLayout>
+              <StartupPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/team">
+          <ProtectedRoute>
+            <DashboardLayout>
+              <TeamPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/documents">
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DocumentsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/kyc">
+          <ProtectedRoute>
+            <DashboardLayout>
+              <KYCPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+      </Switch>
+    )
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <NavbarWithAuth />
