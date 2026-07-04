@@ -19,6 +19,8 @@ import {
   Gauge,
   Calendar,
   UserCheck,
+  Settings,
+  Shield,
 } from 'lucide-react'
 import { useAuth } from '../../lib/auth-context'
 import type { ReactNode } from 'react'
@@ -48,6 +50,12 @@ export const msmeNav: DashboardNavItem[] = [
   { label: 'Compliance', href: '/dashboard/msme/compliance', icon: ClipboardCheck },
   { label: 'Employees & Export', href: '/dashboard/msme/employees', icon: Briefcase },
   { label: 'Documents', href: '/dashboard/msme/documents', icon: FileText },
+]
+
+export const adminNav: DashboardNavItem[] = [
+  { label: 'Dashboard', href: '/dashboard/admin', icon: Shield },
+  { label: 'Users', href: '/dashboard/admin/users', icon: Users },
+  { label: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
 ]
 
 export default function DashboardLayout({ children, navItems }: { children: ReactNode; navItems: DashboardNavItem[] }) {
