@@ -1,6 +1,7 @@
 import { Route, Switch, useLocation } from 'wouter'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import LoadingScreen from './components/layout/LoadingScreen'
 import About from './pages/About'
 import Services from './pages/Services'
 import TargetAudience from './pages/TargetAudience'
@@ -26,7 +27,7 @@ import StartupPage from './pages/dashboard/founder/StartupPage'
 import TeamPage from './pages/dashboard/founder/TeamPage'
 import DocumentsPage from './pages/dashboard/founder/DocumentsPage'
 import KYCPage from './pages/dashboard/founder/KYCPage'
-import DashboardLayout from './components/dashboard/DashboardLayout'
+import DashboardLayout, { founderNav } from './components/dashboard/DashboardLayout'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuth } from './lib/auth-context'
 
@@ -44,42 +45,42 @@ export default function App() {
       <Switch>
         <Route path="/dashboard/founder">
           <ProtectedRoute>
-            <DashboardLayout>
+            <DashboardLayout navItems={founderNav}>
               <DashboardHome />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
         <Route path="/dashboard/founder/profile">
           <ProtectedRoute>
-            <DashboardLayout>
+            <DashboardLayout navItems={founderNav}>
               <ProfilePage />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
         <Route path="/dashboard/founder/startup">
           <ProtectedRoute>
-            <DashboardLayout>
+            <DashboardLayout navItems={founderNav}>
               <StartupPage />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
         <Route path="/dashboard/founder/team">
           <ProtectedRoute>
-            <DashboardLayout>
+            <DashboardLayout navItems={founderNav}>
               <TeamPage />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
         <Route path="/dashboard/founder/documents">
           <ProtectedRoute>
-            <DashboardLayout>
+            <DashboardLayout navItems={founderNav}>
               <DocumentsPage />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
         <Route path="/dashboard/founder/kyc">
           <ProtectedRoute>
-            <DashboardLayout>
+            <DashboardLayout navItems={founderNav}>
               <KYCPage />
             </DashboardLayout>
           </ProtectedRoute>
@@ -89,33 +90,35 @@ export default function App() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <NavbarWithAuth />
-      <main className="flex-1">
-        <Switch>
-          <Route path="/" component={About} />
-          <Route path="/about" component={About} />
-          <Route path="/services" component={Services} />
-          <Route path="/target-audience" component={TargetAudience} />
-          <Route path="/ecosystem" component={Ecosystem} />
-          <Route path="/differentiator" component={Differentiator} />
-          <Route path="/core-values" component={CoreValues} />
-          <Route path="/knowledge" component={KnowledgeHub} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/verify-otp" component={VerifyOTP} />
-          <Route path="/verify-email" component={VerifyEmail} />
-          <Route path="/forgot-password" component={ForgotPassword} />
-          <Route path="/reset-password" component={ResetPassword} />
-          <Route path="/mfa/setup" component={MfaSetup} />
-          <Route path="/mfa/verify" component={MfaVerify} />
-          <Route path="/devices" component={DeviceManagement} />
-          <Route path="/sessions" component={SessionManagement} />
-          <Route path="/auth/callback" component={OAuthCallback} />
-        </Switch>
-      </main>
-      <Footer />
-    </div>
+    <LoadingScreen>
+      <div className="flex min-h-screen flex-col">
+        <NavbarWithAuth />
+        <main className="flex-1">
+          <Switch>
+            <Route path="/" component={About} />
+            <Route path="/about" component={About} />
+            <Route path="/services" component={Services} />
+            <Route path="/target-audience" component={TargetAudience} />
+            <Route path="/ecosystem" component={Ecosystem} />
+            <Route path="/differentiator" component={Differentiator} />
+            <Route path="/core-values" component={CoreValues} />
+            <Route path="/knowledge" component={KnowledgeHub} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/verify-otp" component={VerifyOTP} />
+            <Route path="/verify-email" component={VerifyEmail} />
+            <Route path="/forgot-password" component={ForgotPassword} />
+            <Route path="/reset-password" component={ResetPassword} />
+            <Route path="/mfa/setup" component={MfaSetup} />
+            <Route path="/mfa/verify" component={MfaVerify} />
+            <Route path="/devices" component={DeviceManagement} />
+            <Route path="/sessions" component={SessionManagement} />
+            <Route path="/auth/callback" component={OAuthCallback} />
+          </Switch>
+        </main>
+        <Footer />
+      </div>
+    </LoadingScreen>
   )
 }
