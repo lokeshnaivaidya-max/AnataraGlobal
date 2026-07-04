@@ -1,27 +1,11 @@
-// =============================================================================
-// navConfig.ts — Antara Global Navigation Data Structure
-// =============================================================================
-
 export interface NavItem {
   label: string
   href: string
 }
 
-export interface NavGroup {
-  heading: string
-  items: NavItem[]
-}
-
-export interface NavDropdown {
-  type: 'flat' | 'grouped'
-  flat?: NavItem[]
-  groups?: NavGroup[]
-}
-
 export interface NavLink {
   label: string
   href?: string
-  dropdown?: NavDropdown
 }
 
 export const navConfig: NavLink[] = [
@@ -35,10 +19,14 @@ export const navConfig: NavLink[] = [
   { label: 'Contact', href: '/contact' },
 ]
 
-// Phase 2 / 3 portals — hidden until implemented
-export const futureLinks: NavItem[] = [
-  { label: 'Founder Dashboard', href: '/dashboard/founder' },
-  { label: 'Investor Portal',   href: '/portal/investor' },
-  { label: 'Partner Portal',    href: '/portal/partner' },
-  { label: 'Login / Sign In',   href: '/login' },
+export const authLinks = {
+  login: { label: 'Sign In', href: '/login' },
+  register: { label: 'Get Started', href: '/register' },
+}
+
+export const userMenuLinks: NavItem[] = [
+  { label: 'Dashboard', href: '/dashboard/founder' },
+  { label: 'MFA Settings', href: '/mfa/setup' },
+  { label: 'Devices', href: '/devices' },
+  { label: 'Sessions', href: '/sessions' },
 ]
