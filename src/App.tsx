@@ -43,6 +43,12 @@ import KnowledgeHubDashboard from './pages/dashboard/knowledge/KnowledgeHubDashb
 import TasksPage from './pages/dashboard/tasks/TasksPage'
 import LeadsPage from './pages/dashboard/crm/LeadsPage'
 import LeadDetail from './pages/dashboard/crm/LeadDetail'
+import PartnersList from './pages/dashboard/partners/PartnersList'
+import PartnerDetail from './pages/dashboard/partners/PartnerDetail'
+import CapitalProviders from './pages/dashboard/capital/CapitalProviders'
+import CapitalRequests from './pages/dashboard/capital/CapitalRequests'
+import PaymentsPage from './pages/dashboard/payments/PaymentsPage'
+import AnalyticsPage from './pages/dashboard/analytics/AnalyticsPage'
 import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
 import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
 import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
@@ -221,6 +227,48 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={founderNav}>
               <LeadDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/partners">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <PartnersList />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/partners/:id">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <PartnerDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/capital">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <CapitalProviders />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/capital/requests">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <CapitalRequests />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/payments">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <PaymentsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/analytics">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <AnalyticsPage />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
