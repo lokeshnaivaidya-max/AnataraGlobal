@@ -4,13 +4,8 @@
     "module": "esnext",
     "lib": ["ES2023", "DOM"],
     "types": ["vite/client"],
-    "ignoreDeprecations": "6.0",
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "axios": ["./node_modules/axios"]
-    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
