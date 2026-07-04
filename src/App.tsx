@@ -36,6 +36,13 @@ import FundraisingRounds from './pages/dashboard/founder/FundraisingRounds'
 import InvestorPipeline from './pages/dashboard/founder/InvestorPipeline'
 import InvestorContacts from './pages/dashboard/founder/InvestorContacts'
 import InvestorContactDetail from './pages/dashboard/founder/InvestorContactDetail'
+import EventsList from './pages/dashboard/events/EventsList'
+import EventDetail from './pages/dashboard/events/EventDetail'
+import MyEvents from './pages/dashboard/events/MyEvents'
+import KnowledgeHubDashboard from './pages/dashboard/knowledge/KnowledgeHubDashboard'
+import TasksPage from './pages/dashboard/tasks/TasksPage'
+import LeadsPage from './pages/dashboard/crm/LeadsPage'
+import LeadDetail from './pages/dashboard/crm/LeadDetail'
 import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
 import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
 import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
@@ -165,6 +172,55 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={founderNav}>
               <InvestorContactDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/events">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <EventsList />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/events/my-events">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <MyEvents />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/events/:id">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <EventDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/knowledge">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <KnowledgeHubDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/tasks">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <TasksPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/crm">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <LeadsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/crm/:id">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <LeadDetail />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
