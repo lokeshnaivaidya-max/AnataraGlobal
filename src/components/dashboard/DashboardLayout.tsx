@@ -1,167 +1,268 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'wouter'
-import {
-  LayoutDashboard,
-  User,
-  Building2,
-  Users,
-  FileText,
-  ShieldCheck,
-  Menu,
-  X,
-  Sparkles,
-  ChevronRight,
-  LogOut,
-  BarChart3,
-  ClipboardCheck,
-  Store,
-  Briefcase,
-  Gauge,
-  Calendar,
-  UserCheck,
-  Settings,
-  Shield,
-  Bell,
-} from 'lucide-react'
-import { useAuth } from '../../lib/auth-context'
-import type { ReactNode } from 'react'
+import { Route, Switch, useLocation } from 'wouter'
+import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
+import LoadingScreen from './components/layout/LoadingScreen'
+import About from './pages/About'
+import Services from './pages/Services'
+import TargetAudience from './pages/TargetAudience'
+import Ecosystem from './pages/Ecosystem'
+import Differentiator from './pages/Differentiator'
+import CoreValues from './pages/CoreValues'
+import KnowledgeHub from './pages/KnowledgeHub'
+import Contact from './pages/Contact'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+import VerifyOTP from './pages/auth/VerifyOTP'
+import VerifyEmail from './pages/auth/VerifyEmail'
+import ForgotPassword from './pages/auth/ForgotPassword'
+import ResetPassword from './pages/auth/ResetPassword'
+import MfaSetup from './pages/auth/MfaSetup'
+import MfaVerify from './pages/auth/MfaVerify'
+import DeviceManagement from './pages/auth/DeviceManagement'
+import SessionManagement from './pages/auth/SessionManagement'
+import OAuthCallback from './pages/auth/OAuthCallback'
+import DashboardHome from './pages/dashboard/founder/DashboardHome'
+import ProfilePage from './pages/dashboard/founder/ProfilePage'
+import StartupPage from './pages/dashboard/founder/StartupPage'
+import TeamPage from './pages/dashboard/founder/TeamPage'
+import DocumentsPage from './pages/dashboard/founder/DocumentsPage'
+import KYCPage from './pages/dashboard/founder/KYCPage'
+import VentureReadiness from './pages/dashboard/founder/VentureReadiness'
+import Advisors from './pages/dashboard/founder/Advisors'
+import AdvisorDetail from './pages/dashboard/founder/AdvisorDetail'
+import MySessions from './pages/dashboard/founder/MySessions'
+import FundraisingDashboard from './pages/dashboard/founder/FundraisingDashboard'
+import FundraisingRounds from './pages/dashboard/founder/FundraisingRounds'
+import InvestorPipeline from './pages/dashboard/founder/InvestorPipeline'
+import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
+import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
+import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
+import MsmeCompliance from './pages/dashboard/msme/Compliance'
+import MsmeEmployeesExport from './pages/dashboard/msme/EmployeesExport'
+import MsmeDocumentsPage from './pages/dashboard/msme/DocumentsPage'
+import AdminDashboard from './pages/dashboard/admin/AdminDashboard'
+import AdminUsers from './pages/dashboard/admin/AdminUsers'
+import AdminSettings from './pages/dashboard/admin/AdminSettings'
+import NotificationList from './pages/dashboard/notifications/NotificationList'
+import NotificationPreferences from './pages/dashboard/notifications/NotificationPreferences'
+import DashboardLayout, { founderNav, msmeNav, adminNav } from './components/dashboard/DashboardLayout'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import { useAuth } from './lib/auth-context'
 
-export interface DashboardNavItem {
-  label: string
-  href: string
-  icon: typeof LayoutDashboard
+function NavbarWithAuth() {
+  const { isAuthenticated } = useAuth()
+  return <Navbar isAuthenticated={isAuthenticated} />
 }
 
-export const founderNav: DashboardNavItem[] = [
-  { label: 'Dashboard', href: '/dashboard/founder', icon: LayoutDashboard },
-  { label: 'My Profile', href: '/dashboard/founder/profile', icon: User },
-  { label: 'Startup', href: '/dashboard/founder/startup', icon: Building2 },
-  { label: 'Team', href: '/dashboard/founder/team', icon: Users },
-  { label: 'Documents', href: '/dashboard/founder/documents', icon: FileText },
-  { label: 'KYC', href: '/dashboard/founder/kyc', icon: ShieldCheck },
-  { label: 'Venture Readiness', href: '/dashboard/founder/venture-readiness', icon: Gauge },
-  { label: 'Advisors', href: '/dashboard/founder/advisors', icon: UserCheck },
-  { label: 'My Sessions', href: '/dashboard/founder/sessions', icon: Calendar },
-  { label: 'Notifications', href: '/dashboard/notifications', icon: Bell },
-]
-
-export const msmeNav: DashboardNavItem[] = [
-  { label: 'Dashboard', href: '/dashboard/msme', icon: LayoutDashboard },
-  { label: 'Business Details', href: '/dashboard/msme/business', icon: Store },
-  { label: 'Financial Health', href: '/dashboard/msme/financial-health', icon: BarChart3 },
-  { label: 'Compliance', href: '/dashboard/msme/compliance', icon: ClipboardCheck },
-  { label: 'Employees & Export', href: '/dashboard/msme/employees', icon: Briefcase },
-  { label: 'Documents', href: '/dashboard/msme/documents', icon: FileText },
-  { label: 'Notifications', href: '/dashboard/notifications', icon: Bell },
-]
-
-export const adminNav: DashboardNavItem[] = [
-  { label: 'Dashboard', href: '/dashboard/admin', icon: Shield },
-  { label: 'Users', href: '/dashboard/admin/users', icon: Users },
-  { label: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
-  { label: 'Notifications', href: '/dashboard/notifications', icon: Bell },
-]
-
-export default function DashboardLayout({ children, navItems }: { children: ReactNode; navItems: DashboardNavItem[] }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+export default function App() {
   const [location] = useLocation()
-  const { user, logout } = useAuth()
+  const isDashboard = location.startsWith('/dashboard')
 
-  const dashboardName = location.startsWith('/dashboard/founder') ? 'Founder Dashboard' : 'MSME Dashboard'
+  if (isDashboard) {
+    return (
+      <Switch>
+        <Route path="/dashboard/founder">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <DashboardHome />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/profile">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <ProfilePage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/startup">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <StartupPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/team">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <TeamPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/documents">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <DocumentsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/kyc">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <KYCPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/venture-readiness">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <VentureReadiness />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/advisors">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <Advisors />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/advisors/:id">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <AdvisorDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/sessions">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <MySessions />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/fundraising">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <FundraisingDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/fundraising/rounds">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <FundraisingRounds />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/fundraising/investors">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <InvestorPipeline />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeDashboardHome />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/business">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeBusinessDetails />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/financial-health">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeFinancialHealth />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/compliance">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeCompliance />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/employees">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeEmployeesExport />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/documents">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeDocumentsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/admin">
+          <ProtectedRoute>
+            <DashboardLayout navItems={adminNav}>
+              <AdminDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/admin/users">
+          <ProtectedRoute>
+            <DashboardLayout navItems={adminNav}>
+              <AdminUsers />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/admin/settings">
+          <ProtectedRoute>
+            <DashboardLayout navItems={adminNav}>
+              <AdminSettings />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/notifications">
+          <ProtectedRoute>
+            <DashboardLayout navItems={[]}>
+              <NotificationList />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/notifications/preferences">
+          <ProtectedRoute>
+            <DashboardLayout navItems={[]}>
+              <NotificationPreferences />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+      </Switch>
+    )
+  }
 
   return (
-    <div className="flex min-h-screen bg-light-gray">
-      <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-border-gray transform transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
-        <div className="flex items-center justify-between h-16 px-6 border-b border-border-gray">
-          <Link href="/" className="flex items-center gap-2 group">
-            <Sparkles className="h-4.5 w-4.5 text-gold" />
-            <span className="text-base font-black tracking-tight text-deep-navy">
-              ANTARA{' '}
-              <span className="font-light text-gold">GLOBAL</span>
-            </span>
-          </Link>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden p-1.5 rounded-lg text-medium-gray hover:text-deep-navy hover:bg-light-gray transition-all"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="p-4 space-y-1">
-          {navItems.map(item => {
-            const Icon = item.icon
-            const isActive = location === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                  isActive
-                    ? 'bg-deep-navy text-white shadow-md shadow-deep-navy/15'
-                    : 'text-medium-gray hover:bg-light-gray hover:text-deep-navy'
-                }`}
-              >
-                <Icon className="h-4.5 w-4.5 shrink-0" />
-                {item.label}
-                {isActive && <ChevronRight className="h-4 w-4 ml-auto" />}
-              </Link>
-            )
-          })}
-        </nav>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border-gray">
-          <div className="flex items-center gap-3 px-3 py-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold text-xs font-bold">
-              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-deep-navy truncate">{user?.name || 'User'}</p>
-              <p className="text-xs text-medium-gray/70 truncate">{user?.email || ''}</p>
-            </div>
-          </div>
-          <button
-            onClick={logout}
-            className="flex w-full items-center gap-3 px-4 py-2.5 mt-1 rounded-xl text-sm font-semibold text-error hover:bg-error/5 transition-all duration-150"
-          >
-            <LogOut className="h-4.5 w-4.5" />
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-deep-navy/40 backdrop-blur-sm lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      <div className="flex-1 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-20 h-16 bg-white/90 border-b border-border-gray/60 backdrop-blur-xl flex items-center px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 rounded-lg text-medium-gray hover:text-deep-navy hover:bg-light-gray transition-all mr-3"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-medium-gray hover:text-deep-navy transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5 text-medium-gray/50" />
-            <span className="text-deep-navy font-semibold">{dashboardName}</span>
-          </div>
-        </header>
-
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
-          {children}
+    <LoadingScreen>
+      <div className="flex min-h-screen flex-col">
+        <NavbarWithAuth />
+        <main className="flex-1">
+          <Switch>
+            <Route path="/" component={About} />
+            <Route path="/about" component={About} />
+            <Route path="/services" component={Services} />
+            <Route path="/target-audience" component={TargetAudience} />
+            <Route path="/ecosystem" component={Ecosystem} />
+            <Route path="/differentiator" component={Differentiator} />
+            <Route path="/core-values" component={CoreValues} />
+            <Route path="/knowledge" component={KnowledgeHub} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/verify-otp" component={VerifyOTP} />
+            <Route path="/verify-email" component={VerifyEmail} />
+            <Route path="/forgot-password" component={ForgotPassword} />
+            <Route path="/reset-password" component={ResetPassword} />
+            <Route path="/mfa/setup" component={MfaSetup} />
+            <Route path="/mfa/verify" component={MfaVerify} />
+            <Route path="/devices" component={DeviceManagement} />
+            <Route path="/sessions" component={SessionManagement} />
+            <Route path="/auth/callback" component={OAuthCallback} />
+          </Switch>
         </main>
+        <Footer />
       </div>
-    </div>
+    </LoadingScreen>
   )
 }
