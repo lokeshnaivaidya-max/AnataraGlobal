@@ -23,6 +23,8 @@ import {
   Shield,
   Bell,
   TrendingUp,
+  BookOpen,
+  CheckSquare,
 } from 'lucide-react'
 import { useAuth } from '../../lib/auth-context'
 import type { ReactNode } from 'react'
@@ -46,6 +48,10 @@ export const founderNav: DashboardNavItem[] = [
   { label: 'Notifications', href: '/dashboard/notifications', icon: Bell },
   { label: 'Fundraising', href: '/dashboard/founder/fundraising', icon: TrendingUp },
   { label: 'Investor CRM', href: '/dashboard/founder/investor-crm', icon: Users },
+  { label: 'Events', href: '/dashboard/events', icon: Calendar },
+  { label: 'Knowledge Hub', href: '/dashboard/knowledge', icon: BookOpen },
+  { label: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare },
+  { label: 'CRM', href: '/dashboard/crm', icon: TrendingUp },
 ]
 
 export const msmeNav: DashboardNavItem[] = [
