@@ -27,7 +27,13 @@ import StartupPage from './pages/dashboard/founder/StartupPage'
 import TeamPage from './pages/dashboard/founder/TeamPage'
 import DocumentsPage from './pages/dashboard/founder/DocumentsPage'
 import KYCPage from './pages/dashboard/founder/KYCPage'
-import DashboardLayout, { founderNav } from './components/dashboard/DashboardLayout'
+import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
+import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
+import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
+import MsmeCompliance from './pages/dashboard/msme/Compliance'
+import MsmeEmployeesExport from './pages/dashboard/msme/EmployeesExport'
+import MsmeDocumentsPage from './pages/dashboard/msme/DocumentsPage'
+import DashboardLayout, { founderNav, msmeNav } from './components/dashboard/DashboardLayout'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuth } from './lib/auth-context'
 
@@ -82,6 +88,48 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={founderNav}>
               <KYCPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeDashboardHome />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/business">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeBusinessDetails />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/financial-health">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeFinancialHealth />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/compliance">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeCompliance />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/employees">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeEmployeesExport />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/msme/documents">
+          <ProtectedRoute>
+            <DashboardLayout navItems={msmeNav}>
+              <MsmeDocumentsPage />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
