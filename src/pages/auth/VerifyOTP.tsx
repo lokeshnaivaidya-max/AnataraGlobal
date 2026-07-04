@@ -109,13 +109,15 @@ export default function VerifyOTP() {
           </motion.div>
         )}
 
-        <div className="flex justify-center gap-3" onPaste={handlePaste}>
+        <label className="sr-only">One-time verification code</label>
+        <div className="flex justify-center gap-3" role="group" aria-label="One-time verification code" onPaste={handlePaste}>
           {otp.map((digit, index) => (
             <input
               key={index}
               ref={el => { inputRefs.current[index] = el }}
               type="text"
               inputMode="numeric"
+              autoComplete="one-time-code"
               maxLength={1}
               value={digit}
               onChange={e => handleChange(index, e.target.value)}
