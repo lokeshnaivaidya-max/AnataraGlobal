@@ -31,6 +31,9 @@ import VentureReadiness from './pages/dashboard/founder/VentureReadiness'
 import Advisors from './pages/dashboard/founder/Advisors'
 import AdvisorDetail from './pages/dashboard/founder/AdvisorDetail'
 import MySessions from './pages/dashboard/founder/MySessions'
+import FundraisingDashboard from './pages/dashboard/founder/FundraisingDashboard'
+import FundraisingRounds from './pages/dashboard/founder/FundraisingRounds'
+import InvestorPipeline from './pages/dashboard/founder/InvestorPipeline'
 import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
 import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
 import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
@@ -125,6 +128,27 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={founderNav}>
               <MySessions />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/fundraising">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <FundraisingDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/fundraising/rounds">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <FundraisingRounds />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/fundraising/investors">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <InvestorPipeline />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
