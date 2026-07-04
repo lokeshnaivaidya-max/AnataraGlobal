@@ -28,6 +28,9 @@ import TeamPage from './pages/dashboard/founder/TeamPage'
 import DocumentsPage from './pages/dashboard/founder/DocumentsPage'
 import KYCPage from './pages/dashboard/founder/KYCPage'
 import VentureReadiness from './pages/dashboard/founder/VentureReadiness'
+import Advisors from './pages/dashboard/founder/Advisors'
+import AdvisorDetail from './pages/dashboard/founder/AdvisorDetail'
+import MySessions from './pages/dashboard/founder/MySessions'
 import MsmeDashboardHome from './pages/dashboard/msme/DashboardHome'
 import MsmeBusinessDetails from './pages/dashboard/msme/BusinessDetails'
 import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
@@ -96,6 +99,27 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={founderNav}>
               <VentureReadiness />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/advisors">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <Advisors />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/advisors/:id">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <AdvisorDetail />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/founder/sessions">
+          <ProtectedRoute>
+            <DashboardLayout navItems={founderNav}>
+              <MySessions />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
