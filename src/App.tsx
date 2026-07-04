@@ -37,7 +37,10 @@ import MsmeFinancialHealth from './pages/dashboard/msme/FinancialHealth'
 import MsmeCompliance from './pages/dashboard/msme/Compliance'
 import MsmeEmployeesExport from './pages/dashboard/msme/EmployeesExport'
 import MsmeDocumentsPage from './pages/dashboard/msme/DocumentsPage'
-import DashboardLayout, { founderNav, msmeNav } from './components/dashboard/DashboardLayout'
+import AdminDashboard from './pages/dashboard/admin/AdminDashboard'
+import AdminUsers from './pages/dashboard/admin/AdminUsers'
+import AdminSettings from './pages/dashboard/admin/AdminSettings'
+import DashboardLayout, { founderNav, msmeNav, adminNav } from './components/dashboard/DashboardLayout'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuth } from './lib/auth-context'
 
@@ -162,6 +165,27 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={msmeNav}>
               <MsmeDocumentsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/admin">
+          <ProtectedRoute>
+            <DashboardLayout navItems={adminNav}>
+              <AdminDashboard />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/admin/users">
+          <ProtectedRoute>
+            <DashboardLayout navItems={adminNav}>
+              <AdminUsers />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/admin/settings">
+          <ProtectedRoute>
+            <DashboardLayout navItems={adminNav}>
+              <AdminSettings />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
