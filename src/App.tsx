@@ -40,6 +40,8 @@ import MsmeDocumentsPage from './pages/dashboard/msme/DocumentsPage'
 import AdminDashboard from './pages/dashboard/admin/AdminDashboard'
 import AdminUsers from './pages/dashboard/admin/AdminUsers'
 import AdminSettings from './pages/dashboard/admin/AdminSettings'
+import NotificationList from './pages/dashboard/notifications/NotificationList'
+import NotificationPreferences from './pages/dashboard/notifications/NotificationPreferences'
 import DashboardLayout, { founderNav, msmeNav, adminNav } from './components/dashboard/DashboardLayout'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import { useAuth } from './lib/auth-context'
@@ -186,6 +188,20 @@ export default function App() {
           <ProtectedRoute>
             <DashboardLayout navItems={adminNav}>
               <AdminSettings />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/notifications">
+          <ProtectedRoute>
+            <DashboardLayout navItems={[]}>
+              <NotificationList />
+            </DashboardLayout>
+          </ProtectedRoute>
+        </Route>
+        <Route path="/dashboard/notifications/preferences">
+          <ProtectedRoute>
+            <DashboardLayout navItems={[]}>
+              <NotificationPreferences />
             </DashboardLayout>
           </ProtectedRoute>
         </Route>
