@@ -99,10 +99,8 @@ export default function HeroSection() {
 
   // Network background animation
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext('2d')
+    const canvas = canvasRef.current!
+    const ctx = canvas.getContext('2d')!
     if (!ctx) return
 
     const ACCENT = '#FD7C06'
