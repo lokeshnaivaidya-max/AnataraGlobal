@@ -14,7 +14,6 @@ import {
   Lightbulb,
   LineChart,
   Network,
-  Play,
   Rocket,
   ShieldCheck,
   Sparkles,
@@ -140,20 +139,15 @@ const partnerCategories = [
 export default function Services() {
   return (
     <>
-      <section className="relative min-h-[82vh] overflow-hidden bg-gradient-to-br from-deep-navy via-deep-navy-dark to-deep-navy pt-28 pb-16 flex items-center">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 right-10 h-96 w-96 rounded-full bg-gold/10 blur-3xl animate-pulse-glow" />
-          <div className="absolute bottom-20 left-10 h-80 w-80 rounded-full bg-emerald/10 blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
-        </div>
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-gold to-transparent" />
+      <section className="relative min-h-[82vh] overflow-hidden pt-28 pb-16 flex items-center" style={{ backgroundColor: '#FFF8F2' }}>
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
           <div className="lg:col-span-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-white/5 px-4 py-1.5 text-xs font-semibold text-gold-light"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border text-white" style={{ backgroundColor: '#000000', borderColor: '#000000' }}
             >
               <Sparkles className="h-3.5 w-3.5" />
               Premium Ecosystem Services
@@ -162,19 +156,19 @@ export default function Services() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-6 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl"
+              className="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+              style={{ color: '#FD7C06' }}
             >
               Strategic Guidance.<br />
-              <span className="bg-gradient-to-r from-gold-light via-gold to-gold-dark bg-clip-text text-transparent">
-                Capital Readiness.
-              </span><br />
+              Capital Readiness.<br />
               Sustainable Growth.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg"
+              className="mt-6 max-w-xl text-base leading-relaxed sm:text-lg"
+              style={{ color: 'rgba(0,0,0,0.6)' }}
             >
               Antara Global helps businesses strengthen their foundations, prepare for opportunities,
               connect with relevant ecosystems, and build scalable growth through strategy, knowledge,
@@ -188,16 +182,17 @@ export default function Services() {
             >
               <a
                 href="#contact"
-                className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-gold to-gold-dark px-6 py-3.5 text-sm font-semibold text-deep-navy shadow-lg shadow-gold/20 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-gold/30"
+                className="group inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold border-2 border-black shadow-lg transition-all duration-300 hover:scale-105"
+                style={{ backgroundColor: '#FFFFFF', color: '#000000' }}
               >
                 Book Consultation
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
                 href="/ecosystem"
-                className="inline-flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-white/25 hover:bg-white/10"
+                className="inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105"
+                style={{ backgroundColor: '#000000' }}
               >
-                <Play className="h-4 w-4 fill-white/10" />
                 Explore Our Ecosystem
               </a>
             </motion.div>
@@ -209,31 +204,28 @@ export default function Services() {
             transition={{ delay: 0.25 }}
             className="lg:col-span-6"
           >
-            <div className="relative mx-auto max-w-xl rounded-3xl border border-white/10 bg-white/[0.04] p-5 shadow-2xl shadow-deep-navy-dark/30 backdrop-blur-md sm:p-7">
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-gold/20 via-emerald/10 to-transparent blur-md" />
-              <div className="relative rounded-2xl border border-white/10 bg-deep-navy-dark/60 p-5">
+            <div className="relative mx-auto max-w-xl rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border" style={{ backgroundColor: '#FFF8F2', borderColor: 'rgba(0,0,0,0.15)' }}>
+              <div className="relative rounded-2xl p-5 border" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.15)' }}>
                 <div className="mb-6 flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Ecosystem Flow</p>
-                    <h2 className="mt-1 text-xl font-extrabold text-white">From foundation to growth</h2>
+                    <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(0,0,0,0.5)' }}>Ecosystem Flow</p>
+                    <h2 className="mt-1 text-xl font-extrabold" style={{ color: '#FD7C06' }}>From foundation to growth</h2>
                   </div>
-                  <Network className="h-8 w-8 text-gold" />
+                  <Network className="h-8 w-8" style={{ color: '#FD7C06' }} />
                 </div>
                 <div className="space-y-3">
                   {ecosystemFlow.map((item, index) => (
                     <div key={item} className="grid grid-cols-[2.5rem_1fr] items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl border text-xs font-black ${
-                        index % 2 === 0
-                          ? 'border-emerald/30 bg-emerald/15 text-emerald-light'
-                          : 'border-gold/30 bg-gold/15 text-gold-light'
-                      }`}>
-                        {String(index + 1).padStart(2, '0')}
-                      </div>
-                      <div className="relative rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                      <div className="relative flex justify-center">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xs font-black border z-10" style={{ color: '#FD7C06', borderColor: 'rgba(0,0,0,0.15)' }}>
+                          {String(index + 1).padStart(2, '0')}
+                        </div>
                         {index < ecosystemFlow.length - 1 && (
-                          <span className="absolute left-[-1.9rem] top-10 h-3 w-px bg-white/20" />
+                          <span className="absolute top-10 w-0.5" style={{ height: '44px', backgroundColor: '#FD7C06' }} />
                         )}
-                        <span className="text-sm font-bold text-white">{item}</span>
+                      </div>
+                      <div className="rounded-xl px-4 py-3 border" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.15)' }}>
+                        <span className="text-sm font-bold" style={{ color: 'rgba(0,0,0,0.6)' }}>{item}</span>
                       </div>
                     </div>
                   ))}
@@ -244,7 +236,7 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-white py-24 lg:py-32">
+      <section className="relative overflow-hidden py-24 lg:py-32" style={{ backgroundColor: '#FFF8F2' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -252,11 +244,11 @@ export default function Services() {
             viewport={{ once: true }}
             className="mx-auto mb-16 max-w-3xl text-center"
           >
-            <span className="text-xs font-semibold uppercase tracking-widest text-gold">What We Do</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-deep-navy sm:text-4xl">
+            <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border text-white" style={{ backgroundColor: '#000000', borderColor: '#000000' }}>What We Do</span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: '#FD7C06' }}>
               Structured support for every growth inflection point
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-medium-gray">
+            <p className="mt-4 text-base leading-relaxed" style={{ color: 'rgba(0,0,0,0.6)' }}>
               We support startups, MSMEs, entrepreneurs, and growth-stage businesses through structured
               advisory services, funding readiness support, ecosystem connections, and growth-focused solutions.
             </p>
@@ -265,7 +257,6 @@ export default function Services() {
           <div className="space-y-6">
             {serviceCards.map((card, index) => {
               const Icon = card.icon
-              const isGold = card.accent === 'gold'
 
               return (
                 <motion.article
@@ -274,29 +265,25 @@ export default function Services() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.08 }}
-                  className="group relative overflow-hidden rounded-3xl border border-border-gray bg-light-gray/50 shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
+                  className="group relative overflow-hidden rounded-3xl border shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)' }}
                 >
-                  <div className={`absolute left-0 top-0 h-full w-1.5 ${isGold ? 'bg-gold' : 'bg-emerald'}`} />
+                  <div className="absolute left-0 top-0 h-full w-1.5" style={{ backgroundColor: '#FD7C06' }} />
                   <div className="grid gap-0 lg:grid-cols-[0.9fr_1.35fr]">
-                    <div className="relative border-b border-border-gray bg-white p-7 lg:border-b-0 lg:border-r lg:p-9">
-                      <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border ${
-                        isGold
-                          ? 'border-gold/15 bg-gradient-to-br from-gold/15 to-gold/5 text-gold'
-                          : 'border-emerald/15 bg-gradient-to-br from-emerald/15 to-emerald/5 text-emerald'
-                      }`}>
-                        <Icon className="h-7 w-7" />
+                    <div className="relative border-b p-7 lg:border-b-0 lg:border-r lg:p-9" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)' }}>
+                      <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border" style={{ backgroundColor: '#FD7C06', borderColor: '#FD7C06' }}>
+                        <Icon className="h-7 w-7 text-white" />
                       </div>
-                      <span className={`text-xs font-semibold uppercase tracking-widest ${isGold ? 'text-gold' : 'text-emerald'}`}>
+                      <span className="text-xs font-semibold uppercase tracking-widest text-black">
                         {card.eyebrow}
                       </span>
-                      <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-deep-navy">
+                      <h3 className="mt-3 text-2xl font-extrabold tracking-tight" style={{ color: '#FD7C06' }}>
                         {card.title}
                       </h3>
-                      <p className="mt-4 text-sm leading-relaxed text-medium-gray">
+                      <p className="mt-4 text-sm leading-relaxed text-black/60">
                         {card.desc}
                       </p>
                       {card.highlight && (
-                        <div className="mt-6 rounded-2xl border border-gold/20 bg-gold/5 px-4 py-3 text-sm font-extrabold text-deep-navy">
+                        <div className="mt-6 rounded-2xl border px-4 py-3 text-sm font-extrabold" style={{ backgroundColor: 'rgba(253,124,6,0.08)', borderColor: 'rgba(253,124,6,0.2)', color: '#000000' }}>
                           {card.highlight}
                         </div>
                       )}
@@ -305,8 +292,8 @@ export default function Services() {
                     <div className="p-7 lg:p-9">
                       <div className="grid gap-3 sm:grid-cols-2">
                         {card.items.map((item) => (
-                          <div key={item} className="flex items-center gap-3 rounded-2xl border border-border-gray bg-white px-4 py-3 text-sm font-semibold text-deep-navy">
-                            <CheckCircle2 className={`h-4 w-4 shrink-0 ${isGold ? 'text-gold' : 'text-emerald'}`} />
+                          <div key={item} className="flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)', color: '#000000' }}>
+                            <CheckCircle2 className="h-4 w-4 shrink-0" style={{ color: '#FD7C06' }} />
                             <span>{item}</span>
                           </div>
                         ))}
@@ -320,9 +307,7 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-light-gray py-24 lg:py-32">
-        <div className="absolute top-20 left-10 h-48 w-48 rounded-full bg-emerald/5 blur-3xl animate-float" />
-        <div className="absolute bottom-10 right-10 h-48 w-48 rounded-full bg-gold/5 blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+      <section className="relative overflow-hidden py-24 lg:py-32" style={{ backgroundColor: '#FFF8F2' }}>
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
@@ -331,17 +316,17 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-xs font-semibold uppercase tracking-widest text-gold">Capital Ecosystem Access</span>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-deep-navy sm:text-4xl">
+              <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border text-white" style={{ backgroundColor: '#000000', borderColor: '#000000' }}>Capital Ecosystem Access</span>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: '#FD7C06' }}>
                 Connecting Businesses With Opportunities
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-medium-gray">
+              <p className="mt-4 text-base leading-relaxed" style={{ color: 'rgba(0,0,0,0.6)' }}>
                 Through our ecosystem network and partnerships, businesses may gain access to relevant
                 capital providers and strategic stakeholders.
               </p>
-              <div className="mt-8 rounded-2xl border border-gold/20 bg-gold/5 p-5">
-                <p className="text-xs leading-relaxed text-medium-gray">
-                  <strong className="text-deep-navy">Disclaimer:</strong> Antara Global does not guarantee funding,
+              <div className="mt-8 rounded-2xl border p-5" style={{ backgroundColor: 'rgba(253,124,6,0.06)', borderColor: 'rgba(253,124,6,0.2)' }}>
+                <p className="text-xs leading-relaxed text-black/60">
+                  <strong className="text-black">Disclaimer:</strong> Antara Global does not guarantee funding,
                   investments, loans, or capital commitments. Our role is to assist businesses in becoming
                   funding-ready, investment-ready, and strategically connected with relevant ecosystem participants.
                 </p>
@@ -354,13 +339,13 @@ export default function Services() {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="relative mx-auto max-w-2xl rounded-3xl border border-border-gray bg-white p-5 shadow-xl sm:p-8 lg:flex lg:min-h-[560px] lg:items-center lg:justify-center">
-                <div className="absolute inset-8 hidden rounded-full border border-dashed border-gold/25 lg:block" />
-                <div className="absolute inset-20 hidden rounded-full border border-dashed border-emerald/20 lg:block" />
-                <div className="relative z-10 mx-auto flex h-40 w-40 flex-col items-center justify-center rounded-full border border-gold/30 bg-gradient-to-br from-deep-navy to-deep-navy-dark text-center shadow-2xl shadow-deep-navy/20">
-                  <Sparkles className="mb-2 h-6 w-6 text-gold" />
+              <div className="relative mx-auto max-w-2xl rounded-3xl border-2 p-5 shadow-xl sm:p-8 lg:flex lg:min-h-[560px] lg:items-center lg:justify-center" style={{ backgroundColor: '#FFFFFF', borderColor: '#000000' }}>
+                <div className="absolute inset-8 hidden rounded-full border border-dashed lg:block" style={{ borderColor: '#FD7C06', opacity: 0.3 }} />
+                <div className="absolute inset-20 hidden rounded-full border border-dashed lg:block" style={{ borderColor: '#FC9E00', opacity: 0.2 }} />
+                <div className="relative z-10 mx-auto flex h-40 w-40 flex-col items-center justify-center rounded-full border-2 text-center shadow-2xl" style={{ backgroundColor: '#FD7C06', borderColor: '#FC9E00' }}>
+                  <Sparkles className="mb-2 h-6 w-6 text-white/80" />
                   <span className="text-sm font-black tracking-tight text-white">ANTARA</span>
-                  <span className="text-sm font-light text-gold-light">GLOBAL</span>
+                  <span className="text-sm font-light text-white/70">GLOBAL</span>
                 </div>
 
                 <div className="relative z-10 mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:absolute lg:inset-8 lg:mt-0 lg:content-between">
@@ -370,8 +355,8 @@ export default function Services() {
 
                     return (
                       <div key={item.label} className={`flex ${alignRight ? 'lg:justify-end' : 'lg:justify-start'}`}>
-                        <div className="flex max-w-[11rem] items-center gap-2 rounded-2xl border border-border-gray bg-white px-3 py-2 text-xs font-semibold text-deep-navy shadow-md">
-                          <Icon className="h-3.5 w-3.5 shrink-0 text-gold" />
+                        <div className="flex max-w-[11rem] items-center gap-2 rounded-2xl border px-3 py-2 text-xs font-semibold shadow-md" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)', color: '#000000' }}>
+                          <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: '#FD7C06' }} />
                           <span>{item.label}</span>
                         </div>
                       </div>
@@ -384,28 +369,28 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-white py-24 lg:py-32">
+      <section className="relative overflow-hidden py-24 lg:py-32" style={{ backgroundColor: '#FFF8F2' }}>
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <motion.article
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="rounded-3xl border border-border-gray bg-light-gray/60 p-7 shadow-xl sm:p-9"
+            className="rounded-3xl border p-7 shadow-xl sm:p-9" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)' }}
           >
-            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald/15 bg-emerald/10 text-emerald">
-              <Building2 className="h-7 w-7" />
-            </div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-gold">Services Included</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-deep-navy">
+            <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-white" style={{ backgroundColor: '#000000' }}>Services Included</span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight flex items-center gap-3" style={{ color: '#F4C430' }}>
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border" style={{ backgroundColor: '#FD7C06', borderColor: '#FD7C06' }}>
+                <Building2 className="h-5 w-5 text-white" />
+              </div>
               MSME Growth Advisory
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-medium-gray">
+            <p className="mt-4 text-sm leading-relaxed text-black/60">
               Helping MSMEs strengthen their business foundations, improve readiness, and build sustainable growth systems.
             </p>
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {msmeServices.map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-2xl border border-border-gray bg-white px-4 py-3 text-sm font-semibold text-deep-navy">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald" />
+                <div key={item} className="flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)', color: '#000000' }}>
+                  <CheckCircle2 className="h-4 w-4 shrink-0" style={{ color: '#FD7C06' }} />
                   {item}
                 </div>
               ))}
@@ -417,16 +402,18 @@ export default function Services() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-deep-navy via-deep-navy to-deep-navy-dark p-7 shadow-2xl sm:p-9"
+            className="rounded-3xl border p-7 shadow-xl sm:p-9" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)' }}
           >
-            <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full bg-gold/5 blur-3xl" />
             <div className="relative">
-              <span className="text-xs font-semibold uppercase tracking-widest text-gold-light">Knowledge & Awareness Initiatives</span>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-white">
+              <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-white" style={{ backgroundColor: '#000000' }}>Knowledge & Awareness Initiatives</span>
+              <h2 className="mt-3 text-3xl font-extrabold tracking-tight flex items-center gap-3" style={{ color: '#F4C430' }}>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl border" style={{ backgroundColor: '#FD7C06', borderColor: '#FD7C06' }}>
+                  <BookOpen className="h-5 w-5 text-white" />
+                </div>
                 Financial Knowledge For Everyone
               </h2>
-              <p className="mt-2 text-sm font-semibold text-gold-light">सर्वेषां वित्तज्ञानम्</p>
-              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/65">
+              <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(0,0,0,0.6)' }}>सर्वेषां वित्तज्ञानम्</p>
+              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-black/60">
                 Antara Global promotes business and financial awareness by empowering entrepreneurs with
                 knowledge, resources, and practical learning opportunities.
               </p>
@@ -435,8 +422,8 @@ export default function Services() {
                   const ProgramIcon = program.icon
 
                   return (
-                    <div key={program.label} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white/80">
-                      <ProgramIcon className="h-4 w-4 shrink-0 text-gold" />
+                    <div key={program.label} className="flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)', color: '#000000' }}>
+                      <ProgramIcon className="h-4 w-4 shrink-0" style={{ color: '#FD7C06' }} />
                       {program.label}
                     </div>
                   )
@@ -447,7 +434,7 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-light-gray py-24 lg:py-32">
+      <section className="relative overflow-hidden py-24 lg:py-32" style={{ backgroundColor: '#FFF8F2' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -455,11 +442,11 @@ export default function Services() {
             viewport={{ once: true }}
             className="mx-auto mb-16 max-w-3xl text-center"
           >
-            <span className="text-xs font-semibold uppercase tracking-widest text-gold">Strategic Partnership Network</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-deep-navy sm:text-4xl">
+            <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold text-white" style={{ backgroundColor: '#000000' }}>Strategic Partnership Network</span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: '#FD7C06' }}>
               Building A Strong Business Ecosystem
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-medium-gray">
+            <p className="mt-4 text-base leading-relaxed text-black/60">
               Antara Global collaborates with professionals and organizations that help businesses grow stronger.
             </p>
           </motion.div>
@@ -475,17 +462,17 @@ export default function Services() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.08 }}
-                  className="group relative overflow-hidden rounded-3xl border border-border-gray bg-white p-7 shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
+                  className="group relative overflow-hidden rounded-3xl border p-7 shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)' }}
                 >
-                  <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-gold via-gold/40 to-transparent" />
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-gold/15 bg-gold/10 text-gold transition-transform duration-300 group-hover:scale-110">
+                  <div className="absolute left-0 top-0 h-1 w-full" style={{ backgroundColor: '#FD7C06' }} />
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border" style={{ backgroundColor: '#FFF8F2', borderColor: 'rgba(0,0,0,0.12)', color: '#FD7C06' }}>
                     <CategoryIcon className="h-6 w-6" />
                   </div>
-                  <h3 className="text-lg font-extrabold text-deep-navy">{category.title}</h3>
-                  <ul className="mt-5 space-y-3 border-t border-border-gray pt-5">
+                  <h3 className="text-lg font-extrabold" style={{ color: '#000000' }}>{category.title}</h3>
+                  <ul className="mt-5 space-y-3 border-t pt-5" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
                     {category.items.map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-sm font-medium text-medium-gray">
-                        <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                      <li key={item} className="flex items-center gap-2 text-sm font-medium" style={{ color: 'rgba(0,0,0,0.6)' }}>
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#FD7C06' }} />
                         {item}
                       </li>
                     ))}
