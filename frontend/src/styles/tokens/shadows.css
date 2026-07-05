@@ -10,7 +10,18 @@
   --shadow-md: 0 8px 24px rgba(15, 30, 54, 0.08);
   --shadow-lg: 0 16px 48px rgba(15, 30, 54, 0.12);
 
-  /* Hover-only accent glows — used exclusively on primary/secondary CTAs */
+  /* Hover-only accent glows — primary/secondary CTAs */
   --shadow-gold-glow: 0 8px 32px rgba(184, 138, 43, 0.18);
   --shadow-emerald-glow: 0 8px 32px rgba(13, 148, 136, 0.16);
+
+  /* Tri-tone "luxe" glow — layers navy depth + gold warmth + emerald
+     lift in a single shadow stack. Use on flagship CTA buttons and the
+     hero card/panel. */
+  --shadow-luxe-glow:
+    0 24px 60px -12px rgba(184, 138, 43, 0.28),
+    0 12px 32px -8px rgba(13, 148, 136, 0.22),
+    0 4px 16px -4px rgba(15, 30, 54, 0.35);
+
+  /* Deep navy elevation for dark panels/cards over dark sections */
+  --shadow-navy-deep: 0 20px 50px -10px rgba(10, 19, 36, 0.55);
 }
