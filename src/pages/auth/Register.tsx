@@ -41,14 +41,14 @@ export default function Register() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border border-error/20 bg-error/10 px-4 py-3 text-sm text-error font-medium"
+            className="rounded-xl border px-4 py-3 text-sm font-medium" style={{ backgroundColor: 'rgba(220,38,38,0.08)', borderColor: 'rgba(220,38,38,0.2)', color: '#DC2626' }}
           >
             {serverError}
           </motion.div>
         )}
 
         <div>
-          <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>
             Full Name
           </label>
           <input
@@ -56,16 +56,17 @@ export default function Register() {
             type="text"
             autoComplete="name"
             {...register('name')}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+            className="w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 placeholder:text-black/35"
+            style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
             placeholder="John Doe"
           />
           {errors.name && (
-            <p className="mt-1 text-xs text-error">{errors.name.message}</p>
+            <p className="mt-1 text-xs" style={{ color: '#DC2626' }}>{errors.name.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>
             Email Address
           </label>
           <input
@@ -73,16 +74,17 @@ export default function Register() {
             type="email"
             autoComplete="email"
             {...register('email')}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+            className="w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 placeholder:text-black/35"
+            style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
             placeholder="you@example.com"
           />
           {errors.email && (
-            <p className="mt-1 text-xs text-error">{errors.email.message}</p>
+            <p className="mt-1 text-xs" style={{ color: '#DC2626' }}>{errors.email.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>
             Password
           </label>
           <div className="relative">
@@ -91,25 +93,29 @@ export default function Register() {
               type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               {...register('password')}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-11 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+              className="w-full rounded-xl border px-4 py-3 pr-11 text-sm transition-all duration-200 placeholder:text-black/35"
+              style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
               placeholder="Min. 6 characters"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+              style={{ color: 'rgba(0,0,0,0.4)' }}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#FD7C06'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.4)'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-xs text-error">{errors.password.message}</p>
+            <p className="mt-1 text-xs" style={{ color: '#DC2626' }}>{errors.password.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>
             Confirm Password
           </label>
           <div className="relative">
@@ -118,27 +124,36 @@ export default function Register() {
               type={showConfirm ? 'text' : 'password'}
               autoComplete="new-password"
               {...register('confirmPassword')}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-11 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+              className="w-full rounded-xl border px-4 py-3 pr-11 text-sm transition-all duration-200 focus:outline-none focus:ring-2 placeholder:text-black/35"
+              style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
               placeholder="Repeat your password"
+              onFocus={(e) => { e.target.style.borderColor = '#FD7C06'; e.target.style.setProperty('--tw-ring-color', 'rgba(253,124,6,0.2)') }}
+              onBlur={(e) => { e.target.style.borderColor = 'rgba(0,0,0,0.12)' }}
             />
             <button
               type="button"
               onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
+              style={{ color: 'rgba(0,0,0,0.4)' }}
               aria-label={showConfirm ? 'Hide password' : 'Show password'}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#FD7C06'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.4)'}
             >
               {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="mt-1 text-xs text-error">{errors.confirmPassword.message}</p>
+            <p className="mt-1 text-xs" style={{ color: '#DC2626' }}>{errors.confirmPassword.message}</p>
           )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-dark px-4 py-3.5 text-sm font-bold text-white hover:from-gold-light hover:to-gold transition-all duration-300 shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full rounded-xl px-4 py-3.5 text-sm font-bold text-white transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          style={{ backgroundColor: '#CEA041' }}
+          onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = '#FD7C06' }}
+          onMouseLeave={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = '#CEA041' }}
         >
           {isSubmitting ? (
             <>
@@ -155,9 +170,9 @@ export default function Register() {
         <SocialLoginButtons />
       </div>
 
-      <p className="mt-6 text-center text-sm text-white/50">
+      <p className="mt-6 text-center text-sm" style={{ color: 'rgba(0,0,0,0.5)' }}>
         Already have an account?{' '}
-        <Link href="/login" className="font-semibold text-gold-light hover:text-gold transition-colors">
+        <Link href="/login" className="font-semibold transition-colors" style={{ color: '#FD7C06' }}>
           Sign in
         </Link>
       </p>
