@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, type MouseEvent } from 'react'
 import { Link, useLocation } from 'wouter'
 import {
   Menu,
@@ -41,7 +41,19 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
-  const [location] = useLocation()
+  const [location, setLocation] = useLocation()
+
+  const goHome = useCallback(
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      // Explicit navigation guarantees the logo always routes home,
+      // even if default anchor behavior is intercepted upstream.
+      e.preventDefault()
+      setMobileOpen(false)
+      setUserMenuOpen(false)
+      setLocation('/')
+    },
+    [setLocation]
+  )
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
@@ -79,7 +91,12 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
           className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8"
           aria-label="Main navigation"
         >
-          <Link href="/" className="flex items-center shrink-0 group">
+          <Link
+            href="/"
+            onClick={goHome}
+            className="flex items-center shrink-0 group cursor-pointer"
+            aria-label="ANTARA Global — Go to homepage"
+          >
             <img
               src="/image.png"
               alt="ANTARA Global"
@@ -239,7 +256,12 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
             aria-label="Mobile navigation"
           >
             <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
-              <Link href="/" onClick={closeMobile} className="flex items-center group">
+              <Link
+                href="/"
+                onClick={goHome}
+                className="flex items-center group cursor-pointer"
+                aria-label="ANTARA Global — Go to homepage"
+              >
                 <img
                   src="/image.png"
                   alt="ANTARA Global"
