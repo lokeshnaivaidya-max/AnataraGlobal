@@ -1,79 +1,83 @@
-/* ==========================================================================
-   src/styles/tokens/colors.css
-   Color Design Tokens — Antara Global
-   Tailwind v4 @theme layer — single source of truth for all color values
-   ========================================================================== */
-
 @theme {
-  /* Core Brand — Deep Navy */
-  --color-deep-navy: #0F1E36;
-  --color-deep-navy-light: #1E3A8A;
-  --color-deep-navy-dark: #0A1324;
+  /* Core Brand */
+  --color-deep-navy: #10233F;
+  --color-deep-navy-light: #1E3A6B;
+  --color-deep-navy-dark: #081527;
 
-  /* Core Neutrals */
-  --color-charcoal: #0F172A;
-  --color-slate: #475569;
-  --color-warm-white: #FCFCFD;
-  --color-paper: #F8FAFC;
-  --color-border-gray: #E2E8F0;
-
-  /* Accent — Gold */
   --color-gold: #B88A2B;
-  --color-gold-light: #CEA041;
+  --color-gold-light: #D9AD52;
   --color-gold-dark: #8C6A1D;
 
-  /* Accent — Emerald */
   --color-emerald: #0D9488;
-  --color-emerald-light: #14B8A6;
-  --color-emerald-dark: #0F766E;
+  --color-emerald-light: #2DBFAE;
+  --color-emerald-dark: #0B6D64;
 
-  /* Semantic */
+  /* Soft canvas — warm ivory, never stark white or cold gray */
+  --color-canvas: #FBFAF6;
+  --color-canvas-alt: #F5F3EC;
+  --color-canvas-deep: #EFEDE3;
+
+  /* Soft text tones — warm ink instead of flat black */
+  --color-ink: #16233A;
+  --color-ink-soft: #3B4A64;
+  --color-ink-muted: #6B7A93;
+  --color-ink-faint: #9AA7BC;
+
+  /* Neutrals */
+  --color-border-gray: #E7E3D6;
+  --color-warm-white: #FFFFFF;
+  --color-paper: #F5F3EC;
+  --color-charcoal: #16233A;
+  --color-slate: #6B7A93;
+
   --color-success: #10B981;
   --color-warning: #F59E0B;
-  --color-error: #EF4444;
+  --color-error: #E15252;
   --color-info: #3B82F6;
 
-  /* Neutral Grayscale */
   --color-gray-950: #0A1324;
-  --color-gray-900: #0F172A;
-  --color-gray-800: #1E293B;
-  --color-gray-700: #334155;
-  --color-gray-600: #475569;
-  --color-gray-500: #64748B;
-  --color-gray-400: #94A3B8;
-  --color-gray-300: #CBD5E1;
-  --color-gray-200: #E2E8F0;
-  --color-gray-100: #F1F5F9;
-  --color-gray-50: #F8FAFC;
-  --color-gray-25: #FCFCFD;
+  --color-gray-900: #16233A;
+  --color-gray-800: #24334D;
+  --color-gray-700: #3B4A64;
+  --color-gray-600: #6B7A93;
+  --color-gray-500: #8B96A8;
+  --color-gray-400: #AAB3C2;
+  --color-gray-300: #CCD1DC;
+  --color-gray-200: #E7E3D6;
+  --color-gray-100: #F5F3EC;
+  --color-gray-50: #FBFAF6;
+  --color-gray-25: #FEFDFB;
 
-  /* GRADIENTS — built only from Navy / Gold / Emerald */
-  --gradient-primary: linear-gradient(135deg, #0F1E36 0%, #0D9488 100%);
-  --gradient-premium: linear-gradient(135deg, #0F1E36 0%, #B88A2B 100%);
+  /* Pastel tints — for soft badge/icon-chip backgrounds */
+  --color-navy-pastel: #E9EEF6;
+  --color-gold-pastel: #FBF1DC;
+  --color-emerald-pastel: #E3F5F1;
 
-  --gradient-luxe: linear-gradient(115deg, #0A1324 0%, #1E3A8A 30%, #B88A2B 68%, #0D9488 100%);
-  --gradient-luxe-vivid: linear-gradient(110deg, #1E3A8A 0%, #B88A2B 50%, #14B8A6 100%);
+  /* ----------------------------------------------------------------------
+     GRADIENTS
+  ---------------------------------------------------------------------- */
 
-  --gradient-aurora: linear-gradient(90deg, #8C6A1D 0%, #B88A2B 25%, #CEA041 50%, #14B8A6 75%, #0D9488 100%);
-  --gradient-gold-emerald: linear-gradient(120deg, #B88A2B 0%, #CEA041 45%, #0D9488 100%);
+  /* Hero — soft navy, warmed at the edges, not harsh black */
+  --gradient-hero: linear-gradient(160deg, #10233F 0%, #1B3A6B 55%, #123028 100%);
 
-  --gradient-mesh-hero:
-    radial-gradient(ellipse 75% 55% at 8% 0%, rgba(184, 138, 43, 0.30), transparent 55%),
-    radial-gradient(ellipse 70% 65% at 95% 15%, rgba(13, 148, 136, 0.28), transparent 55%),
-    radial-gradient(ellipse 90% 80% at 50% 110%, rgba(30, 58, 138, 0.45), transparent 60%),
-    linear-gradient(160deg, #0A1324 0%, #0F1E36 55%, #0A1F26 100%);
+  /* CTA pill gradient — gold to emerald, the "happy" accent combo */
+  --gradient-cta: linear-gradient(120deg, #D9AD52 0%, #B88A2B 45%, #0D9488 100%);
+  --gradient-cta-hover: linear-gradient(120deg, #0D9488 0%, #B88A2B 55%, #D9AD52 100%);
 
-  --gradient-surface-light: linear-gradient(150deg, #FFFFFF 0%, #F1F5FC 48%, #ECF7F4 100%);
-  --gradient-surface-light-cool: linear-gradient(150deg, #FFFFFF 0%, #EAF0FC 55%, #E7F5F1 100%);
-  --gradient-surface-light-warm: linear-gradient(135deg, #FFFFFF 0%, #FBF3E1 100%);
-  --gradient-surface-dark: linear-gradient(160deg, #0A1324 0%, #14264A 45%, #0C2E2C 100%);
+  /* Flagship tri-color, used sparingly for hero word / stat numbers */
+  --gradient-luxe: linear-gradient(115deg, #10233F 0%, #1E3A6B 35%, #B88A2B 70%, #0D9488 100%);
 
-  --gradient-radial-navy: radial-gradient(circle at 30% 20%, #1E3A8A 0%, #0A1324 70%);
-  --gradient-radial-gold: radial-gradient(circle at 50% 50%, rgba(184, 138, 43, 0.4) 0%, transparent 70%);
-  --gradient-radial-emerald: radial-gradient(circle at 50% 50%, rgba(13, 148, 136, 0.4) 0%, transparent 70%);
+  /* Accent sweep — echoes the arrow in the logo */
+  --gradient-aurora: linear-gradient(90deg, #B88A2B 0%, #D9AD52 40%, #2DBFAE 70%, #0D9488 100%);
 
-  --color-glass-light-bg: rgba(234, 240, 251, 0.65);
-  --color-glass-light-border: rgba(184, 138, 43, 0.25);
-  --color-glass-dark-bg: rgba(13, 148, 136, 0.08);
-  --color-glass-dark-border: rgba(184, 138, 43, 0.18);
+  /* Soft radial blooms — low-opacity floating color for backgrounds */
+  --bloom-navy: radial-gradient(circle, rgba(16, 35, 63, 0.14) 0%, transparent 70%);
+  --bloom-gold: radial-gradient(circle, rgba(184, 138, 43, 0.16) 0%, transparent 70%);
+  --bloom-emerald: radial-gradient(circle, rgba(13, 148, 136, 0.16) 0%, transparent 70%);
+
+  /* Glass */
+  --color-glass-light-bg: rgba(255, 255, 255, 0.6);
+  --color-glass-light-border: rgba(184, 138, 43, 0.2);
+  --color-glass-dark-bg: rgba(255, 255, 255, 0.08);
+  --color-glass-dark-border: rgba(217, 173, 82, 0.25);
 }
