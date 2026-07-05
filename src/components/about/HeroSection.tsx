@@ -152,7 +152,7 @@ export default function HeroSection() {
       }
     }
 
-    function createNode(index: number) {
+    function createNode() {
       const margin = 10
       const x = margin + Math.random() * (W - margin * 2)
       const y = margin + Math.random() * (H - margin * 2)
@@ -175,7 +175,7 @@ export default function HeroSection() {
     function buildNodes() {
       nodes = []
       for (let i = 0; i < NODE_COUNT; i++) {
-        nodes.push(createNode(i))
+        nodes.push(createNode())
       }
     }
 
@@ -267,7 +267,7 @@ export default function HeroSection() {
       }
     }
 
-    function drawConnections(time: number) {
+    function drawConnections() {
       const maxDist = CONNECTION_MAX_DIST
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
@@ -388,7 +388,7 @@ export default function HeroSection() {
       if (mouse.active) { applyMouseInfluence() } else { easeNodesBack() }
       drawGrid()
       drawOrbitals(time)
-      drawConnections(time)
+      drawConnections()
       drawNodes(time)
       drawTravelers()
       animationId = requestAnimationFrame(render)
