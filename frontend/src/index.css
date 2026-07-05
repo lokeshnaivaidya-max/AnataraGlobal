@@ -6,10 +6,17 @@
    base element defaults + glass/gradient/focus primitives. Previously
    written but never wired into the build — now the single source of
    truth for every color, font, radius, and shadow site-wide.
+
+   NOTE: base/primitives are imported into named Tailwind layers so that
+   Tailwind utility classes (h-11, w-[220px], object-contain, etc.) still
+   correctly override element defaults like the reset's `img { height:
+   auto }`. Unlayered CSS always beats layered CSS regardless of order —
+   importing without layer() was the bug that made every logo image
+   render at full native size, ignoring Tailwind's size utilities.
    ========================================================================== */
 @import './styles/tokens/index.css';
-@import './styles/base/index.css';
-@import './styles/primitives/index.css';
+@import './styles/base/index.css' layer(base);
+@import './styles/primitives/index.css' layer(components);
 
 @theme {
   /* Back-compat aliases — existing components reference these names */
@@ -44,75 +51,77 @@
 /* ==========================================================================
    Premium component primitives — cards, buttons, sections
    Built on the token layer above. Opt-in classes for consistent premium
-   feel across every card/button/section in the app.
+   feel across every card/button/section in the app. Placed in the
+   components layer so utility classes can still override them per usage.
    ========================================================================== */
+@layer components {
+  .card-premium {
+    background: var(--color-warm-white);
+    border: 1px solid var(--color-border-gray);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-fast) var(--ease-premium),
+      box-shadow var(--duration-fast) var(--ease-premium),
+      border-color var(--duration-fast) var(--ease-premium);
+  }
 
-.card-premium {
-  background: var(--color-warm-white);
-  border: 1px solid var(--color-border-gray);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--duration-fast) var(--ease-premium),
-    box-shadow var(--duration-fast) var(--ease-premium),
-    border-color var(--duration-fast) var(--ease-premium);
-}
+  .card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(184, 138, 43, 0.35);
+  }
 
-.card-premium:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(184, 138, 43, 0.35);
-}
+  .btn-premium-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+    background: var(--gradient-premium);
+    color: #fff;
+    box-shadow: var(--shadow-gold-glow);
+    transition: transform var(--duration-fast) var(--ease-premium),
+      box-shadow var(--duration-fast) var(--ease-premium),
+      filter var(--duration-fast) var(--ease-premium);
+  }
 
-.btn-premium-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-semibold);
-  background: var(--gradient-premium);
-  color: #fff;
-  box-shadow: var(--shadow-gold-glow);
-  transition: transform var(--duration-fast) var(--ease-premium),
-    box-shadow var(--duration-fast) var(--ease-premium),
-    filter var(--duration-fast) var(--ease-premium);
-}
+  .btn-premium-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow: 0 12px 40px rgba(184, 138, 43, 0.28);
+  }
 
-.btn-premium-primary:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.06);
-  box-shadow: 0 12px 40px rgba(184, 138, 43, 0.28);
-}
+  .btn-premium-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+    background: var(--color-glass-light-bg);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid var(--color-glass-light-border);
+    color: var(--color-deep-navy);
+    transition: transform var(--duration-fast) var(--ease-premium),
+      box-shadow var(--duration-fast) var(--ease-premium),
+      background var(--duration-fast) var(--ease-premium);
+  }
 
-.btn-premium-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-semibold);
-  background: var(--color-glass-light-bg);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  border: 1px solid var(--color-glass-light-border);
-  color: var(--color-deep-navy);
-  transition: transform var(--duration-fast) var(--ease-premium),
-    box-shadow var(--duration-fast) var(--ease-premium),
-    background var(--duration-fast) var(--ease-premium);
-}
+  .btn-premium-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.8);
+  }
 
-.btn-premium-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  background: rgba(255, 255, 255, 0.8);
-}
-
-/* Section background rhythm — alternate across page sections */
-.section-bg-white { background-color: #FFFFFF; }
-.section-bg-cream { background-color: #FFF8EE; }
-.section-bg-tint {
-  background-color: #F8FAFC;
-  background-image: radial-gradient(ellipse 70% 60% at 15% 0%, rgba(37, 99, 235, 0.05), transparent 60%);
+  /* Section background rhythm — alternate across page sections */
+  .section-bg-white { background-color: #FFFFFF; }
+  .section-bg-cream { background-color: #FFF8EE; }
+  .section-bg-tint {
+    background-color: #F8FAFC;
+    background-image: radial-gradient(ellipse 70% 60% at 15% 0%, rgba(37, 99, 235, 0.05), transparent 60%);
+  }
 }
 
 @utility text-gradient-primary {
