@@ -1,0 +1,16 @@
+/* ==========================================================================
+   src/styles/tokens/shadows.css
+   Shadow Design Tokens — Antara Global
+   Tailwind v4 @theme layer — cool-toned, navy-tinted elevation system
+   ========================================================================== */
+
+@theme {
+  --shadow-xs: 0 1px 2px rgba(15, 30, 54, 0.04);
+  --shadow-sm: 0 2px 8px rgba(15, 30, 54, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 30, 54, 0.08);
+  --shadow-lg: 0 16px 48px rgba(15, 30, 54, 0.12);
+
+  /* Hover-only accent glows — used exclusively on primary/secondary CTAs */
+  --shadow-gold-glow: 0 8px 32px rgba(184, 138, 43, 0.18);
+  --shadow-emerald-glow: 0 8px 32px rgba(13, 148, 136, 0.16);
+}

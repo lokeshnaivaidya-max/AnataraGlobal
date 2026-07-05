@@ -1,0 +1,8 @@
+/* ==========================================================================
+   src/styles/base/index.css
+   Base Layer — Master Import
+   Antara Global — element-level defaults, built on top of the token layer
+   ========================================================================== */
+
+@import '../reset.css';
+@import './typography-base.css';

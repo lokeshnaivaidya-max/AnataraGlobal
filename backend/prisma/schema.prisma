@@ -1,0 +1,465 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Role {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String?
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String?
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model User {
+  id               String             @id @default(uuid())
+  email            String             @unique
+  passwordHash     String?
+  googleId         String?            @unique
+  linkedinId       String?            @unique
+  firstName        String
+  lastName         String
+  roleId           String
+  isEmailVerified  Boolean            @default(false)
+  isMfaEnabled     Boolean            @default(false)
+  mfaSecret        String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  role             Role               @relation(fields: [roleId], references: [id])
+  sessions         UserSession[]
+  otpLogs          OtpLog[]
+  founder          Founder?
+  msme             MsmeBusiness?
+  advisor          Advisor?
+  meetings         Meeting[]
+  tasks            Task[]
+  reports          Report[]
+  documentVersions DocumentVersion[]
+  documentApprovals DocumentApproval[]
+  notifications    Notification[]
+  documents        Document[]
+  progress         ProgressTracking[]
+  signatures       DigitalSignature[]
+  billingLedgers   BillingLedger[]
+}
+
+model UserSession {
+  id         String   @id @default(uuid())
+  userId     String
+  token      String   @unique
+  deviceInfo String?
+  ipAddress  String?
+  expiresAt  DateTime
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OtpLog {
+  id        String   @id @default(uuid())
+  userId    String
+  code      String
+  purpose   String
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Founder {
+  id                   String       @id @default(uuid())
+  userId               String       @unique
+  bio                  String?
+  phone                String?
+  linkedinUrl          String?
+  kycStatus            String       @default("pending")
+  completionPercentage Int          @default(0)
+  panNumber            String?
+  gstNumber            String?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  user                 User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  educations           Education[]
+  experiences          Experience[]
+  skills               Skill[]
+  startups             Startup[]
+}
+
+model Education {
+  id           String    @id @default(uuid())
+  founderId    String
+  institution  String
+  degree       String
+  fieldOfStudy String
+  startDate    DateTime
+  endDate      DateTime?
+  founder      Founder   @relation(fields: [founderId], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id          String    @id @default(uuid())
+  founderId   String
+  company     String
+  role        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  founder     Founder   @relation(fields: [founderId], references: [id], onDelete: Cascade)
+}
+
+model Skill {
+  id        String  @id @default(uuid())
+  founderId String
+  name      String
+  founder   Founder @relation(fields: [founderId], references: [id], onDelete: Cascade)
+}
+
+model BusinessStage {
+  id          Int       @id
+  name        String    @unique
+  description String?
+  startups    Startup[]
+}
+
+model FundingStage {
+  id          Int       @id
+  name        String    @unique
+  description String?
+  startups    Startup[]
+}
+
+model Startup {
+  id               String        @id @default(uuid())
+  founderId        String
+  name             String
+  tagline          String        @default("")
+  description      String        @default("")
+  industry         String
+  sector           String
+  problem          String
+  solution         String
+  website          String        @default("")
+  incorporationType String       @default("")
+  revenue          Float         @default(0)
+  traction         String        @default("")
+  customers        Int           @default(0)
+  employees        Int           @default(0)
+  capTable         Json?
+  currentValuation Float         @default(0)
+  currentFunding   Float         @default(0)
+  previousFunding  Float         @default(0)
+  businessStageId  Int
+  fundingStageId   Int
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  businessStage    BusinessStage @relation(fields: [businessStageId], references: [id])
+  fundingStage     FundingStage  @relation(fields: [fundingStageId], references: [id])
+  founder          Founder       @relation(fields: [founderId], references: [id], onDelete: Cascade)
+  documents        Document[]
+  teamMembers      TeamMember[]
+}
+
+model MsmeBusiness {
+  id               String              @id @default(uuid())
+  userId           String              @unique
+  companyName      String
+  industryId       String
+  employeeCount    Int                 @default(0)
+  isExporter       Boolean             @default(false)
+  exportCountries  String[]
+  exportPercentage Float               @default(0)
+  turnoverTier     String
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gstDetails       GstDetails[]
+  turnoverLogs     TurnoverLog[]
+  financialHealth  MsmeFinancialHealth?
+  compliance       MsmeCompliance?
+}
+
+model GstDetails {
+  id                 String       @id @default(uuid())
+  businessId         String
+  gstNumber          String
+  verificationStatus String       @default("pending")
+  fileUrl            String?
+  uploadedAt         DateTime     @default(now())
+  business           MsmeBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model TurnoverLog {
+  id         String       @id @default(uuid())
+  businessId String
+  year       Int
+  amount     Float
+  fileUrl    String?
+  createdAt  DateTime     @default(now())
+  business   MsmeBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model MsmeFinancialHealth {
+  id                 String       @id @default(uuid())
+  businessId         String       @unique
+  cashFlowScore      Int
+  profitabilityScore Int
+  leverageScore      Int
+  overallScore       Int
+  assessedAt         DateTime     @default(now())
+  business           MsmeBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model MsmeCompliance {
+  id                     String       @id @default(uuid())
+  businessId             String       @unique
+  taxCompliance          String
+  laborCompliance        String
+  environmentalCompliance String
+  overallStatus          String
+  updatedAt              DateTime     @updatedAt
+  business               MsmeBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model BusinessAssessment {
+  id              String             @id @default(uuid())
+  userId          String
+  assessmentType  String
+  overallScore    Float
+  riskScore       Float
+  growthScore     Float
+  investmentScore Float
+  status          String             @default("draft")
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  answers         AssessmentAnswer[]
+  readinessScores ReadinessScore[]
+  reports         Report[]
+}
+
+model AssessmentAnswer {
+  id           String             @id @default(uuid())
+  assessmentId String
+  questionKey  String
+  answerValue  Json
+  comments     String?
+  assessment   BusinessAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+}
+
+model ReadinessScore {
+  id              String             @id @default(uuid())
+  assessmentId    String
+  sectionName     String
+  score           Float
+  recommendations Json
+  assessment      BusinessAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+}
+
+model Advisor {
+  id                String           @id @default(uuid())
+  userId            String           @unique
+  expertise         String[]
+  availabilitySlots Json
+  bio               String?
+  rate              Float            @default(0)
+  status            String           @default("pending")
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meetings          Meeting[]
+  reports           Report[]
+  recommendations   Recommendation[]
+}
+
+model Meeting {
+  id              String    @id @default(uuid())
+  advisorId       String
+  clientId        String
+  scheduledAt     DateTime
+  durationMinutes Int
+  status          String    @default("booked")
+  meetingLink     String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  advisor         Advisor   @relation(fields: [advisorId], references: [id], onDelete: Cascade)
+  client          User      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  tasks           Task[]
+  reports         Report[]
+}
+
+model Task {
+  id           String   @id @default(uuid())
+  meetingId    String
+  assignedToId String
+  title        String
+  description  String?
+  dueDate      DateTime
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  meeting      Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  assignedTo   User     @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id              String              @id @default(uuid())
+  advisorId       String
+  clientId        String
+  meetingId       String?
+  assessmentId    String?
+  content         String
+  createdAt       DateTime            @default(now())
+  advisor         Advisor             @relation(fields: [advisorId], references: [id], onDelete: Cascade)
+  client          User                @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  meeting         Meeting?            @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  assessment      BusinessAssessment? @relation(fields: [assessmentId], references: [id], onDelete: SetNull)
+  recommendations Recommendation[]
+}
+
+model Recommendation {
+  id          String   @id @default(uuid())
+  reportId    String
+  advisorId   String
+  title       String
+  description String?
+  priority    String
+  createdAt   DateTime @default(now())
+  advisor     Advisor  @relation(fields: [advisorId], references: [id], onDelete: Cascade)
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}
+
+model ProgressTracking {
+  id            String   @id @default(uuid())
+  clientId      String
+  milestoneName String
+  description   String?
+  targetDate    DateTime
+  status        String   @default("not_started")
+  updatedAt     DateTime @updatedAt
+  client        User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id             String             @id @default(uuid())
+  ownerId        String
+  startupId      String?
+  category       String
+  fileName       String
+  filePath       String
+  currentVersion Int                @default(1)
+  isSensitive    Boolean            @default(false)
+  expiryDate     DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  owner          User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  startup        Startup?           @relation(fields: [startupId], references: [id], onDelete: SetNull)
+  versions       DocumentVersion[]
+  approvals      DocumentApproval[]
+  signature      DigitalSignature?
+}
+
+model DocumentVersion {
+  id            String   @id @default(uuid())
+  documentId    String
+  versionNumber Int
+  filePath      String
+  uploadedById  String
+  changelog     String?
+  createdAt     DateTime @default(now())
+  document      Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  uploadedBy    User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+}
+
+model DocumentApproval {
+  id            String    @id @default(uuid())
+  documentId    String
+  versionNumber Int
+  reviewerId    String
+  status        String    @default("pending")
+  comments      String?
+  reviewedAt    DateTime?
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  reviewer      User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id          String    @id @default(uuid())
+  recipientId String
+  type        String
+  subject     String
+  content     String
+  status      String    @default("pending")
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+  recipient   User      @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  startupId String
+  name      String
+  role      String
+  email     String?
+  createdAt DateTime @default(now())
+  startup   Startup  @relation(fields: [startupId], references: [id], onDelete: Cascade)
+}
+
+model BillingLedger {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Float
+  status      String   @default("pending")
+  description String
+  invoiceDate DateTime @default(now())
+  dueDate     DateTime
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InvestorProfile {
+  id              String   @id @default(uuid())
+  companyName     String
+  contactName     String
+  email           String   @unique
+  investmentStage String[]
+  minTicket       Float
+  maxTicket       Float
+  createdAt       DateTime @default(now())
+}
+
+model PlatformEvent {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  eventDate   DateTime
+  location    String?
+  createdAt   DateTime @default(now())
+}
+
+model DigitalSignature {
+  id            String   @id @default(uuid())
+  documentId    String   @unique
+  signedById    String
+  signatureHash String
+  signedAt      DateTime @default(now())
+  document      Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  signedBy      User     @relation(fields: [signedById], references: [id], onDelete: Cascade)
+}
