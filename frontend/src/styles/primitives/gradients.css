@@ -1,46 +1,112 @@
 /* ==========================================================================
    src/styles/primitives/gradients.css
    Gradient & Ambient Mesh Primitives — Antara Global
-   Gradients imply depth and lighting only — never decoration for its own
-   sake. Used on primary CTAs, flagship panels, and low-opacity ambient
-   background blooms.
+   Every gradient is built from the three brand colors (Navy / Gold /
+   Emerald) — used on CTAs, flagship panels, dividers, and ambient blooms.
    ========================================================================== */
 
 /* ----------------------------------------------------------------------
-   Solid Gradient Fills — reserved for primary CTA buttons and stat panels
+   Solid Gradient Fills
 ---------------------------------------------------------------------- */
-.gradient-primary {
-  background: var(--gradient-primary);
+.gradient-primary { background: var(--gradient-primary); }
+.gradient-premium { background: var(--gradient-premium); }
+
+/* Flagship tri-color fill — hero panels, primary CTAs, stat blocks */
+.gradient-luxe {
+  background: var(--gradient-luxe);
+  background-size: 200% 200%;
+  animation: luxe-drift 12s ease-in-out infinite;
 }
 
-.gradient-premium {
-  background: var(--gradient-premium);
+.gradient-luxe-vivid { background: var(--gradient-luxe-vivid); }
+.gradient-gold-emerald { background: var(--gradient-gold-emerald); }
+
+/* Full-bleed dark hero/CTA/footer background */
+.mesh-hero { background: var(--gradient-mesh-hero); }
+
+/* Premium "white" surface — use instead of a flat white fill */
+.surface-premium { background: var(--gradient-surface-light); }
+.surface-premium-cool { background: var(--gradient-surface-light-cool); }
+.surface-premium-dark { background: var(--gradient-surface-dark); }
+
+@keyframes luxe-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* ----------------------------------------------------------------------
-   Gradient Text — reserved for a single hero headline word, used at
-   most once per page
+   Gradient Text — hero headline word, section eyebrow, key stat
 ---------------------------------------------------------------------- */
-.gradient-text-primary {
-  background: var(--gradient-primary);
+.gradient-text-primary,
+.gradient-text-premium,
+.gradient-text-luxe,
+.gradient-text-aurora {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
+.gradient-text-primary { background: var(--gradient-primary); }
+.gradient-text-premium { background: var(--gradient-premium); }
+.gradient-text-luxe { background: var(--gradient-luxe); }
+.gradient-text-aurora { background: var(--gradient-aurora); }
 
-.gradient-text-premium {
-  background: var(--gradient-premium);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+/* ----------------------------------------------------------------------
+   Accent Sweep / Divider — echoes the arrow-sweep in the logomark.
+   Drop a single <div class="divider-aurora"> between sections instead
+   of a plain border, or under a heading instead of nothing.
+---------------------------------------------------------------------- */
+.divider-aurora {
+  height: 3px;
+  width: 100%;
+  max-width: 120px;
+  border-radius: 999px;
+  background: var(--gradient-aurora);
+  background-size: 200% 100%;
+  animation: shimmer 5s linear infinite;
+}
+
+.divider-aurora--full {
+  max-width: none;
+  height: 1px;
+  opacity: 0.6;
 }
 
 /* ----------------------------------------------------------------------
-   Ambient Mesh Bloom — extremely low-opacity radial glow, positioned in
-   a section corner. Never exceeds ~40% of the section. Container needs
-   position: relative + overflow: hidden.
+   Gradient Border Card — a "white" card whose border is a thin
+   tri-color gradient ring instead of flat gray. Wrap content in a
+   child element; the ring lives on ::before.
+---------------------------------------------------------------------- */
+.gradient-border-premium {
+  position: relative;
+  background: var(--gradient-surface-light);
+  border-radius: var(--radius-xl);
+  isolation: isolate;
+}
+
+.gradient-border-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: var(--gradient-luxe);
+  opacity: 0.55;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-premium);
+}
+
+.gradient-border-premium:hover::before {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------------------------
+   Ambient Mesh Bloom — low-opacity radial glow in a section corner.
+   Container needs position: relative + overflow: hidden.
 ---------------------------------------------------------------------- */
 .mesh-bloom {
   position: relative;
@@ -54,48 +120,33 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(
-      ellipse 60% 50% at 85% 15%,
-      rgba(13, 148, 136, 0.08),
-      transparent 70%
-    );
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(13, 148, 136, 0.08), transparent 70%);
   animation: mesh-drift var(--duration-mesh-drift) ease-in-out infinite;
 }
 
 .mesh-bloom--gold::before {
-  background:
-    radial-gradient(
-      ellipse 60% 50% at 85% 15%,
-      rgba(184, 138, 43, 0.08),
-      transparent 70%
-    );
+  background: radial-gradient(ellipse 60% 50% at 85% 15%, rgba(184, 138, 43, 0.09), transparent 70%);
 }
 
 .mesh-bloom--corner-bottom::before {
+  background: radial-gradient(ellipse 55% 45% at 10% 90%, rgba(13, 148, 136, 0.06), transparent 70%);
+}
+
+/* Tri-color bloom — richest option, use once per page max (hero or CTA) */
+.mesh-bloom--luxe::before {
   background:
-    radial-gradient(
-      ellipse 55% 45% at 10% 90%,
-      rgba(13, 148, 136, 0.06),
-      transparent 70%
-    );
+    radial-gradient(ellipse 55% 45% at 88% 10%, rgba(184, 138, 43, 0.12), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 8% 85%, rgba(13, 148, 136, 0.12), transparent 60%);
 }
 
 @keyframes mesh-drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-2%, 2%) scale(1.05);
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-2%, 2%) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
 }
 
 /* ----------------------------------------------------------------------
-   Cursor Glow — subtle radial gradient following cursor position.
-   Desktop-only; position set via inline custom properties --x / --y
-   from a mousemove handler.
+   Cursor Glow — subtle radial gradient following cursor position
 ---------------------------------------------------------------------- */
 .cursor-glow {
   position: relative;
@@ -116,16 +167,16 @@
 }
 
 @media (max-width: 1023px) {
-  .cursor-glow::after {
-    display: none;
-  }
+  .cursor-glow::after { display: none; }
 }
 
 /* ----------------------------------------------------------------------
-   Reduced motion — freeze ambient drift, keep the static gradient
+   Reduced motion
 ---------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .mesh-bloom::before {
+  .mesh-bloom::before,
+  .gradient-luxe,
+  .divider-aurora {
     animation: none;
   }
 }
