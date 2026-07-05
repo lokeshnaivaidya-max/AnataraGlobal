@@ -1,51 +1,33 @@
-/* ==========================================================================
-   src/styles/tokens/colors.css
-   Color Design Tokens — Antara Global
-   Tailwind v4 @theme layer — single source of truth for all color values
-   ========================================================================== */
-
 @theme {
-  /* ----------------------------------------------------------------------
-     Core Brand — Deep Navy
-  ---------------------------------------------------------------------- */
+  /* Core Brand — Deep Navy */
   --color-deep-navy: #0F1E36;
   --color-deep-navy-light: #1E3A8A;
   --color-deep-navy-dark: #0A1324;
 
-  /* ----------------------------------------------------------------------
-     Core Neutrals
-  ---------------------------------------------------------------------- */
+  /* Core Neutrals */
   --color-charcoal: #0F172A;
   --color-slate: #475569;
   --color-warm-white: #FCFCFD;
   --color-paper: #F8FAFC;
   --color-border-gray: #E2E8F0;
 
-  /* ----------------------------------------------------------------------
-     Accent — Gold (capital / authority)
-  ---------------------------------------------------------------------- */
+  /* Accent — Gold */
   --color-gold: #B88A2B;
   --color-gold-light: #CEA041;
   --color-gold-dark: #8C6A1D;
 
-  /* ----------------------------------------------------------------------
-     Accent — Emerald (growth / momentum)
-  ---------------------------------------------------------------------- */
+  /* Accent — Emerald */
   --color-emerald: #0D9488;
   --color-emerald-light: #14B8A6;
   --color-emerald-dark: #0F766E;
 
-  /* ----------------------------------------------------------------------
-     Semantic
-  ---------------------------------------------------------------------- */
+  /* Semantic */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-error: #EF4444;
   --color-info: #3B82F6;
 
-  /* ----------------------------------------------------------------------
-     Neutral Grayscale (12-step)
-  ---------------------------------------------------------------------- */
+  /* Neutral Grayscale */
   --color-gray-950: #0A1324;
   --color-gray-900: #0F172A;
   --color-gray-800: #1E293B;
@@ -60,60 +42,54 @@
   --color-gray-25: #FCFCFD;
 
   /* ----------------------------------------------------------------------
-     GRADIENTS — Premium tri-brand system
-     Every gradient below is built from the same three brand colors
-     (Navy / Gold / Emerald) mixed at different angles and weights, so
-     nothing ever looks like a random decorative color choice.
+     GRADIENTS — bold, visible, tri-brand only (Navy / Gold / Emerald)
   ---------------------------------------------------------------------- */
 
-  /* Two-tone workhorses (existing, kept for back-compat) */
   --gradient-primary: linear-gradient(135deg, #0F1E36 0%, #0D9488 100%);
   --gradient-premium: linear-gradient(135deg, #0F1E36 0%, #B88A2B 100%);
 
-  /* Signature tri-color gradient — the "flagship" gradient of the brand.
-     Use on hero headline words, primary CTA buttons, and stat panels. */
-  --gradient-luxe: linear-gradient(120deg, #0A1324 0%, #0F1E36 30%, #B88A2B 65%, #0D9488 100%);
-  --gradient-luxe-vivid: linear-gradient(115deg, #1E3A8A 0%, #B88A2B 50%, #14B8A6 100%);
+  /* Flagship tri-color — hero text, primary CTAs, stat panels */
+  --gradient-luxe: linear-gradient(115deg, #0A1324 0%, #1E3A8A 30%, #B88A2B 68%, #0D9488 100%);
+  --gradient-luxe-vivid: linear-gradient(110deg, #1E3A8A 0%, #B88A2B 50%, #14B8A6 100%);
 
-  /* Accent sweep — mirrors the arrow-sweep in the logomark. Use on
-     dividers, underlines, progress bars, and small accent bars. */
+  /* Arrow-sweep accent — dividers, underlines, progress bars */
   --gradient-aurora: linear-gradient(90deg, #8C6A1D 0%, #B88A2B 25%, #CEA041 50%, #14B8A6 75%, #0D9488 100%);
-
-  /* Gold ↔ Emerald — secondary CTAs, badges, icon chips */
   --gradient-gold-emerald: linear-gradient(120deg, #B88A2B 0%, #CEA041 45%, #0D9488 100%);
 
-  /* Full dark hero mesh — layered radial blooms of gold + emerald over a
-     deep navy base. Use as a full-bleed section background instead of
-     flat navy for hero/CTA/footer sections. */
+  /* Full dark hero/CTA/footer mesh */
   --gradient-mesh-hero:
-    radial-gradient(ellipse 75% 55% at 8% 0%, rgba(184, 138, 43, 0.22), transparent 55%),
-    radial-gradient(ellipse 70% 65% at 95% 15%, rgba(13, 148, 136, 0.20), transparent 55%),
-    radial-gradient(ellipse 90% 80% at 50% 110%, rgba(30, 58, 138, 0.35), transparent 60%),
+    radial-gradient(ellipse 75% 55% at 8% 0%, rgba(184, 138, 43, 0.30), transparent 55%),
+    radial-gradient(ellipse 70% 65% at 95% 15%, rgba(13, 148, 136, 0.28), transparent 55%),
+    radial-gradient(ellipse 90% 80% at 50% 110%, rgba(30, 58, 138, 0.45), transparent 60%),
     linear-gradient(160deg, #0A1324 0%, #0F1E36 55%, #0A1F26 100%);
 
-  /* Premium "white" surface — replaces flat #FFFFFF. Reads as white at a
-     glance but carries a whisper of navy-cool + gold-warm undertone so
-     no section is a dead, flat white. */
-  --gradient-surface-light: linear-gradient(150deg, #FDFCFA 0%, #F8FAFD 45%, #FCF9F1 100%);
-  --gradient-surface-light-cool: linear-gradient(150deg, #FCFDFE 0%, #F4F8FC 55%, #F8FAFC 100%);
+  /* PREMIUM SURFACE — this is the "white" replacement. Clearly visible
+     tri-tone wash: cool navy top-left → warm gold center → soft
+     emerald bottom-right. This is the base of every light section. */
+  --gradient-surface-light: linear-gradient(150deg,
+    #EAF0FB 0%,
+    #F7FAFF 18%,
+    #FFFFFF 38%,
+    #FDF6E7 58%,
+    #FBEFD3 72%,
+    #E9F7F3 88%,
+    #E1F3EE 100%
+  );
 
-  /* Premium dark surface — replaces flat navy card fills */
-  --gradient-surface-dark: linear-gradient(160deg, #0A1324 0%, #0F1E36 60%, #0C2426 100%);
+  --gradient-surface-light-cool: linear-gradient(150deg, #E3ECFB 0%, #F5F9FF 45%, #E4F5F1 100%);
+  --gradient-surface-light-warm: linear-gradient(150deg, #FFFDF7 0%, #FDF1D6 55%, #F8E6BE 100%);
 
-  /* Radial spotlight — used behind stat numbers / hero art */
+  /* Premium dark surface — replaces flat navy fills */
+  --gradient-surface-dark: linear-gradient(160deg, #0A1324 0%, #14264A 45%, #0C2E2C 100%);
+
+  /* Radial spotlights */
   --gradient-radial-navy: radial-gradient(circle at 30% 20%, #1E3A8A 0%, #0A1324 70%);
-  --gradient-radial-gold: radial-gradient(circle at 50% 50%, rgba(184, 138, 43, 0.35) 0%, transparent 70%);
-  --gradient-radial-emerald: radial-gradient(circle at 50% 50%, rgba(13, 148, 136, 0.35) 0%, transparent 70%);
+  --gradient-radial-gold: radial-gradient(circle at 50% 50%, rgba(184, 138, 43, 0.4) 0%, transparent 70%);
+  --gradient-radial-emerald: radial-gradient(circle at 50% 50%, rgba(13, 148, 136, 0.4) 0%, transparent 70%);
 
-  /* ----------------------------------------------------------------------
-     Glass — Light Surface
-  ---------------------------------------------------------------------- */
-  --color-glass-light-bg: rgba(255, 255, 255, 0.55);
-  --color-glass-light-border: rgba(255, 255, 255, 0.6);
-
-  /* ----------------------------------------------------------------------
-     Glass — Dark Surface
-  ---------------------------------------------------------------------- */
-  --color-glass-dark-bg: rgba(255, 255, 255, 0.06);
-  --color-glass-dark-border: rgba(255, 255, 255, 0.12);
+  /* Glass — now tinted navy instead of neutral white/gray, for consistency */
+  --color-glass-light-bg: rgba(234, 240, 251, 0.65);
+  --color-glass-light-border: rgba(184, 138, 43, 0.25);
+  --color-glass-dark-bg: rgba(13, 148, 136, 0.08);
+  --color-glass-dark-border: rgba(184, 138, 43, 0.18);
 }
