@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'wouter'
+import { useState, useEffect, useCallback, type MouseEvent } from 'react'
+import { Link, useLocation } from 'wouter'
 import {
   Menu,
   X,
@@ -42,6 +42,19 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
+  const [location, setLocation] = useLocation()
+
+  const goHome = useCallback(
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      // Explicit navigation guarantees the logo always routes home,
+      // even if default anchor behavior is intercepted upstream.
+      e.preventDefault()
+      setMobileOpen(false)
+      setUserMenuOpen(false)
+      setLocation('/')
+    },
+    [setLocation]
+  )
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -90,7 +103,12 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
           }`}
           aria-label="Main navigation"
         >
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+          <Link
+            href="/"
+            onClick={goHome}
+            className="flex items-center gap-2.5 group shrink-0 cursor-pointer"
+            aria-label="ANTARA Global — Go to homepage"
+          >
             <div className="relative flex items-center">
               <Sparkles className="h-5 w-5 text-gold transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
               <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-gold/40 animate-pulse-glow" />
@@ -233,7 +251,12 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
             aria-label="Mobile navigation"
           >
             <div className="flex items-center justify-between border-b border-border-gray/60 px-5 py-4">
-              <Link href="/" onClick={closeMobile} className="flex items-center gap-2 group">
+              <Link
+                href="/"
+                onClick={goHome}
+                className="flex items-center gap-2 group cursor-pointer"
+                aria-label="ANTARA Global — Go to homepage"
+              >
                 <Sparkles className="h-4.5 w-4.5 text-gold group-hover:rotate-12 transition-transform duration-300" />
                 <span className="text-base font-black tracking-tight text-deep-navy">
                   ANTARA{' '}
