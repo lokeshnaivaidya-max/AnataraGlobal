@@ -32,7 +32,7 @@ export default function Footer() {
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map(({ icon: Icon, label }) => (
-                
+                <a
                   key={label}
                   href="#"
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-gold-light hover:border-gold/30 hover:bg-gold/5 hover:scale-110 transition-all duration-200"
