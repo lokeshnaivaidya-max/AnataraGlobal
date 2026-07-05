@@ -1,0 +1,12 @@
+/* ==========================================================================
+   src/styles/tokens/index.css
+   Token Layer — Master Import
+   Antara Global — imports all @theme token files in dependency order
+   ========================================================================== */
+
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './radius.css';
+@import './shadows.css';
+@import './motion.css';

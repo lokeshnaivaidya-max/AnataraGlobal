@@ -1,0 +1,61 @@
+/* ==========================================================================
+   src/styles/primitives/focus-ring.css
+   Accessible Focus Ring Primitive — Antara Global
+   Shared focus style for all interactive elements. Never remove outlines
+   without this replacement — see Accessibility Rules in the design system.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------
+   Default focus ring — accent-colored halo + solid inner ring,
+   keyboard-only (uses :focus-visible, so mouse clicks stay clean)
+---------------------------------------------------------------------- */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-deep-navy-light);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(30, 58, 138, 0.12);
+  border-radius: var(--radius-sm);
+}
+
+/* ----------------------------------------------------------------------
+   Gold variant — for elements on gold/premium-gradient surfaces
+---------------------------------------------------------------------- */
+.focus-ring--gold:focus-visible {
+  outline-color: var(--color-gold);
+  box-shadow: 0 0 0 5px rgba(184, 138, 43, 0.16);
+}
+
+/* ----------------------------------------------------------------------
+   Emerald variant — for elements on emerald-accented surfaces
+---------------------------------------------------------------------- */
+.focus-ring--emerald:focus-visible {
+  outline-color: var(--color-emerald);
+  box-shadow: 0 0 0 5px rgba(13, 148, 136, 0.14);
+}
+
+/* ----------------------------------------------------------------------
+   Inverse variant — for interactive elements on dark/navy backgrounds
+---------------------------------------------------------------------- */
+.focus-ring--inverse:focus-visible {
+  outline-color: var(--color-warm-white);
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.16);
+}
+
+/* ----------------------------------------------------------------------
+   Global baseline — applies to every native interactive element even
+   if a component forgets to add a .focus-ring class explicitly
+---------------------------------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-deep-navy-light);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(30, 58, 138, 0.12);
+  border-radius: var(--radius-sm);
+}

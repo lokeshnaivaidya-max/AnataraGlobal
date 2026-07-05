@@ -1,0 +1,131 @@
+/* ==========================================================================
+   src/styles/primitives/gradients.css
+   Gradient & Ambient Mesh Primitives — Antara Global
+   Gradients imply depth and lighting only — never decoration for its own
+   sake. Used on primary CTAs, flagship panels, and low-opacity ambient
+   background blooms.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------
+   Solid Gradient Fills — reserved for primary CTA buttons and stat panels
+---------------------------------------------------------------------- */
+.gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.gradient-premium {
+  background: var(--gradient-premium);
+}
+
+/* ----------------------------------------------------------------------
+   Gradient Text — reserved for a single hero headline word, used at
+   most once per page
+---------------------------------------------------------------------- */
+.gradient-text-primary {
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-premium {
+  background: var(--gradient-premium);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ----------------------------------------------------------------------
+   Ambient Mesh Bloom — extremely low-opacity radial glow, positioned in
+   a section corner. Never exceeds ~40% of the section. Container needs
+   position: relative + overflow: hidden.
+---------------------------------------------------------------------- */
+.mesh-bloom {
+  position: relative;
+  isolation: isolate;
+}
+
+.mesh-bloom::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 60% 50% at 85% 15%,
+      rgba(13, 148, 136, 0.08),
+      transparent 70%
+    );
+  animation: mesh-drift var(--duration-mesh-drift) ease-in-out infinite;
+}
+
+.mesh-bloom--gold::before {
+  background:
+    radial-gradient(
+      ellipse 60% 50% at 85% 15%,
+      rgba(184, 138, 43, 0.08),
+      transparent 70%
+    );
+}
+
+.mesh-bloom--corner-bottom::before {
+  background:
+    radial-gradient(
+      ellipse 55% 45% at 10% 90%,
+      rgba(13, 148, 136, 0.06),
+      transparent 70%
+    );
+}
+
+@keyframes mesh-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-2%, 2%) scale(1.05);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Cursor Glow — subtle radial gradient following cursor position.
+   Desktop-only; position set via inline custom properties --x / --y
+   from a mousemove handler.
+---------------------------------------------------------------------- */
+.cursor-glow {
+  position: relative;
+  isolation: isolate;
+}
+
+.cursor-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 320px at var(--x, 50%) var(--y, 50%),
+    rgba(255, 255, 255, 0.05),
+    transparent 70%
+  );
+}
+
+@media (max-width: 1023px) {
+  .cursor-glow::after {
+    display: none;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Reduced motion — freeze ambient drift, keep the static gradient
+---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-bloom::before {
+    animation: none;
+  }
+}
