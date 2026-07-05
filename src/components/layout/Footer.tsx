@@ -1,5 +1,5 @@
 import { Link } from 'wouter'
-import { Mail, MapPin, Globe, Share2, Play, Sparkles } from 'lucide-react'
+import { Mail, MapPin, Globe, Share2, Play } from 'lucide-react'
 
 const socialLinks = [
   { icon: Globe, label: 'LinkedIn' },
@@ -19,12 +19,12 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 group">
-              <Sparkles className="h-5 w-5 text-gold group-hover:rotate-12 transition-transform duration-300" />
-              <span className="text-2xl font-bold tracking-tight">
-                ANTARA{' '}
-                <span className="font-light text-gold-light">GLOBAL</span>
-              </span>
+            <div className="inline-flex items-center rounded-xl bg-white/95 px-3 py-2 shadow-sm group">
+              <img
+                src="/image.png"
+                alt="ANTARA Global"
+                className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
             </div>
             <p className="mt-4 text-white/40 text-sm leading-relaxed max-w-md">
               Strategic business advisory, venture readiness, and capital connectivity
@@ -32,7 +32,7 @@ export default function Footer() {
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map(({ icon: Icon, label }) => (
-                <a
+                
                   key={label}
                   href="#"
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-white/40 hover:text-gold-light hover:border-gold/30 hover:bg-gold/5 hover:scale-110 transition-all duration-200"
