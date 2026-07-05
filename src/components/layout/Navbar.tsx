@@ -79,23 +79,12 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
           className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8"
           aria-label="Main navigation"
         >
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="relative flex items-center">
-              <Sparkles className="h-5 w-5 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" style={{ color: '#FD7C06' }} />
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full animate-pulse-glow" style={{ backgroundColor: 'rgba(253,124,6,0.4)' }} />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="text-[17px] font-black tracking-tight transition-colors duration-300" style={{ color: '#000000' }}>
-                ANTARA{' '}
-                <span className="font-light" style={{ color: '#FD7C06' }}>GLOBAL</span>
-              </span>
-              <span
-                className="hidden sm:block text-[9px] font-medium tracking-wider"
-                style={{ color: 'rgba(0,0,0,0.5)' }}
-              >
-                सर्वेषां वित्तज्ञानम्
-              </span>
-            </div>
+          <Link href="/" className="flex items-center shrink-0 group">
+            <img
+              src="/image.png"
+              alt="ANTARA Global"
+              className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            />
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">
@@ -250,12 +239,12 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
             aria-label="Mobile navigation"
           >
             <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
-              <Link href="/" onClick={closeMobile} className="flex items-center gap-2 group">
-                <Sparkles className="h-4.5 w-4.5 transition-transform duration-300 group-hover:rotate-12" style={{ color: '#FD7C06' }} />
-                <span className="text-base font-black tracking-tight" style={{ color: '#000000' }}>
-                  ANTARA{' '}
-                  <span className="font-light" style={{ color: '#FD7C06' }}>GLOBAL</span>
-                </span>
+              <Link href="/" onClick={closeMobile} className="flex items-center group">
+                <img
+                  src="/image.png"
+                  alt="ANTARA Global"
+                  className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                />
               </Link>
               <button
                 onClick={closeMobile}
