@@ -122,9 +122,7 @@ export default function Ecosystem() {
                 {ecosystemSteps.map((step, idx) => (
                   <button key={step.title} onClick={() => setActiveStep(idx)}
                     className="flex-1 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
-                    style={activeStep === idx
-                      ? { backgroundColor: 'rgba(253,124,6,0.15)', border: '1px solid rgba(253,124,6,0.3)', color: '#FD7C06' }
-                      : { backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)' }}
+                    style={activeStep === idx ? { backgroundColor: 'rgba(253,124,6,0.15)', border: '1px solid rgba(253,124,6,0.3)', color: '#FD7C06' } : { backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)' }}
                     onMouseEnter={(e) => { if (activeStep !== idx) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)' }}}
                     onMouseLeave={(e) => { if (activeStep !== idx) { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)' }}}>
                     {step.step}
@@ -165,8 +163,12 @@ export default function Ecosystem() {
       </section>
 
       {/* ── Ecosystem Journey — 4 Cards ── */}
-      <section className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#000000' }}>
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl" style={{ backgroundColor: 'rgba(253,124,6,0.05)' }} />
+        </div>
+        <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, #FD7C06, transparent)' }} />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-20">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -174,17 +176,17 @@ export default function Ecosystem() {
               <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#CEA041' }}>The Journey</span>
               <span className="h-px w-8" style={{ backgroundColor: '#CEA041' }} />
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight whitespace-nowrap" style={{ color: '#000000' }}>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight whitespace-nowrap text-white">
               Educate → Advise → Connect → Grow
             </h2>
-            <p className="mt-4 text-base leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}>
+            <p className="mt-4 text-base leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
               A continuous loop of learning, strategy, connections, and expansion.
             </p>
           </motion.div>
 
           <div className="relative">
             {/* Connecting line */}
-            <div className="hidden lg:block absolute top-[60px] left-[12.5%] right-[12.5%] h-px" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
+            <div className="hidden lg:block absolute top-[16px] left-[12.5%] right-[12.5%] h-px" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}>
               <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                 className="h-full origin-left" style={{ background: 'linear-gradient(90deg, #FD7C06, #CEA041, #FD7C06)' }} />
@@ -198,19 +200,19 @@ export default function Ecosystem() {
                 return (
                   <motion.div key={step.title} variants={cardVariants} whileHover={{ y: -8 }} className="group relative text-center">
                     <div className="hidden lg:flex justify-center relative z-10 mb-8">
-                      <div className="h-8 w-8 rounded-full bg-white border-2 shadow-lg flex items-center justify-center"
-                        style={{ borderColor: isGold ? '#CEA041' : '#FD7C06' }}>
+                      <div className="h-8 w-8 rounded-full border-2 shadow-lg flex items-center justify-center"
+                        style={{ backgroundColor: '#000000', borderColor: isGold ? '#CEA041' : '#FD7C06' }}>
                         <span className="h-3 w-3 rounded-full" style={{ backgroundColor: isGold ? '#CEA041' : '#FD7C06' }} />
                       </div>
                     </div>
 
                     <div className="rounded-3xl p-7 shadow-md hover:shadow-2xl transition-all duration-500 h-full flex flex-col items-center"
-                      style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                      style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
                       <div className="flex h-16 w-16 items-center justify-center rounded-2xl border mb-5 transition-all duration-300 group-hover:scale-110"
                         style={{
-                          backgroundColor: isGold ? 'rgba(206,160,65,0.1)' : 'rgba(253,124,6,0.1)',
-                          borderColor: isGold ? 'rgba(206,160,65,0.15)' : 'rgba(253,124,6,0.15)',
-                          color: isGold ? '#CEA041' : '#FD7C06',
+                          backgroundColor: isGold ? '#CEA041' : '#FD7C06',
+                          borderColor: isGold ? '#CEA041' : '#FD7C06',
+                          color: '#FFFFFF',
                         }}>
                         <Icon className="h-8 w-8" />
                       </div>
@@ -218,12 +220,12 @@ export default function Ecosystem() {
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: isGold ? '#CEA041' : '#FD7C06' }}>
                         {step.step}
                       </span>
-                      <h3 className="text-xl font-extrabold mt-1 transition-colors" style={{ color: '#000000' }}>{step.title}</h3>
-                      <p className="text-xs mt-3 leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}>{step.desc}</p>
+                      <h3 className="text-xl font-extrabold mt-1 transition-colors text-white">{step.title}</h3>
+                      <p className="text-xs mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{step.desc}</p>
 
-                      <ul className="mt-5 pt-5 w-full space-y-2" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                      <ul className="mt-5 pt-5 w-full space-y-2" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                         {step.points.map((point) => (
-                          <li key={point} className="flex items-center justify-center gap-2 text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
+                          <li key={point} className="flex items-center justify-start gap-2 text-xs font-medium" style={{ color: 'rgba(255,255,255,0.7)' }}>
                             <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: isGold ? '#CEA041' : '#FD7C06' }} />
                             {point}
                           </li>
@@ -233,7 +235,7 @@ export default function Ecosystem() {
 
                     {idx < ecosystemSteps.length - 1 && (
                       <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20">
-                        <ArrowRight className="h-5 w-5" style={{ color: 'rgba(0,0,0,0.2)' }} />
+                        <ArrowRight className="h-5 w-5" style={{ color: 'rgba(255,255,255,0.2)' }} />
                       </div>
                     )}
                   </motion.div>
@@ -243,11 +245,11 @@ export default function Ecosystem() {
           </div>
 
           {/* Loop indicator */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-12 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold"
-              style={{ backgroundColor: 'rgba(206,160,65,0.08)', border: '1px solid rgba(206,160,65,0.2)', color: '#CEA041' }}>
-              <RefreshCw className="h-4 w-4" />
-              Continuous Improvement Loop — After Grow, return to Educate
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-20 text-center">
+            <div className="inline-flex items-center gap-3 rounded-full px-6 py-3 text-[10px] sm:text-xs font-semibold whitespace-nowrap"
+              style={{ backgroundColor: 'rgba(206,160,65,0.1)', border: '1px solid rgba(206,160,65,0.25)', color: '#CEA041' }}>
+              <RefreshCw className="h-4 w-4 shrink-0" />
+              <span>Continuous Improvement Loop — After Grow, return to Educate</span>
             </div>
           </motion.div>
         </div>
