@@ -72,10 +72,10 @@ export default function ResourcesSection() {
   }
 
   return (
-    <section id="resources" className="relative py-24 lg:py-32 bg-light-gray overflow-hidden">
+    <section id="resources" className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#FFF8F2' }}>
       {/* Decorative ornaments */}
-      <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-gold/5 blur-3xl animate-float" />
-      <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-emerald/5 blur-3xl animate-float" style={{ animationDelay: '3s' }} />
+      <div className="absolute top-10 left-10 w-40 h-40 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: '#FD7C06' }} />
+      <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: '#CEA041' }} />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -83,9 +83,10 @@ export default function ResourcesSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full bg-emerald/10 px-4 py-1.5 text-xs font-semibold text-emerald border border-emerald/20 mb-4"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border mb-4"
+            style={{ backgroundColor: 'rgba(253,124,6,0.08)', borderColor: 'rgba(253,124,6,0.2)', color: '#FD7C06' }}
           >
-            <Sparkles className="h-3.5 w-3.5 text-emerald" />
+            <Sparkles className="h-3.5 w-3.5" />
             Insights & Tools
           </motion.div>
           <motion.h2 
@@ -93,7 +94,7 @@ export default function ResourcesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-deep-navy tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight" style={{ color: '#000000' }}
           >
             Intellectual Capital Library
           </motion.h2>
@@ -102,7 +103,7 @@ export default function ResourcesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="mt-4 text-medium-gray text-lg"
+            className="mt-4 text-base leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}
           >
             Equip your business with proprietary frameworks, growth guides, and market intelligence compiled by our advisors.
           </motion.p>
@@ -117,38 +118,46 @@ export default function ResourcesSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               onClick={() => setSelectedResource(resource)}
-              className="group cursor-pointer relative rounded-2xl bg-white border border-border-gray p-8 hover:shadow-2xl hover:border-emerald/30 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              className="group cursor-pointer relative rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}
             >
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-emerald bg-emerald/10 px-3 py-1 rounded-full">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full"
+                    style={{ color: '#FD7C06', backgroundColor: 'rgba(253,124,6,0.08)' }}>
                     {resource.category}
                   </span>
-                  <div className="flex items-center gap-2 text-xs text-medium-gray">
+                  <div className="flex items-center gap-2 text-xs" style={{ color: 'rgba(0,0,0,0.4)' }}>
                     <Clock className="h-3 w-3" />
                     <span>{resource.readTime}</span>
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-deep-navy group-hover:text-emerald transition-colors duration-300">
+                <h3 className="text-xl font-bold transition-colors duration-300 group-hover:scale-[1.02]" style={{ color: '#000000' }}>
                   {resource.title}
                 </h3>
-                <p className="mt-3 text-sm text-medium-gray leading-relaxed">
+                <p className="mt-3 text-sm leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}>
                   {resource.description}
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-border-gray flex items-center justify-between">
-                <span className="text-xs text-medium-gray">{resource.pages} pages PDF</span>
+              <div className="mt-8 pt-6 flex items-center justify-between" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                <span className="text-xs" style={{ color: 'rgba(0,0,0,0.4)' }}>{resource.pages} pages PDF</span>
                 <div className="flex gap-2">
                   <button
                     onClick={(e) => handleDownload(resource.title, e)}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg bg-light-gray hover:bg-emerald hover:text-white border border-border-gray hover:border-emerald transition-all duration-200"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200"
+                    style={{ backgroundColor: '#FFF8F2', color: 'rgba(0,0,0,0.5)', border: '1px solid rgba(0,0,0,0.06)' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FD7C06'; e.currentTarget.style.color = '#FFFFFF' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFF8F2'; e.currentTarget.style.color = 'rgba(0,0,0,0.5)' }}
                     title="Download Report"
                   >
                     <Download className="h-4 w-4" />
                   </button>
-                  <button className="flex h-9 items-center justify-center rounded-lg bg-deep-navy text-white px-4 text-xs font-semibold hover:bg-emerald hover:scale-105 transition-all duration-200">
+                  <button className="flex h-9 items-center justify-center rounded-lg px-4 text-xs font-semibold text-white hover:scale-105 transition-all duration-200"
+                    style={{ backgroundColor: '#000000' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                     Quick View
                   </button>
                 </div>
@@ -165,12 +174,13 @@ export default function ResourcesSection() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-8 right-8 z-50 flex items-center gap-3 rounded-2xl bg-deep-navy text-white px-5 py-4 border border-emerald/20 shadow-2xl"
+            className="fixed bottom-8 right-8 z-50 flex items-center gap-3 rounded-2xl px-5 py-4 shadow-2xl"
+            style={{ backgroundColor: '#000000', border: '1px solid rgba(255,255,255,0.06)' }}
           >
-            <CheckCircle className="h-5 w-5 text-emerald shrink-0 animate-bounce" />
+            <CheckCircle className="h-5 w-5 shrink-0 animate-bounce" style={{ color: '#FD7C06' }} />
             <div>
-              <p className="text-xs font-bold">Download Started</p>
-              <p className="text-[10px] text-white/60">{downloadSuccess} is downloading...</p>
+              <p className="text-xs font-bold" style={{ color: '#FFFFFF' }}>Download Started</p>
+              <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.6)' }}>{downloadSuccess} is downloading...</p>
             </div>
           </motion.div>
         )}
@@ -185,57 +195,67 @@ export default function ResourcesSection() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedResource(null)}
-              className="absolute inset-0 bg-deep-navy/80 backdrop-blur-sm"
+              className="absolute inset-0 backdrop-blur-sm"
+              style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative max-w-2xl w-full rounded-3xl bg-white border border-border-gray p-8 sm:p-10 shadow-2xl overflow-hidden"
+              className="relative max-w-2xl w-full rounded-3xl p-8 sm:p-10 shadow-2xl overflow-hidden"
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}
             >
               <button
                 onClick={() => setSelectedResource(null)}
-                className="absolute top-6 right-6 p-2 text-medium-gray hover:text-deep-navy rounded-full hover:bg-light-gray transition-all cursor-pointer"
+                className="absolute top-6 right-6 p-2 rounded-full transition-all cursor-pointer"
+                style={{ color: 'rgba(0,0,0,0.4)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FFF8F2'; e.currentTarget.style.color = '#000000' }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(0,0,0,0.4)' }}
               >
                 <X className="h-5 w-5" />
               </button>
 
               <div className="mb-4">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald bg-emerald/10 px-3 py-1 rounded-full">
+                <span className="text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full"
+                  style={{ color: '#FD7C06', backgroundColor: 'rgba(253,124,6,0.08)' }}>
                   {selectedResource.category}
                 </span>
               </div>
 
-              <h3 className="text-2xl font-bold text-deep-navy pr-8">
+              <h3 className="text-2xl font-bold pr-8" style={{ color: '#000000' }}>
                 {selectedResource.title}
               </h3>
-              <p className="mt-3 text-sm text-medium-gray leading-relaxed">
+              <p className="mt-3 text-sm leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}>
                 {selectedResource.description}
               </p>
 
-              <div className="mt-6 bg-light-gray border border-border-gray rounded-2xl p-6">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-deep-navy mb-4 flex items-center gap-1.5">
-                  <BookOpen className="h-4 w-4 text-emerald" />
+              <div className="mt-6 rounded-2xl p-6" style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                <h4 className="text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-1.5" style={{ color: '#000000' }}>
+                  <BookOpen className="h-4 w-4" style={{ color: '#FD7C06' }} />
                   Table of Contents & Core Insights Preview:
                 </h4>
                 <div className="space-y-3">
                   {selectedResource.previewContent.map((point, i) => (
-                    <div key={i} className="flex gap-2.5 items-start text-xs text-medium-gray">
-                      <span className="h-5 w-5 rounded-full bg-emerald/10 text-emerald flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                    <div key={i} className="flex gap-2.5 items-start text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>
+                      <span className="h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5"
+                        style={{ color: '#FD7C06', backgroundColor: 'rgba(253,124,6,0.08)' }}>
                         {i + 1}
                       </span>
-                      <p className="leading-relaxed"><strong className="text-deep-navy">{point.split(':')[0]}:</strong>{point.split(':')[1]}</p>
+                      <p className="leading-relaxed"><strong style={{ color: '#000000' }}>{point.split(':')[0]}:</strong>{point.split(':')[1]}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <span className="text-xs text-medium-gray">Ready to read? Get the full {selectedResource.pages}-page document.</span>
+                <span className="text-xs" style={{ color: 'rgba(0,0,0,0.4)' }}>Ready to read? Get the full {selectedResource.pages}-page document.</span>
                 <div className="flex gap-3 w-full sm:w-auto justify-end">
                   <button
                     onClick={() => setSelectedResource(null)}
-                    className="w-full sm:w-auto px-5 py-2.5 text-xs font-semibold text-medium-gray hover:text-deep-navy hover:bg-light-gray rounded-xl transition-all cursor-pointer"
+                    className="w-full sm:w-auto px-5 py-2.5 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+                    style={{ color: 'rgba(0,0,0,0.5)' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FFF8F2'; e.currentTarget.style.color = '#000000' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(0,0,0,0.5)' }}
                   >
                     Close Preview
                   </button>
@@ -244,7 +264,10 @@ export default function ResourcesSection() {
                       handleDownload(selectedResource.title, e)
                       setSelectedResource(null)
                     }}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-emerald text-white px-5 py-2.5 text-xs font-semibold hover:bg-emerald-dark hover:scale-105 transition-all shadow-md shadow-emerald/15 cursor-pointer"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-semibold hover:scale-105 transition-all shadow-md cursor-pointer"
+                    style={{ backgroundColor: '#FD7C06' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#000000'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
                   >
                     <Download className="h-3.5 w-3.5" />
                     Download Full PDF
