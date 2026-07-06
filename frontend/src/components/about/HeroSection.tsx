@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ArrowRight, Play, Sparkles, TrendingUp, Shield, Users, Zap, 
@@ -87,6 +87,7 @@ const itemVariants = {
 
 export default function HeroSection() {
   const [activeStep, setActiveStep] = useState(0)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // Auto-cycle through steps unless hovered/clicked
   useEffect(() => {
@@ -96,26 +97,362 @@ export default function HeroSection() {
     return () => clearInterval(timer)
   }, [])
 
+  // Network background animation
+  useEffect(() => {
+    const canvas = canvasRef.current!
+    const ctx = canvas.getContext('2d')!
+    if (!ctx) return
+
+    const ACCENT = '#FD7C06'
+    const BG = '#FFF8F2'
+    const NODE_BASE_RADIUS = 2.2
+    const NODE_MAX_RADIUS = 5.5
+    const CONNECTION_MAX_DIST = 220
+    const TRAVELER_SPEED_BASE = 0.004
+    const FLOAT_AMPLITUDE = 0.3
+    const FLOAT_SPEED = 0.0006
+    const MOUSE_RADIUS = 200
+    const NODE_COUNT = 250
+    const ORBITAL_COUNT = 3
+
+    let dpr = 1
+    let W = 0
+    let H = 0
+    let mouse = { x: -9999, y: -9999, active: false }
+    let nodes: any[] = []
+    let travelers: any[] = []
+    let orbitalCircles: any[] = []
+    let animationId: number
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1
+      const rect = canvas.getBoundingClientRect()
+      W = rect.width
+      H = rect.height
+      canvas.width = W * dpr
+      canvas.height = H * dpr
+      ctx.scale(dpr, dpr)
+      buildOrbitals()
+    }
+
+    function buildOrbitals() {
+      const count = ORBITAL_COUNT
+      const baseRadius = Math.min(W, H) * 0.28
+      orbitalCircles = []
+      for (let i = 0; i < count; i++) {
+        orbitalCircles.push({
+          cx: W * (0.3 + i * 0.2),
+          cy: H * (0.4 + i * 0.1),
+          radius: baseRadius * (0.6 + i * 0.25),
+          speed: 0.0003 + i * 0.00015,
+          phase: (i / count) * Math.PI * 2,
+          lineWidth: 0.4 + i * 0.15,
+          opacity: 0.06 + i * 0.03,
+        })
+      }
+    }
+
+    function createNode() {
+      const margin = 10
+      const x = margin + Math.random() * (W - margin * 2)
+      const y = margin + Math.random() * (H - margin * 2)
+      const radius = NODE_BASE_RADIUS + Math.random() * 2.5
+      const floatOffsetX = Math.random() * 1000
+      const floatOffsetY = Math.random() * 1000
+      const pulseSpeed = 0.002 + Math.random() * 0.004
+      const pulsePhase = Math.random() * Math.PI * 2
+      const isImportant = Math.random() < 0.12
+      return {
+        x, y, baseX: x, baseY: y,
+        radius: isImportant ? NODE_MAX_RADIUS : radius,
+        baseRadius: isImportant ? NODE_MAX_RADIUS : radius,
+        floatOffsetX, floatOffsetY, pulseSpeed, pulsePhase, isImportant,
+        opacity: 0.6 + Math.random() * 0.4,
+        currentPulse: 1,
+      }
+    }
+
+    function buildNodes() {
+      nodes = []
+      for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push(createNode())
+      }
+    }
+
+    function createTraveler(source: any, target: any) {
+      return {
+        source, target,
+        t: Math.random(),
+        speed: TRAVELER_SPEED_BASE * (0.6 + Math.random() * 0.8),
+        size: 1.2 + Math.random() * 2.2,
+        phase: Math.random() * 100,
+      }
+    }
+
+    function spawnTravelers(count: number) {
+      const available = nodes.length
+      if (available < 2) return
+      for (let i = 0; i < count; i++) {
+        let a = Math.floor(Math.random() * available)
+        let b = Math.floor(Math.random() * available)
+        let attempts = 0
+        while (b === a && attempts < 20) { b = Math.floor(Math.random() * available); attempts++ }
+        if (a !== b) travelers.push(createTraveler(nodes[a], nodes[b]))
+      }
+    }
+
+    function updateNodes(time: number) {
+      for (const n of nodes) {
+        const fx = Math.sin(time * FLOAT_SPEED + n.floatOffsetX) * FLOAT_AMPLITUDE
+        const fy = Math.cos(time * FLOAT_SPEED * 0.7 + n.floatOffsetY) * FLOAT_AMPLITUDE
+        n.x = n.baseX + fx
+        n.y = n.baseY + fy
+        const pulse = Math.sin(time * n.pulseSpeed + n.pulsePhase) * 0.15 + 0.85
+        n.radius = n.baseRadius * pulse
+        n.currentPulse = pulse
+      }
+    }
+
+    function updateTravelers() {
+      for (const t of travelers) {
+        t.t += t.speed
+        if (t.t >= 1) {
+          const available = nodes.length
+          let newTarget = Math.floor(Math.random() * available)
+          let attempts = 0
+          while (newTarget === nodes.indexOf(t.source) && attempts < 20) { newTarget = Math.floor(Math.random() * available); attempts++ }
+          if (newTarget !== nodes.indexOf(t.source)) {
+            t.source = t.target
+            t.target = nodes[newTarget]
+            t.t = 0
+            t.speed = TRAVELER_SPEED_BASE * (0.6 + Math.random() * 0.8)
+          } else {
+            t.t = 0
+          }
+        }
+      }
+    }
+
+    function drawGrid() {
+      ctx.save()
+      ctx.strokeStyle = '#f0f0f0'
+      ctx.lineWidth = 0.5
+      const step = 60
+      for (let x = step; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke() }
+      for (let y = step; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke() }
+      ctx.restore()
+    }
+
+    function drawOrbitals(time: number) {
+      for (const o of orbitalCircles) {
+        ctx.save()
+        ctx.globalAlpha = o.opacity
+        ctx.strokeStyle = ACCENT
+        ctx.lineWidth = o.lineWidth
+        ctx.setLineDash([4, 8])
+        ctx.beginPath()
+        ctx.arc(o.cx, o.cy, o.radius, 0, Math.PI * 2)
+        ctx.stroke()
+        ctx.restore()
+        const angle = time * o.speed + o.phase
+        const dotX = o.cx + o.radius * Math.cos(angle)
+        const dotY = o.cy + o.radius * Math.sin(angle)
+        ctx.save()
+        ctx.globalAlpha = 0.2
+        ctx.fillStyle = ACCENT
+        ctx.beginPath()
+        ctx.arc(dotX, dotY, 2, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.restore()
+      }
+    }
+
+    function drawConnections() {
+      const maxDist = CONNECTION_MAX_DIST
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i]; const b = nodes[j]
+          const dx = a.x - b.x; const dy = a.y - b.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < maxDist) {
+            const opacity = (1 - dist / maxDist) * 0.35
+            ctx.save()
+            ctx.globalAlpha = opacity
+            ctx.strokeStyle = ACCENT
+            ctx.lineWidth = 0.6
+            const midX = (a.x + b.x) / 2; const midY = (a.y + b.y) / 2
+            const perpX = -(dy) * 0.3; const perpY = (dx) * 0.3
+            ctx.beginPath()
+            ctx.moveTo(a.x, a.y)
+            ctx.quadraticCurveTo(midX + perpX, midY + perpY, b.x, b.y)
+            ctx.stroke()
+            ctx.restore()
+          }
+        }
+      }
+    }
+
+    function drawNodes(time: number) {
+      for (const n of nodes) {
+        const depthFactor = 0.7 + 0.3 * (1 - (n.y / H))
+        const finalOpacity = n.opacity * depthFactor
+        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius * 4)
+        grad.addColorStop(0, `rgba(253, 124, 6, ${0.15 * finalOpacity})`)
+        grad.addColorStop(1, 'rgba(253, 124, 6, 0)')
+        ctx.save()
+        ctx.globalAlpha = finalOpacity
+        ctx.fillStyle = grad
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, n.radius * 4, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.shadowColor = `rgba(253, 124, 6, ${0.2 * finalOpacity})`
+        ctx.shadowBlur = 12
+        ctx.fillStyle = ACCENT
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, n.radius * 0.9, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.shadowBlur = 0
+        if (n.isImportant) {
+          const ringSize = n.radius * (2.2 + 0.6 * Math.sin(time * 0.003 + n.pulsePhase))
+          ctx.strokeStyle = `rgba(253, 124, 6, ${0.15 * finalOpacity})`
+          ctx.lineWidth = 0.8
+          ctx.beginPath()
+          ctx.arc(n.x, n.y, ringSize, 0, Math.PI * 2)
+          ctx.stroke()
+        }
+        ctx.restore()
+      }
+    }
+
+    function drawTravelers() {
+      for (const t of travelers) {
+        const sx = t.source.x; const sy = t.source.y
+        const tx = t.target.x; const ty = t.target.y
+        const midX = (sx + tx) / 2; const midY = (sy + ty) / 2
+        const perpX = -(ty - sy) * 0.3; const perpY = (tx - sx) * 0.3
+        const t1 = t.t; const u = 1 - t1
+        const px = u * u * sx + 2 * u * t1 * (midX + perpX) + t1 * t1 * tx
+        const py = u * u * sy + 2 * u * t1 * (midY + perpY) + t1 * t1 * ty
+        const glow = ctx.createRadialGradient(px, py, 0, px, py, t.size * 3)
+        glow.addColorStop(0, 'rgba(253, 124, 6, 0.6)')
+        glow.addColorStop(1, 'rgba(253, 124, 6, 0)')
+        ctx.save()
+        ctx.globalAlpha = 0.7
+        ctx.fillStyle = glow
+        ctx.beginPath()
+        ctx.arc(px, py, t.size * 3, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.shadowColor = 'rgba(253, 124, 6, 0.3)'
+        ctx.shadowBlur = 14
+        ctx.fillStyle = '#FD7C06'
+        ctx.beginPath()
+        ctx.arc(px, py, t.size * 0.8, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.shadowBlur = 0
+        ctx.restore()
+      }
+    }
+
+    function applyMouseInfluence() {
+      if (!mouse.active) return
+      const mr = MOUSE_RADIUS
+      for (const n of nodes) {
+        const dx = n.x - mouse.x; const dy = n.y - mouse.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < mr) {
+          const force = (1 - dist / mr) * 4
+          const angle = Math.atan2(dy, dx)
+          n.x += Math.cos(angle) * force * 0.5
+          n.y += Math.sin(angle) * force * 0.5
+          n.radius = n.baseRadius * (1 + 0.2 * (1 - dist / mr))
+        } else {
+          n.radius = n.baseRadius * (n.currentPulse || 1)
+        }
+      }
+    }
+
+    function easeNodesBack() {
+      for (const n of nodes) {
+        n.x += (n.baseX - n.x) * 0.02
+        n.y += (n.baseY - n.y) * 0.02
+      }
+    }
+
+    function render(timestamp: number) {
+      const time = timestamp || 0
+      ctx.clearRect(0, 0, W, H)
+      ctx.fillStyle = BG
+      ctx.fillRect(0, 0, W, H)
+      updateNodes(time)
+      updateTravelers()
+      if (mouse.active) { applyMouseInfluence() } else { easeNodesBack() }
+      drawGrid()
+      drawOrbitals(time)
+      drawConnections()
+      drawNodes(time)
+      drawTravelers()
+      animationId = requestAnimationFrame(render)
+    }
+
+    function onMouseMove(e: MouseEvent) {
+      const rect = canvas.getBoundingClientRect()
+      mouse.x = e.clientX - rect.left
+      mouse.y = e.clientY - rect.top
+      mouse.active = true
+    }
+
+    function onMouseLeave() {
+      mouse.active = false
+      mouse.x = -9999
+      mouse.y = -9999
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      e.preventDefault()
+      const touch = e.touches[0]
+      if (!touch) return
+      const rect = canvas.getBoundingClientRect()
+      mouse.x = touch.clientX - rect.left
+      mouse.y = touch.clientY - rect.top
+      mouse.active = true
+    }
+
+    function onTouchEnd() {
+      mouse.active = false
+      mouse.x = -9999
+      mouse.y = -9999
+    }
+
+    resize()
+    buildNodes()
+    travelers = []
+    spawnTravelers(25)
+
+    window.addEventListener('resize', resize)
+    canvas.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mouseleave', onMouseLeave)
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false })
+    canvas.addEventListener('touchend', onTouchEnd)
+    animationId = requestAnimationFrame(render)
+
+    return () => {
+      cancelAnimationFrame(animationId)
+      window.removeEventListener('resize', resize)
+      canvas.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('mouseleave', onMouseLeave)
+      canvas.removeEventListener('touchmove', onTouchMove)
+      canvas.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [])
+
   const currentStep = ecosystemSteps[activeStep]
   const StepIcon = currentStep.icon
 
   return (
-    <section className="relative min-h-[95vh] flex items-center overflow-hidden bg-gradient-to-br from-deep-navy via-deep-navy-dark to-deep-navy pt-24 pb-16">
-      {/* Dynamic Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-96 h-96 rounded-full bg-emerald/15 blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-20 right-10 w-[30rem] h-[30rem] rounded-full bg-gold/10 blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full bg-gold/5 blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 left-1/4 w-48 h-48 rounded-full bg-emerald/5 blur-2xl animate-float" style={{ animationDelay: '3s' }} />
-      </div>
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-16 pb-16">
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block pointer-events-none" style={{ zIndex: 0 }} />
 
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-
-      {/* Top Border Line */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald via-gold to-transparent" />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-24">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           
           {/* Left Column: Headline */}
@@ -126,6 +463,8 @@ export default function HeroSection() {
               animate="visible"
               className="flex flex-col"
             >
+
+
               <motion.div 
                 variants={itemVariants} 
                 className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-xs font-semibold text-gold-light border border-gold/20 mb-6 shadow-lg shadow-gold/5 w-fit"
@@ -136,18 +475,16 @@ export default function HeroSection() {
 
               <motion.h1 
                 variants={itemVariants} 
-                className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white tracking-tight"
+                className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight"
+                style={{ color: '#FD7C06' }}
               >
                 Building Growth-Ready &{' '}
-                <span className="bg-gradient-to-r from-gold-light via-gold to-gold-dark bg-clip-text text-transparent drop-shadow-sm">
-                  Investment-Ready
-                </span>{' '}
-                Businesses
+                Investment-Ready Businesses
               </motion.h1>
 
               <motion.p 
                 variants={itemVariants} 
-                className="mt-6 text-base sm:text-lg text-white/70 leading-relaxed max-w-xl"
+                className="mt-6 text-base sm:text-lg text-black leading-relaxed max-w-xl"
               >
                 Antara Global is a strategic business advisory, venture readiness, fundraising
                 support, and capital connectivity ecosystem helping startups, MSMEs, entrepreneurs,
@@ -160,16 +497,18 @@ export default function HeroSection() {
               >
                 <a
                   href="#services"
-                  className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-gold to-gold-dark px-6 py-3.5 text-sm font-semibold text-deep-navy shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 hover:scale-105 transition-all duration-300"
+                  className="group inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold border border-black shadow-lg hover:scale-105 transition-all duration-300"
+                  style={{ color: '#FC9E00' }}
                 >
                   Explore Services
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" style={{ color: '#FC9E00' }} />
                 </a>
                 <a
                   href="#consultation"
-                  className="inline-flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/25 hover:scale-105 transition-all duration-300"
+                  className="inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold border border-black hover:scale-105 transition-all duration-300"
+                  style={{ color: '#FC9E00' }}
                 >
-                  <Play className="h-4 w-4 fill-white/10" />
+                  <Play className="h-4 w-4" style={{ color: '#FC9E00' }} />
                   Book Strategy Session
                 </a>
               </motion.div>
@@ -183,15 +522,15 @@ export default function HeroSection() {
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="h-9 w-9 rounded-full border-2 border-deep-navy bg-gradient-to-br from-deep-navy-light to-deep-navy flex items-center justify-center text-[10px] font-bold text-gold border-gold/10 shadow-lg"
+                      className="h-9 w-9 rounded-full border-2 border-white bg-[#FC9E00] flex items-center justify-center text-[10px] font-bold shadow-lg text-white"
                     >
                       {['IN', 'EU', 'US', 'ME'][i-1]}
                     </div>
                   ))}
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-white/70">Global Connectivity</span>
-                  <span className="tracking-wide text-[10px] mt-0.5 text-white/40">Serving Founders & Investors Worldwide</span>
+                  <span className="font-semibold text-black">Global Connectivity</span>
+                  <span className="tracking-wide text-[10px] mt-0.5 text-black/60">Serving Founders & Investors Worldwide</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -208,7 +547,7 @@ export default function HeroSection() {
               {/* Premium Glow Aura */}
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-gold/20 via-emerald/10 to-transparent blur-md pointer-events-none" />
 
-              <div className="relative rounded-3xl bg-white/[0.03] backdrop-blur-md border border-white/10 p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch">
+              <div className="relative rounded-3xl backdrop-blur-md border border-black p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch bg-white">
                 
                 {/* Steps Selector Column */}
                 <div className="flex md:flex-col justify-between md:justify-center gap-3">
@@ -219,20 +558,36 @@ export default function HeroSection() {
                       <button
                         key={step.letter}
                         onClick={() => setActiveStep(idx)}
-                        className={`h-12 w-12 rounded-2xl flex flex-col items-center justify-center border transition-all duration-300 relative ${
+                        className={`h-14 w-14 rounded-2xl flex flex-col items-center justify-center transition-all duration-500 relative ${
                           isSelected
-                            ? step.accent === 'gold' 
-                              ? 'bg-gold/20 border-gold text-gold-light scale-110 shadow-lg shadow-gold/10'
-                              : 'bg-emerald/20 border-emerald text-emerald-light scale-110 shadow-lg shadow-emerald/10'
-                            : 'bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white'
+                            ? 'text-white scale-110'
+                            : 'bg-white border-2 border-black text-black hover:bg-black/5 hover:scale-105 hover:shadow-md'
                         }`}
+                        style={isSelected ? {
+                          background: 'radial-gradient(circle at 30% 30%, #000000, #333333)',
+                          boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
+                          border: 'none'
+                        } : undefined}
                       >
-                        <Icon className="h-5 w-5" />
-                        <span className="text-[9px] font-bold mt-0.5">{step.letter}</span>
                         {isSelected && (
-                          <span className={`absolute -right-1.5 top-1/2 -translate-y-1/2 hidden md:block h-3 w-3 rotate-45 border-r border-t ${
-                            step.accent === 'gold' ? 'border-gold bg-gold/20' : 'border-emerald bg-emerald/20'
-                          }`} />
+                          <>
+                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-black/30 via-black/10 to-transparent blur-sm -z-10" />
+                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2 ring-offset-black/10" />
+                          </>
+                        )}
+                        <div className={`relative flex flex-col items-center justify-center ${isSelected ? 'animate-pulse-glow' : ''}`}>
+                          <Icon className="h-5 w-5" />
+                          <span className="text-[9px] font-bold mt-0.5">{step.letter}</span>
+                        </div>
+                        {isSelected && (
+                          <div className="absolute -right-3 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center">
+                            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-black shadow-lg shadow-black/20">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                              </svg>
+                            </div>
+                          </div>
                         )}
                       </button>
                     )
@@ -240,8 +595,8 @@ export default function HeroSection() {
                 </div>
 
                 {/* Dashboard Details Screen */}
-                <div className="flex-1 rounded-2xl bg-deep-navy-dark/60 border border-white/5 p-6 flex flex-col justify-between relative overflow-hidden">
-                  <div className="absolute -top-10 -right-10 h-24 w-24 rounded-full bg-white/[0.02] blur-xl" />
+                <div className="flex-1 rounded-2xl border border-black p-6 flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: '#FD7C06' }}>
+                  <div className="absolute -top-10 -right-10 h-24 w-24 rounded-full bg-white/10 blur-xl" />
                   
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -253,12 +608,10 @@ export default function HeroSection() {
                       className="space-y-4"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">
                           {currentStep.label} Node Status
                         </span>
-                        <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                          currentStep.accent === 'gold' ? 'bg-gold/10 text-gold-light' : 'bg-emerald/10 text-emerald-light'
-                        }`}>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
                           <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse-glow" />
                           {currentStep.metrics.status}
                         </span>
@@ -266,35 +619,31 @@ export default function HeroSection() {
 
                       <div>
                         <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                          <StepIcon className={`h-5 w-5 ${
-                            currentStep.accent === 'gold' ? 'text-gold' : 'text-emerald-light'
-                          }`} />
+                          <StepIcon className="h-5 w-5 text-white/90" />
                           {currentStep.metrics.title}
                         </h4>
-                        <p className="text-xs text-white/60 mt-1 leading-relaxed">
+                        <p className="text-xs text-white/70 mt-1 leading-relaxed">
                           {currentStep.metrics.detail}
                         </p>
                       </div>
 
-                      <div className="space-y-2 border-t border-white/5 pt-4">
+                      <div className="space-y-2 border-t border-white/20 pt-4">
                         {currentStep.metrics.features.map((feature, i) => (
                           <div key={i} className="flex items-center gap-2 text-xs text-white/80">
-                            <CheckCircle2 className="h-4 w-4 text-emerald shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-white/90 shrink-0" />
                             <span>{feature}</span>
                           </div>
                         ))}
                       </div>
 
-                      <div className="border-t border-white/5 pt-4 flex items-center justify-between">
+                      <div className="border-t border-white/20 pt-4 flex items-center justify-between">
                         <div>
-                          <p className="text-[9px] uppercase tracking-wider text-white/40">{currentStep.metrics.statLabel}</p>
-                          <p className={`text-2xl font-black ${
-                            currentStep.accent === 'gold' ? 'text-gold' : 'text-emerald-light'
-                          }`}>{currentStep.metrics.stat}</p>
+                          <p className="text-[9px] uppercase tracking-wider text-white/80">{currentStep.metrics.statLabel}</p>
+                          <p className="text-2xl font-black text-white">{currentStep.metrics.stat}</p>
                         </div>
                         <a 
                           href="#services"
-                          className="inline-flex items-center gap-1.5 text-xs text-gold-light font-semibold hover:text-white transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs text-white font-semibold hover:text-white/70 transition-colors"
                         >
                           Unlock Node
                           <ArrowRight className="h-3 w-3" />
@@ -307,8 +656,8 @@ export default function HeroSection() {
               </div>
 
               {/* Decorative Glow Dots */}
-              <div className="absolute -top-3 -right-3 h-24 w-24 rounded-2xl bg-gradient-to-br from-gold/20 to-emerald/10 blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-2 -left-2 h-16 w-16 rounded-2xl bg-gradient-to-tr from-gold/10 to-transparent blur-xl pointer-events-none" />
+              <div className="absolute -top-3 -right-3 h-24 w-24 rounded-2xl bg-gradient-to-br from-[#FD7C06]/20 to-[#FC9E00]/10 blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-2 -left-2 h-16 w-16 rounded-2xl bg-gradient-to-tr from-[#FD7C06]/10 to-transparent blur-xl pointer-events-none" />
             </motion.div>
           </div>
 
