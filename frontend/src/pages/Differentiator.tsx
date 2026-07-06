@@ -77,7 +77,7 @@ export default function Differentiator() {
 
               {/* Desktop horizontal timeline */}
               <div className="hidden md:block relative py-4">
-                <div className="absolute top-[18px] left-[8%] right-[8%] h-[2px] rounded" style={{ background: 'linear-gradient(90deg, #ddd, #FD7C06, #ddd)' }} />
+                <div className="absolute top-[24px] left-[8%] right-[8%] h-[2px] rounded" style={{ background: 'linear-gradient(90deg, #ddd, #FD7C06, #ddd)' }} />
                 <div className="flex justify-between items-start">
                   {[
                     { step: '01', title: 'Discovery', desc: 'Assess readiness & identify gaps' },
