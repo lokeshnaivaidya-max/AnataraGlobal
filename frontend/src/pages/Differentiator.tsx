@@ -42,7 +42,7 @@ export default function Differentiator() {
               </motion.div>
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                 className="mt-6 text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight" style={{ color: '#000000' }}>
-                Why <span style={{ color: '#FD7C06' }}>Us</span>
+                What Makes <span style={{ color: '#FD7C06' }}>Antara Global</span> Different
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                 className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl min-h-[4.5rem]" style={{ color: 'rgba(0,0,0,0.6)' }}>
