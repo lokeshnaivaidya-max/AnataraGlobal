@@ -54,31 +54,27 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  fileFilter: (_req, file, cb) => {
+    const allowedMimes = [
+      'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'text/plain',
+      'application/zip',
+      'application/x-zip-compressed',
+    ];
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Unsupported file type: ${file.mimetype}. Allowed: images, PDF, DOC, DOCX, XLS, XLSX, TXT, ZIP`));
+    }
+  },
 });
 
 // --- IN-MEMORY STATES (For non-DB mock modules) ---
-let leads = [
-  { id: 'lead-1', name: 'Acme Growth Corp', email: 'sales@acmegrowth.co', status: 'new', value: 15000, company: 'Acme Growth', phone: '+91 99999 88888', notes: 'Interested in growth platform' },
-  { id: 'lead-2', name: 'Zeta Solutions', email: 'founder@zetasol.com', status: 'contacted', value: 25000, company: 'Zeta Tech', phone: '+91 77777 66666', notes: 'Needs valuation template' }
-];
-let leadActivities: any[] = [
-  { id: 'act-1', leadId: 'lead-1', type: 'email', description: 'Sent introduction email', createdAt: new Date().toISOString() }
-];
-
-let investorContacts = [
-  { id: 'ic-1', name: 'Sarah Jenkins', email: 'sarah@sequoia.com', company: 'Sequoia Capital', firm: 'Sequoia Capital', role: 'Partner', title: 'Partner', phone: '+91 90000 12345', linkedinUrl: 'https://linkedin.com/in/sarah', status: 'warm', type: 'vc', tags: ['SaaS', 'Fintech'], notes: 'Met at pitch event', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  { id: 'ic-2', name: 'Rajesh Nair', email: 'rajesh@accel.com', company: 'Accel Partners', firm: 'Accel Partners', role: 'VP Investments', title: 'VP Investments', phone: '+91 80000 54321', linkedinUrl: 'https://linkedin.com/in/rajesh', status: 'contacted', type: 'vc', tags: ['Deep Tech'], notes: 'Emailed summary sheet', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
-];
-let investorComms: any[] = [
-  { id: 'comm-1', contactId: 'ic-1', type: 'email', direction: 'outbound', subject: 'Follow up from pitching', summary: 'Sent the updated deck', content: 'Sent the updated deck', date: new Date().toISOString(), createdAt: new Date().toISOString() }
-];
-let investorMeetings: any[] = [
-  { id: 'im-1', contactId: 'ic-1', title: 'Pitch Deck Review', date: new Date(Date.now() + 86400000).toISOString(), scheduledAt: new Date(Date.now() + 86400000).toISOString(), meetingLink: 'https://zoom.us/j/12345', notes: 'Bring financial model', actionItems: [] }
-];
-let investorTasks: any[] = [
-  { id: 'it-1', contactId: 'ic-1', title: 'Send updated cap table', dueDate: new Date(Date.now() + 172800000).toISOString(), status: 'pending', priority: 'medium' }
-];
-
 let capitalProviders = [
   { 
     id: 'cp-1', 
@@ -117,27 +113,6 @@ let capitalProviders = [
 ];
 let capitalRequests: any[] = [];
 
-let fundraisingRounds: any[] = [
-  { id: 'round-1', targetAmount: 500000, status: 'active', type: 'seed', valuation: 3000000, raisedAmount: 150000, closedAmount: 150000, closedAt: null, createdAt: new Date().toISOString() }
-];
-let fundraisingInvestors: any[] = [
-  { id: 'inv-1', roundId: 'round-1', name: 'Sequoia Capital', commitment: 100000, status: 'closed', shares: 20000, notes: 'Signed Term Sheet' },
-  { id: 'inv-2', roundId: 'round-1', name: 'Individual Angel', commitment: 50000, status: 'pending', shares: 10000, notes: 'Follow up call on Monday' }
-];
-let fundraisingMetrics = {
-  burnRate: 20000,
-  runway: 15,
-  ltv: 8500,
-  cac: 1200,
-  mrr: 32000
-};
-
-let bookmarks = new Set<string>();
-let knowledgeResources = [
-  { id: 'kr-1', title: 'How to write a Pitch Deck that wins seed funding', description: 'A comprehensive guide on building a slides structure that VCs look for.', type: 'guide', category: 'fundraising', url: 'https://example.com/pitch-deck-guide', author: 'Antara Advisory Team', duration: '15 mins', tags: ['Pitch Deck', 'Seed Funding'], viewCount: 142, createdAt: new Date().toISOString() },
-  { id: 'kr-2', title: 'Early-stage Startup Valuation Template', description: 'An Excel/Google Sheets template to model valuation based on comparable company analysis.', type: 'template', category: 'finance', url: 'https://example.com/valuation-template', author: 'Finance Team', duration: '5 mins', tags: ['Valuation', 'Template'], viewCount: 98, createdAt: new Date().toISOString() }
-];
-
 let paymentMethods = [
   { id: 'pm-1', type: 'card', name: 'Visa ending in 4242', isDefault: true, expiry: '12/28' }
 ];
@@ -169,8 +144,8 @@ router.post('/auth/register', async (req: Request, res: Response) => {
       return;
     }
 
-    const defaultRole = await prisma.role.findFirst({
-      where: { name: { in: ['Founder', 'MSME'] } },
+    const defaultRole = await prisma.role.findUnique({
+      where: { name: 'Founder' },
     });
     if (!defaultRole) {
       res.status(500).json({ status: 'error', message: 'System role missing' });
@@ -218,7 +193,7 @@ router.post('/auth/register', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Save session in DB
@@ -317,7 +292,7 @@ router.post('/auth/login', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Create session in DB
@@ -414,7 +389,7 @@ router.post('/auth/mfa/authenticate', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Create session in DB
@@ -498,7 +473,7 @@ router.post('/auth/verify-otp', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -711,7 +686,7 @@ router.post('/auth/refresh', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: session.user.id, email: session.user.email, role: session.user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Update session
@@ -3307,79 +3282,6 @@ router.delete('/tasks/:id', authenticate, async (req: AuthenticatedRequest, res:
 // MOCK ENDPOINTS FOR OTHER FRONTEND ROUTING
 // ==========================================
 
-// CRM leads
-router.get('/crm/leads', authenticate, (req, res) => res.json(leads));
-router.post('/crm/leads', authenticate, (req, res) => {
-  const newLead = { id: 'lead-' + Date.now(), ...req.body, status: 'new' };
-  leads.push(newLead);
-  res.status(201).json(newLead);
-});
-router.get('/crm/leads/:id', authenticate, (req, res) => {
-  const lead = leads.find((l) => l.id === req.params.id);
-  lead ? res.json(lead) : res.status(404).json({ message: 'Lead not found' });
-});
-router.put('/crm/leads/:id', authenticate, (req, res) => {
-  const index = leads.findIndex((l) => l.id === req.params.id);
-  if (index !== -1) {
-    leads[index] = { ...leads[index], ...req.body };
-    res.json(leads[index]);
-  } else {
-    res.status(404).json({ message: 'Lead not found' });
-  }
-});
-router.delete('/crm/leads/:id', authenticate, (req, res) => {
-  leads = leads.filter((l) => l.id !== req.params.id);
-  res.json({ status: 'success' });
-});
-router.get('/crm/leads/:leadId/activities', authenticate, (req, res) => {
-  res.json(leadActivities.filter((a) => a.leadId === req.params.leadId));
-});
-router.post('/crm/leads/:leadId/activities', authenticate, (req, res) => {
-  const act = { id: 'act-' + Date.now(), leadId: req.params.leadId, ...req.body, createdAt: new Date().toISOString() };
-  leadActivities.push(act);
-  res.status(201).json(act);
-});
-
-// Investor CRM contacts
-router.get('/investor-crm/contacts', authenticate, (req, res) => res.json(investorContacts));
-router.post('/investor-crm/contacts', authenticate, (req, res) => {
-  const contact = { id: 'ic-' + Date.now(), ...req.body, status: 'contacted' };
-  investorContacts.push(contact);
-  res.status(201).json(contact);
-});
-router.get('/investor-crm/contacts/:id', authenticate, (req, res) => {
-  const contact = investorContacts.find((c) => c.id === req.params.id);
-  contact ? res.json(contact) : res.status(404).json({ message: 'Contact not found' });
-});
-router.delete('/investor-crm/contacts/:id', authenticate, (req, res) => {
-  investorContacts = investorContacts.filter((c) => c.id !== req.params.id);
-  res.json({ status: 'success' });
-});
-router.get('/investor-crm/contacts/:id/communications', authenticate, (req, res) => {
-  res.json(investorComms.filter((c) => c.contactId === req.params.id));
-});
-router.post('/investor-crm/contacts/:id/communications', authenticate, (req, res) => {
-  const comm = { id: 'comm-' + Date.now(), contactId: req.params.id, ...req.body, createdAt: new Date().toISOString() };
-  investorComms.push(comm);
-  res.status(201).json(comm);
-});
-router.get('/investor-crm/contacts/:id/meetings', authenticate, (req, res) => {
-  res.json(investorMeetings.filter((m) => m.contactId === req.params.id));
-});
-router.post('/investor-crm/contacts/:id/meetings', authenticate, (req, res) => {
-  const mtg = { id: 'im-' + Date.now(), contactId: req.params.id, ...req.body };
-  investorMeetings.push(mtg);
-  res.status(201).json(mtg);
-});
-router.get('/investor-crm/contacts/:id/tasks', authenticate, (req, res) => {
-  res.json(investorTasks.filter((t) => t.contactId === req.params.id));
-});
-router.post('/investor-crm/contacts/:id/tasks', authenticate, (req, res) => {
-  const task = { id: 'it-' + Date.now(), contactId: req.params.id, ...req.body, status: 'pending' };
-  investorTasks.push(task);
-  res.status(201).json(task);
-});
-
 // Capital
 router.get('/capital/providers', authenticate, (req, res) => res.json(capitalProviders));
 router.get('/capital/providers/:id', authenticate, (req, res) => {
@@ -3391,54 +3293,6 @@ router.post('/capital/requests', authenticate, (req, res) => {
   const reqst = { id: 'cr-' + Date.now(), status: 'pending', createdAt: new Date().toISOString(), ...req.body };
   capitalRequests.push(reqst);
   res.status(201).json(reqst);
-});
-
-// Fundraising
-router.get('/fundraising/rounds', authenticate, (req, res) => res.json(fundraisingRounds));
-router.get('/fundraising/rounds/:id', authenticate, (req, res) => {
-  const round = fundraisingRounds.find((r) => r.id === req.params.id);
-  round ? res.json(round) : res.status(404).json({ message: 'Round not found' });
-});
-router.post('/fundraising/rounds', authenticate, (req, res) => {
-  const round = { id: 'round-' + Date.now(), status: 'active', raisedAmount: 0, closedAmount: 0, createdAt: new Date().toISOString(), ...req.body };
-  fundraisingRounds.push(round);
-  res.status(201).json(round);
-});
-router.get('/fundraising/investors', authenticate, (req, res) => res.json(fundraisingInvestors));
-router.post('/fundraising/investors', authenticate, (req, res) => {
-  const inv = { id: 'inv-' + Date.now(), status: 'pending', ...req.body };
-  fundraisingInvestors.push(inv);
-  res.status(201).json(inv);
-});
-router.put('/fundraising/investors/:id/stage', authenticate, (req, res) => {
-  const index = fundraisingInvestors.findIndex((i) => i.id === req.params.id);
-  if (index !== -1) {
-    fundraisingInvestors[index].stage = req.body.stage;
-    res.json(fundraisingInvestors[index]);
-  } else {
-    res.status(404).json({ message: 'Investor not found' });
-  }
-});
-router.get('/fundraising/metrics', authenticate, (req, res) => res.json(fundraisingMetrics));
-
-// Knowledge Hub
-router.get('/knowledge', authenticate, (req, res) => {
-  const list = knowledgeResources.map((k) => ({ ...k, isBookmarked: bookmarks.has(k.id) }));
-  res.json(list);
-});
-router.get('/knowledge/:id', authenticate, (req, res) => {
-  const id = req.params.id as string;
-  const resource = knowledgeResources.find((r) => r.id === id);
-  resource ? res.json({ ...resource, isBookmarked: bookmarks.has(resource.id) }) : res.status(404).json({ message: 'Resource not found' });
-});
-router.post('/knowledge/:id/bookmark', authenticate, (req, res) => {
-  const id = req.params.id as string;
-  if (bookmarks.has(id)) {
-    bookmarks.delete(id);
-  } else {
-    bookmarks.add(id);
-  }
-  res.json({ status: 'success', isBookmarked: bookmarks.has(id) });
 });
 
 // Partnership request

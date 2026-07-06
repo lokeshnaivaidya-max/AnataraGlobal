@@ -9,6 +9,33 @@ const JWT_SECRET = process.env.JWT_SECRET || 'antara-super-secret-jwt-key-change
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 const OTP_EXPIRES_IN_MINS = Number(process.env.OTP_EXPIRES_IN_MINS || 10);
 
+async function verifyGoogleToken(idToken: string): Promise<{ email: string; name: string } | null> {
+  try {
+    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
+    if (!response.ok) return null;
+    const data = await response.json() as Record<string, string>;
+    if (!data.email) return null;
+    return { email: data.email, name: data.name || '' };
+  } catch {
+    return null;
+  }
+}
+
+async function verifyLinkedInToken(accessToken: string): Promise<{ email: string; name: string } | null> {
+  try {
+    const response = await fetch('https://api.linkedin.com/v2/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!response.ok) return null;
+    const data = await response.json() as Record<string, string>;
+    if (!data.email) return null;
+    const name = `${data.given_name || ''} ${data.family_name || ''}`.trim();
+    return { email: data.email, name };
+  } catch {
+    return null;
+  }
+}
+
 // Helper to generate OTP
 const generateOTPCode = (): string => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -63,9 +90,27 @@ export const register = async (req: AuthenticatedRequest, res: Response): Promis
       text: `Hello ${firstName},\n\nWelcome to Antara! Your verification code is: ${otpCode}.\nIt will expire in ${OTP_EXPIRES_IN_MINS} minutes.`,
     });
 
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: role.name },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
+    );
+
+    const sessionExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await prisma.userSession.create({
+      data: {
+        userId: user.id,
+        token,
+        deviceInfo: req.headers['user-agent'] || 'Unknown',
+        ipAddress: req.ip || '0.0.0.0',
+        expiresAt: sessionExpiresAt,
+      },
+    });
+
     res.status(201).json({
       status: 'success',
       message: 'Registration successful. Verification email sent.',
+      token,
       data: {
         userId: user.id,
         email: user.email,
@@ -142,7 +187,7 @@ export const login = async (req: AuthenticatedRequest, res: Response): Promise<v
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Create session in DB
@@ -221,34 +266,40 @@ export const verifyOtp = async (req: AuthenticatedRequest, res: Response): Promi
       });
     }
 
-    // Generate active session for MFA or general verification callback
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role.name },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
-    );
+    if (purpose !== 'password_reset') {
+      const token = jwt.sign(
+        { id: user.id, email: user.email, role: user.role.name },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
+      );
 
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    await prisma.userSession.create({
-      data: {
-        userId: user.id,
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await prisma.userSession.create({
+        data: {
+          userId: user.id,
+          token,
+          deviceInfo: req.headers['user-agent'] || 'Unknown',
+          ipAddress: req.ip || '0.0.0.0',
+          expiresAt,
+        },
+      });
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Code verified successfully',
         token,
-        deviceInfo: req.headers['user-agent'] || 'Unknown',
-        ipAddress: req.ip || '0.0.0.0',
-        expiresAt,
-      },
-    });
-
-    res.status(200).json({
-      status: 'success',
-      message: 'Code verified successfully',
-      token,
-      data: {
-        userId: user.id,
-        email: user.email,
-        roleName: user.role.name,
-      },
-    });
+        data: {
+          userId: user.id,
+          email: user.email,
+          roleName: user.role.name,
+        },
+      });
+    } else {
+      res.status(200).json({
+        status: 'success',
+        message: 'Code verified successfully. Proceed to reset your password.',
+      });
+    }
   } catch (error) {
     console.error('OTP verification error:', error);
     res.status(500).json({ status: 'error', message: 'Internal verification server error' });
@@ -361,7 +412,31 @@ export const socialLogin = async (req: AuthenticatedRequest, res: Response): Pro
       return;
     }
 
-    // Mock validation of OAuth token and dynamic user ingestion
+    if (!socialToken) {
+      res.status(400).json({ status: 'fail', message: 'Social token is required' });
+      return;
+    }
+
+    let verifiedProfile: { email: string; name: string } | null = null;
+    if (provider === 'google') {
+      verifiedProfile = await verifyGoogleToken(socialToken);
+    } else if (provider === 'linkedin') {
+      verifiedProfile = await verifyLinkedInToken(socialToken);
+    } else {
+      res.status(400).json({ status: 'fail', message: `Unsupported provider: ${provider}. Supported: google, linkedin` });
+      return;
+    }
+
+    if (!verifiedProfile) {
+      res.status(401).json({ status: 'fail', message: 'Invalid or expired social token' });
+      return;
+    }
+
+    if (verifiedProfile.email !== email) {
+      res.status(401).json({ status: 'fail', message: 'Email mismatch: the social token does not belong to the provided email' });
+      return;
+    }
+
     let user = await prisma.user.findUnique({
       where: { email },
       include: { role: true },
@@ -428,7 +503,7 @@ export const socialLogin = async (req: AuthenticatedRequest, res: Response): Pro
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     await prisma.userSession.create({
@@ -460,6 +535,8 @@ export const socialLogin = async (req: AuthenticatedRequest, res: Response): Pro
 export const getSessions = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user!.id;
+    const currentToken = req.headers.authorization?.replace('Bearer ', '') || '';
+
     const sessions = await prisma.userSession.findMany({
       where: { userId, isActive: true },
       select: {
@@ -471,7 +548,18 @@ export const getSessions = async (req: AuthenticatedRequest, res: Response): Pro
       },
     });
 
-    res.status(200).json({ status: 'success', data: sessions });
+    const currentSession = await prisma.userSession.findFirst({
+      where: { token: currentToken, userId },
+      select: { id: true },
+    });
+    const currentSessionId = currentSession?.id;
+
+    const sessionsWithCurrent = sessions.map((s) => ({
+      ...s,
+      isCurrent: s.id === currentSessionId,
+    }));
+
+    res.status(200).json({ status: 'success', data: sessionsWithCurrent });
   } catch (error) {
     console.error('Fetch sessions error:', error);
     res.status(500).json({ status: 'error', message: 'Internal server error' });

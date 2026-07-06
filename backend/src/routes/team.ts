@@ -21,13 +21,20 @@ router.post('/startup/:startupId', validateRequest(addTeamMemberSchema), async (
   try {
     const startupId = req.params.startupId as string;
     const { name, role, email } = req.body;
+    const userId = req.user!.id;
 
     const startup = await prisma.startup.findUnique({
       where: { id: startupId },
+      include: { founder: true },
     });
 
     if (!startup) {
       res.status(404).json({ status: 'fail', message: 'Startup not found' });
+      return;
+    }
+
+    if (startup.founder.userId !== userId && req.user!.roleName !== 'Admin' && req.user!.roleName !== 'Super Admin') {
+      res.status(403).json({ status: 'fail', message: 'Unauthorized: You do not own this startup' });
       return;
     }
 
@@ -41,9 +48,9 @@ router.post('/startup/:startupId', validateRequest(addTeamMemberSchema), async (
     });
 
     res.status(201).json({ status: 'success', data: member });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Add team member error:', error);
-    res.status(500).json({ status: 'error', message: error.message });
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -58,8 +65,9 @@ router.get('/startup/:startupId', async (req, res) => {
     });
 
     res.status(200).json({ status: 'success', data: members });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Get team members error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -82,8 +90,9 @@ router.delete('/:memberId', async (req, res) => {
     });
 
     res.status(200).json({ status: 'success', message: 'Team member removed successfully' });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Remove team member error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 

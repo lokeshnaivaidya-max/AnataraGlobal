@@ -3,9 +3,28 @@ import { z } from 'zod';
 import { validateRequest } from '../middlewares/validation';
 import { authenticate, restrictTo } from '../middlewares/auth';
 import { prisma } from '../config/db';
+import {
+  getContacts,
+  createContact,
+  getContact,
+  updateContact,
+  deleteContact,
+  getPortfolioCompanies,
+  addPortfolioCompany,
+  removePortfolioCompany,
+  getCommunications,
+  logCommunication,
+  getMeetings,
+  scheduleMeeting,
+  getInvestorTasks,
+  createInvestorTask,
+  updateInvestorTask,
+  deleteInvestorTask,
+} from '../controllers/investor-crm';
 
 const router = Router();
 
+// Existing schemas
 const createInvestorSchema = z.object({
   body: z.object({
     companyName: z.string().min(1, 'Company name is required'),
@@ -17,21 +36,100 @@ const createInvestorSchema = z.object({
   }),
 });
 
+// New schemas for CRM
+const createContactSchema = z.object({
+  body: z.object({
+    name: z.string().min(1, 'Contact name is required'),
+    email: z.string().email().optional().or(z.literal('')),
+    company: z.string().optional(),
+    firm: z.string().optional(),
+    role: z.string().optional(),
+    title: z.string().optional(),
+    phone: z.string().optional(),
+    linkedinUrl: z.string().url().optional().or(z.literal('')),
+    status: z.string().optional(),
+    type: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    notes: z.string().optional(),
+  }),
+});
+
+const updateContactSchema = z.object({
+  body: z.object({
+    name: z.string().min(1).optional(),
+    email: z.string().email().optional().or(z.literal('')),
+    company: z.string().optional(),
+    firm: z.string().optional(),
+    role: z.string().optional(),
+    title: z.string().optional(),
+    phone: z.string().optional(),
+    linkedinUrl: z.string().url().optional().or(z.literal('')),
+    status: z.string().optional(),
+    type: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    notes: z.string().optional(),
+  }),
+});
+
+const addPortfolioSchema = z.object({
+  body: z.object({
+    companyName: z.string().min(1, 'Company name is required'),
+    investmentRound: z.string().optional(),
+    investmentAmount: z.number().nonnegative().optional(),
+    description: z.string().optional(),
+  }),
+});
+
+const logCommunicationSchema = z.object({
+  body: z.object({
+    type: z.string().min(1, 'Communication type is required'),
+    direction: z.enum(['inbound', 'outbound']).optional(),
+    subject: z.string().optional(),
+    summary: z.string().optional(),
+    content: z.string().optional(),
+  }),
+});
+
+const scheduleMeetingSchema = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    date: z.string().datetime('Valid date is required'),
+    meetingLink: z.string().url().optional().or(z.literal('')),
+    notes: z.string().optional(),
+  }),
+});
+
+const createTaskSchema = z.object({
+  body: z.object({
+    title: z.string().min(1, 'Task title is required'),
+    dueDate: z.string().datetime().optional(),
+    priority: z.enum(['low', 'medium', 'high']).optional(),
+  }),
+});
+
+const updateTaskSchema = z.object({
+  body: z.object({
+    title: z.string().min(1).optional(),
+    status: z.string().optional(),
+    priority: z.enum(['low', 'medium', 'high']).optional(),
+  }),
+});
+
 router.use(authenticate);
 
-// Get list of investors (All authenticated users can browse)
+// --- Existing Investor Profile Routes ---
 router.get('/', async (req, res) => {
   try {
     const list = await prisma.investorProfile.findMany({
       orderBy: { createdAt: 'desc' },
     });
     res.status(200).json({ status: 'success', data: list });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Get investors error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
-// Create investor profile (Admin only)
 router.post('/', restrictTo('Admin', 'Super Admin'), validateRequest(createInvestorSchema), async (req, res) => {
   try {
     const { companyName, contactName, email, investmentStage, minTicket, maxTicket } = req.body;
@@ -54,12 +152,12 @@ router.post('/', restrictTo('Admin', 'Super Admin'), validateRequest(createInves
     });
 
     res.status(201).json({ status: 'success', data: investor });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Create investor error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
-// Update investor profile (Admin only)
 router.put('/:id', restrictTo('Admin', 'Super Admin'), async (req, res) => {
   try {
     const id = req.params.id as string;
@@ -77,12 +175,12 @@ router.put('/:id', restrictTo('Admin', 'Super Admin'), async (req, res) => {
     });
 
     res.status(200).json({ status: 'success', data: updated });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Update investor error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
-// Delete investor profile (Admin only)
 router.delete('/:id', restrictTo('Admin', 'Super Admin'), async (req, res) => {
   try {
     const id = req.params.id as string;
@@ -96,9 +194,38 @@ router.delete('/:id', restrictTo('Admin', 'Super Admin'), async (req, res) => {
     await prisma.investorProfile.delete({ where: { id } });
 
     res.status(200).json({ status: 'success', message: 'Investor profile deleted successfully' });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Delete investor error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
+
+// --- New Investor CRM Routes ---
+
+// Contacts
+router.get('/contacts', getContacts);
+router.post('/contacts', validateRequest(createContactSchema), createContact);
+router.get('/contacts/:id', getContact);
+router.put('/contacts/:id', validateRequest(updateContactSchema), updateContact);
+router.delete('/contacts/:id', deleteContact);
+
+// Portfolio
+router.get('/:investorId/portfolio', getPortfolioCompanies);
+router.post('/:investorId/portfolio', validateRequest(addPortfolioSchema), addPortfolioCompany);
+router.delete('/portfolio/:id', removePortfolioCompany);
+
+// Communications
+router.get('/contacts/:id/communications', getCommunications);
+router.post('/contacts/:id/communications', validateRequest(logCommunicationSchema), logCommunication);
+
+// Meetings
+router.get('/contacts/:id/meetings', getMeetings);
+router.post('/contacts/:id/meetings', validateRequest(scheduleMeetingSchema), scheduleMeeting);
+
+// Tasks
+router.get('/contacts/:id/tasks', getInvestorTasks);
+router.post('/contacts/:id/tasks', validateRequest(createTaskSchema), createInvestorTask);
+router.put('/tasks/:id', validateRequest(updateTaskSchema), updateInvestorTask);
+router.delete('/tasks/:id', deleteInvestorTask);
 
 export default router;

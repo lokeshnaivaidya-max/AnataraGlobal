@@ -126,7 +126,7 @@ export const deleteEducation = async (req: AuthenticatedRequest, res: Response):
       include: { founder: true },
     });
 
-    if (!edu || (edu as any).founder.userId !== userId) {
+    if (!edu || edu.founder.userId !== userId) {
       res.status(404).json({ status: 'fail', message: 'Education not found or unauthorized' });
       return;
     }
@@ -190,7 +190,7 @@ export const deleteExperience = async (req: AuthenticatedRequest, res: Response)
       include: { founder: true },
     });
 
-    if (!exp || (exp as any).founder.userId !== userId) {
+    if (!exp || exp.founder.userId !== userId) {
       res.status(404).json({ status: 'fail', message: 'Experience record not found or unauthorized' });
       return;
     }

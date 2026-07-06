@@ -172,28 +172,33 @@ export const approveDocument = async (req: AuthenticatedRequest, res: Response):
       return;
     }
 
-    // Upsert approval log
-    const approval = await prisma.documentApproval.upsert({
-      where: {
-        id: (await prisma.documentApproval.findFirst({
-          where: { documentId: id, versionNumber: doc.currentVersion },
-        }))?.id || '',
-      },
-      update: {
-        status,
-        comments: comments || null,
-        reviewedAt: new Date(),
-        reviewerId,
-      },
-      create: {
-        documentId: id,
-        versionNumber: doc.currentVersion,
-        reviewerId,
-        status,
-        comments: comments || null,
-        reviewedAt: new Date(),
-      },
+    const existingApproval = await prisma.documentApproval.findFirst({
+      where: { documentId: id, versionNumber: doc.currentVersion },
     });
+
+    let approval;
+    if (existingApproval) {
+      approval = await prisma.documentApproval.update({
+        where: { id: existingApproval.id },
+        data: {
+          status,
+          comments: comments || null,
+          reviewedAt: new Date(),
+          reviewerId,
+        },
+      });
+    } else {
+      approval = await prisma.documentApproval.create({
+        data: {
+          documentId: id,
+          versionNumber: doc.currentVersion,
+          reviewerId,
+          status,
+          comments: comments || null,
+          reviewedAt: new Date(),
+        },
+      });
+    }
 
     res.status(200).json({ status: 'success', data: approval });
   } catch (error) {

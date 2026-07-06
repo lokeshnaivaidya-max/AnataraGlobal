@@ -105,17 +105,18 @@ export async function sendEmail({ to, subject, text, html, fromName, replyTo }: 
 
 
 // Concrete notification helpers as requested by Module 8
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@antara.com';
+const SALES_EMAIL = process.env.SALES_EMAIL || 'sales@antara.com';
+
 export async function sendConsultationBookedEmail(founderEmail: string, meetingDetails: string) {
-  // 1. Send to founder
   await sendEmail({
     to: founderEmail,
     subject: 'Consultation Meeting Booked - Antara',
     text: `Your advisory meeting has been scheduled!\n\nDetails:\n${meetingDetails}\n\nThank you,\nThe Antara Team`,
   });
 
-  // 2. Send alert to admin
   await sendEmail({
-    to: 'admin@antara.com',
+    to: ADMIN_EMAIL,
     subject: 'ALERT: New Consultation Booked',
     text: `A new advisory consultation has been booked by founder ${founderEmail}.\n\nDetails:\n${meetingDetails}`,
   });
@@ -123,7 +124,7 @@ export async function sendConsultationBookedEmail(founderEmail: string, meetingD
 
 export async function sendLeadReceivedEmail(leadName: string, leadEmail: string, leadMessage: string) {
   await sendEmail({
-    to: 'sales@antara.com',
+    to: SALES_EMAIL,
     subject: 'New Lead Notification - Sales Team',
     text: `You have received a new lead on the platform:\n\nName: ${leadName}\nEmail: ${leadEmail}\nMessage:\n${leadMessage}`,
   });
