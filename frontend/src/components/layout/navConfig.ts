@@ -10,11 +10,10 @@ export interface NavLink {
 
 export const navConfig: NavLink[] = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Target Audience', href: '/target-audience' },
   { label: 'Ecosystem', href: '/ecosystem' },
-  { label: 'What Makes Us Different', href: '/differentiator' },
+  { label: 'Why Us', href: '/differentiator' },
   { label: 'Core Values', href: '/core-values' },
   { label: 'Contact', href: '/contact' },
 ]
