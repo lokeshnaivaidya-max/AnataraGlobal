@@ -146,12 +146,12 @@ export default function WhoWeAre() {
                         onClick={() => setActiveConnection(item.id)}
                         className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all duration-300 ${
                           isActive
-                            ? 'text-white shadow-md scale-105'
+                            ? 'shadow-md scale-105'
                             : 'text-black/60 border-black/10 bg-white hover:border-[#FC9E00]/30 hover:text-black hover:shadow-sm'
                         }`}
-                        style={isActive ? { backgroundColor: '#FD7C06', borderColor: '#FD7C06' } : undefined}
+                        style={isActive ? { backgroundColor: '#FFFFFF', borderColor: '#FD7C06', color: '#FD7C06' } : undefined}
                       >
-                        <Icon className="h-3.5 w-3.5" style={!isActive ? { color: '#FC9E00' } : undefined} />
+                        <Icon className="h-3.5 w-3.5" style={{ color: isActive ? '#FD7C06' : '#FC9E00' }} />
                         {item.label}
                       </button>
                     )
