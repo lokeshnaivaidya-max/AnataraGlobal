@@ -97,7 +97,6 @@
   }
 
   /* Section backgrounds — soft ivory, alternating for rhythm */
-  .section-bg-white { background: var(--color-canvas); }
   .section-bg-cream { background: var(--color-canvas-alt); }
   .section-bg-tint { background: var(--color-canvas); }
   .section-bg-mesh-dark { background: var(--gradient-hero); }
@@ -178,21 +177,17 @@
 }
 
 /* ==========================================================================
-   SOFT SURFACE OVERRIDE — replaces every flat bg-white with the warm ivory
-   canvas, plus two large blurred floating color blobs (gold + emerald)
-   drifting slowly behind the content for a soft, alive, happy feel
-   instead of a flat dead white or a harsh gradient band. Unlayered on
-   purpose so it beats Tailwind's generated bg-white utility everywhere.
+   SURFACE OVERRIDE — warm ivory canvas for section backgrounds only
    ========================================================================== */
-.bg-white {
+.section-bg-white {
   position: relative;
   isolation: isolate;
   background: var(--color-canvas);
   overflow: hidden;
 }
 
-.bg-white::before,
-.bg-white::after {
+.section-bg-white::before,
+.section-bg-white::after {
   content: '';
   position: absolute;
   z-index: -1;
@@ -202,7 +197,7 @@
   animation: blob-drift 22s ease-in-out infinite;
 }
 
-.bg-white::before {
+.section-bg-white::before {
   width: 420px;
   height: 420px;
   top: -120px;
@@ -210,7 +205,7 @@
   background: var(--bloom-gold);
 }
 
-.bg-white::after {
+.section-bg-white::after {
   width: 480px;
   height: 480px;
   bottom: -160px;
@@ -220,8 +215,8 @@
 }
 
 @media (max-width: 768px) {
-  .bg-white::before,
-  .bg-white::after {
+  .section-bg-white::before,
+  .section-bg-white::after {
     width: 260px;
     height: 260px;
     filter: blur(40px);
