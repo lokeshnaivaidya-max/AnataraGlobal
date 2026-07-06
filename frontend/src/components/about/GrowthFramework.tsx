@@ -1,131 +1,87 @@
-import { motion, type Variants } from 'framer-motion'
-import { Compass, ShieldCheck, Network, Rocket, ArrowUpRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Sparkles, Building2, Compass, ShieldCheck, TrendingUp, Globe } from 'lucide-react'
 
-const pillars = [
-  {
-    icon: Compass,
-    tag: '01',
-    title: 'Strategy',
-    desc: 'Helping businesses build strong foundations through structured planning, business advisory, and growth strategies.',
-    accent: 'gold',
-  },
-  {
-    icon: ShieldCheck,
-    tag: '02',
-    title: 'Readiness',
-    desc: 'Preparing businesses for investment, partnerships, and expansion opportunities.',
-    accent: 'emerald',
-  },
-  {
-    icon: Network,
-    tag: '03',
-    title: 'Connectivity',
-    desc: 'Creating meaningful connections between businesses, investors, advisors, and ecosystem partners.',
-    accent: 'gold',
-  },
-  {
-    icon: Rocket,
-    tag: '04',
-    title: 'Scale',
-    desc: 'Supporting sustainable growth and long-term business value creation.',
-    accent: 'emerald',
-  },
+const flowSteps = [
+  { step: '01', icon: Building2, label: 'Business' },
+  { step: '02', icon: Compass, label: 'Strategy' },
+  { step: '03', icon: ShieldCheck, label: 'Readiness' },
+  { step: '04', icon: TrendingUp, label: 'Capital' },
+  { step: '05', icon: Globe, label: 'Growth' },
 ]
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-  },
-}
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
-  },
-}
 
 export default function GrowthFramework() {
   return (
-    <section className="relative py-24 lg:py-32 bg-light-gray overflow-hidden" aria-labelledby="growth-framework-heading">
-      <div className="absolute top-1/4 left-0 w-72 h-72 rounded-full bg-gold/5 blur-3xl animate-float pointer-events-none" />
-      <div className="absolute bottom-1/4 right-0 w-72 h-72 rounded-full bg-emerald/5 blur-3xl animate-float pointer-events-none" style={{ animationDelay: '2.5s' }} />
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+    <section className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#FFF8F2' }}>
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center max-w-3xl mx-auto mb-16 lg:mb-20"
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto mb-16"
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <span className="h-px w-8 bg-gold" />
-            <span className="text-xs font-semibold tracking-widest uppercase text-gold">
-              Positioning Pillars
-            </span>
-            <span className="h-px w-8 bg-gold" />
-          </div>
-          <h2 id="growth-framework-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-deep-navy tracking-tight">
-            Our Growth Framework
+          <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border mb-4 text-white" style={{ backgroundColor: '#000000', borderColor: '#000000' }}>
+            <Sparkles className="h-3.5 w-3.5" />
+            Premium Ecosystem Services
+          </span>
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight" style={{ color: '#FD7C06' }}>
+            Strategic Guidance. <br />
+            Capital Readiness. Sustainable Growth.
           </h2>
-          <p className="mt-4 text-medium-gray text-base leading-relaxed">
-            A disciplined, repeatable methodology that moves a business from ambiguity to institutional-grade scale.
+          <p className="mt-5 text-base leading-relaxed max-w-2xl mx-auto" style={{ color: 'rgba(0,0,0,0.6)' }}>
+            Antara Global helps businesses strengthen their foundations, prepare for opportunities, connect with relevant ecosystems, and build scalable growth through strategy, knowledge, partnerships, and capital connectivity.
           </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <a href="#consultation" className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-lg hover:scale-105 transition-all duration-300" style={{ backgroundColor: '#000000' }}>
+              Book Consultation
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="#services" className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-lg hover:scale-105 transition-all duration-300" style={{ backgroundColor: '#000000' }}>
+              Explore Our Ecosystem
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </motion.div>
 
+        {/* Ecosystem Flow */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="relative rounded-3xl p-8 sm:p-10 shadow-2xl overflow-hidden" style={{ backgroundColor: '#FD7C06' }}
         >
-          {pillars.map((pillar) => {
-            const Icon = pillar.icon
-            const isGold = pillar.accent === 'gold'
-            return (
-              <motion.div
-                key={pillar.title}
-                variants={cardVariants}
-                whileHover={{ y: -8 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                className="group relative rounded-3xl border border-border-gray bg-white/70 backdrop-blur-xl p-7 shadow-md hover:shadow-2xl transition-shadow duration-500"
-              >
-                <div
-                  className={`absolute top-0 left-0 w-full h-1 rounded-t-3xl bg-gradient-to-r ${
-                    isGold ? 'from-gold via-gold/40' : 'from-emerald via-emerald/40'
-                  } to-transparent`}
-                />
-                <div className="flex items-start justify-between">
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-2xl border transition-all duration-300 group-hover:scale-110 ${
-                      isGold
-                        ? 'bg-gradient-to-br from-gold/15 to-gold/5 text-gold border-gold/15 group-hover:shadow-lg group-hover:shadow-gold/20'
-                        : 'bg-gradient-to-br from-emerald/15 to-emerald/5 text-emerald border-emerald/15 group-hover:shadow-lg group-hover:shadow-emerald/20'
-                    }`}
-                  >
-                    <Icon className="h-6 w-6" />
+          <div className="absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+          <div className="relative">
+            <div className="flex items-center gap-3 mb-8 pb-5 border-b border-white/10">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF' }}>∞</div>
+              <h3 className="text-sm font-bold text-white tracking-wide">Ecosystem Flow</h3>
+              <span className="text-[10px] text-white/50 ml-auto hidden sm:block">From foundation to growth</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+              {flowSteps.map((item, i) => {
+                const Icon = item.icon
+                return (
+                  <div key={item.step} className="relative flex flex-col items-center text-center group">
+                    {i < flowSteps.length - 1 && (
+                      <div className="hidden sm:block absolute top-5 left-[60%] w-[calc(80%)] h-px" style={{ borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
+                    )}
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-lg text-xs font-black transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl" style={{ color: '#FD7C06' }}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-[9px] font-bold mt-2 mb-0.5 text-white/60">{item.step}</span>
+                    <span className="text-xs font-bold text-white">{item.label}</span>
                   </div>
-                  <span className="text-[11px] font-black text-medium-gray/40 tracking-widest">{pillar.tag}</span>
-                </div>
-
-                <h3 className={`mt-6 text-lg font-extrabold text-deep-navy transition-colors duration-300 ${isGold ? 'group-hover:text-gold' : 'group-hover:text-emerald'}`}>
-                  {pillar.title}
-                </h3>
-                <p className="mt-3 text-xs text-medium-gray leading-relaxed">
-                  {pillar.desc}
-                </p>
-
-                <ArrowUpRight className={`mt-5 h-4 w-4 opacity-0 -translate-y-1 group-hover:opacity-60 group-hover:translate-y-0 transition-all duration-300 ${isGold ? 'text-gold' : 'text-emerald'}`} />
-              </motion.div>
-            )
-          })}
+                )
+              })}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
