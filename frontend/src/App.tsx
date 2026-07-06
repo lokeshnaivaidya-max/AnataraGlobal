@@ -1,4 +1,5 @@
 import { Route, Switch, useLocation } from 'wouter'
+import { useEffect } from 'react'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import LoadingScreen from './components/layout/LoadingScreen'
@@ -73,6 +74,16 @@ function NavbarWithAuth() {
 export default function App() {
   const [location] = useLocation()
   const isDashboard = location.startsWith('/dashboard')
+
+  useEffect(() => {
+    try { history.scrollRestoration = 'manual' } catch { /* noop */ }
+  }, [])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [location])
 
   if (isDashboard) {
     return (
