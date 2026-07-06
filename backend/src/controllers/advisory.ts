@@ -103,7 +103,8 @@ export const bookMeeting = async (req: AuthenticatedRequest, res: Response): Pro
     // Generate notification triggers
     const dateStr = new Date(scheduledAt).toLocaleString();
     const meetingDetails = `Advisor: ${advisor.user.firstName} ${advisor.user.lastName}\nTime: ${dateStr}\nDuration: ${durationMinutes} minutes\nLink: ${meetingLink || 'To be shared'}`;
-    await sendConsultationBookedEmail(req.user!.email, meetingDetails);
+    const advisorName = `${advisor.user.firstName} ${advisor.user.lastName}`;
+    await sendConsultationBookedEmail(req.user!.email, meetingDetails, advisorName, advisor.user.email);
 
     res.status(201).json({ status: 'success', data: meeting });
   } catch (error) {

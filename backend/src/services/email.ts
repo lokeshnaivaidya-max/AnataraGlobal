@@ -108,17 +108,24 @@ export async function sendEmail({ to, subject, text, html, fromName, replyTo }: 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@antara.com';
 const SALES_EMAIL = process.env.SALES_EMAIL || 'sales@antara.com';
 
-export async function sendConsultationBookedEmail(founderEmail: string, meetingDetails: string) {
+export async function sendConsultationBookedEmail(
+  founderEmail: string,
+  meetingDetails: string,
+  advisorName?: string,
+  advisorEmail?: string,
+) {
   await sendEmail({
     to: founderEmail,
     subject: 'Consultation Meeting Booked - Antara',
-    text: `Your advisory meeting has been scheduled!\n\nDetails:\n${meetingDetails}\n\nThank you,\nThe Antara Team`,
+    text: `Your advisory meeting has been scheduled!\n\n${meetingDetails}\n\nThank you,\n${advisorName || 'The Antara Team'}`,
+    fromName: advisorName,
+    replyTo: advisorEmail,
   });
 
   await sendEmail({
     to: ADMIN_EMAIL,
     subject: 'ALERT: New Consultation Booked',
-    text: `A new advisory consultation has been booked by founder ${founderEmail}.\n\nDetails:\n${meetingDetails}`,
+    text: `A new advisory consultation has been booked by founder ${founderEmail}.\n\n${meetingDetails}`,
   });
 }
 
@@ -127,6 +134,8 @@ export async function sendLeadReceivedEmail(leadName: string, leadEmail: string,
     to: SALES_EMAIL,
     subject: 'New Lead Notification - Sales Team',
     text: `You have received a new lead on the platform:\n\nName: ${leadName}\nEmail: ${leadEmail}\nMessage:\n${leadMessage}`,
+    fromName: leadName,
+    replyTo: leadEmail,
   });
 }
 

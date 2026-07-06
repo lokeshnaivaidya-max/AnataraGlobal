@@ -2942,7 +2942,8 @@ router.post('/documents/:id/share', authenticate, async (req: AuthenticatedReque
       },
     });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('Document share error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 

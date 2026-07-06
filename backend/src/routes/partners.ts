@@ -72,7 +72,7 @@ router.put('/:id/status', validateRequest(updateStatusSchema), async (req, res) 
     res.status(200).json({ status: 'success', data: updated });
   } catch (error: any) {
     console.error('Update partner status error:', error);
-    res.status(500).json({ status: 'error', message: error.message });
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
