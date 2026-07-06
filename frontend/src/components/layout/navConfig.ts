@@ -15,7 +15,6 @@ export const navConfig: NavLink[] = [
   { label: 'Ecosystem', href: '/ecosystem' },
   { label: 'Why Us', href: '/differentiator' },
   { label: 'Core Values', href: '/core-values' },
-  { label: 'Contact', href: '/contact' },
 ]
 
 export const authLinks = {
