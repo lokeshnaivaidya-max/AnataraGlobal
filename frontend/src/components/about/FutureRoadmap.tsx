@@ -45,9 +45,9 @@ const phases = [
 
 export default function FutureRoadmap() {
   return (
-    <section className="relative py-24 lg:py-32 bg-white overflow-hidden" aria-labelledby="roadmap-heading">
-      <div className="absolute top-0 right-0 w-1/2 h-px bg-gradient-to-l from-transparent via-gold/20 to-transparent" />
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #081C3A 1px, transparent 0)', backgroundSize: '48px 48px' }} />
+    <section className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }} aria-labelledby="roadmap-heading">
+      <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(253,124,6,0.15), transparent)' }} />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #000000 1px, transparent 0)', backgroundSize: '48px 48px' }} />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -58,28 +58,29 @@ export default function FutureRoadmap() {
           className="text-center max-w-3xl mx-auto mb-20"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <span className="h-px w-8 bg-gold" />
-            <span className="text-xs font-semibold tracking-widest uppercase text-gold">
+            <span className="h-px w-8" style={{ backgroundColor: '#FD7C06' }} />
+            <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#FD7C06' }}>
               Future Roadmap
             </span>
-            <span className="h-px w-8 bg-gold" />
+            <span className="h-px w-8" style={{ backgroundColor: '#FD7C06' }} />
           </div>
-          <h2 id="roadmap-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-deep-navy tracking-tight">
+          <h2 id="roadmap-heading" className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight" style={{ color: '#000000' }}>
             Building The Future Business Ecosystem
           </h2>
-          <p className="mt-4 text-medium-gray text-base leading-relaxed">
+          <p className="mt-4 text-base leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}>
             A deliberate, three-phase expansion designed to compound trust, reach, and capital access over time.
           </p>
         </motion.div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-[52px] left-0 right-0 h-px bg-border-gray">
+          <div className="hidden lg:block absolute top-[52px] left-0 right-0 h-px" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
             <motion.div
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="h-full origin-left bg-gradient-to-r from-gold via-gold to-emerald"
+              className="h-full origin-left"
+              style={{ background: 'linear-gradient(to right, #FD7C06, #CEA041)' }}
             />
           </div>
 
@@ -96,32 +97,35 @@ export default function FutureRoadmap() {
                   className="relative"
                 >
                   <div className="hidden lg:flex relative z-10 h-[26px] items-center mb-6">
-                    <div className="h-6 w-6 rounded-full bg-white border-2 border-gold shadow-lg shadow-gold/20 flex items-center justify-center">
-                      <span className="h-2 w-2 rounded-full bg-gold animate-pulse-glow" />
+                    <div className="h-6 w-6 rounded-full border-2 flex items-center justify-center"
+                      style={{ backgroundColor: '#FFFFFF', borderColor: '#FD7C06', boxShadow: '0 0 16px rgba(253,124,6,0.2)' }}>
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: '#FD7C06' }} />
                     </div>
                   </div>
 
                   <motion.div
                     whileHover={{ y: -6 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-                    className="group relative rounded-3xl border border-border-gray bg-light-gray/60 backdrop-blur-xl p-7 sm:p-8 shadow-md hover:shadow-2xl hover:border-gold/30 transition-shadow duration-500 h-full"
+                    className="group relative rounded-3xl p-7 sm:p-8 shadow-md hover:shadow-2xl transition-all duration-500 h-full"
+                    style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}
                   >
                     <div className="flex items-center justify-between mb-6">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-deep-navy to-deep-navy-dark text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300"
+                        style={{ backgroundColor: '#000000', color: '#FFFFFF' }}>
                         <Icon className="h-6 w-6" />
                       </div>
-                      <span className="text-[11px] font-black tracking-widest uppercase text-gold">
+                      <span className="text-[11px] font-black tracking-widest uppercase" style={{ color: '#CEA041' }}>
                         {item.phase}
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-extrabold text-deep-navy">{item.title}</h3>
-                    <p className="mt-4 text-xs text-medium-gray leading-relaxed">{item.desc}</p>
+                    <h3 className="text-xl font-extrabold" style={{ color: '#000000' }}>{item.title}</h3>
+                    <p className="mt-4 text-xs leading-relaxed" style={{ color: 'rgba(0,0,0,0.5)' }}>{item.desc}</p>
 
-                    <ul className="mt-6 space-y-2.5 pt-6 border-t border-border-gray">
+                    <ul className="mt-6 space-y-2.5 pt-6" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                       {item.points.map((point) => (
-                        <li key={point} className="flex items-center gap-2.5 text-xs text-deep-navy font-medium">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0" />
+                        <li key={point} className="flex items-center gap-2.5 text-xs font-medium" style={{ color: '#000000' }}>
+                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: '#FD7C06' }} />
                           {point}
                         </li>
                       ))}
