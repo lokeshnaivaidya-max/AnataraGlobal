@@ -498,7 +498,7 @@ export default function HeroSection() {
                 <a
                   href="#services"
                   className="group inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold shadow-lg hover:scale-105 transition-all duration-300"
-                  style={{ color: '#FC9E00', border: '1px solid #000000' }}
+                  style={{ color: '#FC9E00', border: '1px solid #000000', backgroundColor: '#FFFFFF' }}
                 >
                   Explore Services
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" style={{ color: '#FC9E00' }} />
@@ -506,7 +506,7 @@ export default function HeroSection() {
                 <a
                   href="#consultation"
                   className="inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold hover:scale-105 transition-all duration-300"
-                  style={{ color: '#FC9E00', border: '1px solid #000000' }}
+                  style={{ color: '#FC9E00', border: '1px solid #000000', backgroundColor: '#FFFFFF' }}
                 >
                   <Play className="h-4 w-4" style={{ color: '#FC9E00' }} />
                   Book Strategy Session
