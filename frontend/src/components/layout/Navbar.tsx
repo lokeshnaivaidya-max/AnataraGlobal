@@ -41,7 +41,7 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
-  const [_location, setLocation] = useLocation()
+  const [currentLocation, setLocation] = useLocation()
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
@@ -99,7 +99,7 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
 
           <div className="hidden lg:flex items-center gap-1">
             {navConfig.map((link) => {
-              const isCurrent = link.href === '/' ? location === '/' : location.startsWith(link.href ?? '')
+              const isCurrent = link.href === '/' ? currentLocation === '/' : currentLocation.startsWith(link.href ?? '')
               return (
                 <Link
                   key={link.label}
@@ -348,7 +348,7 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
 
             <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2">
             {navConfig.map((link) => {
-              const isCurrent = link.href === '/' ? location === '/' : location.startsWith(link.href ?? '')
+              const isCurrent = link.href === '/' ? currentLocation === '/' : currentLocation.startsWith(link.href ?? '')
               return (
                 <Link
                   key={link.label}
