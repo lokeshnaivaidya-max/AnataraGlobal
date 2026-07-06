@@ -24,16 +24,14 @@ function generateParticles(count: number): Particle[] {
   }))
 }
 
-/**
- * Premium, fully-automatic loading screen for ANTARA Global.
- *
- * - No user interaction of any kind is required or accepted.
- * - Plays once per browser session (tracked via sessionStorage), then
- *   reveals the site content with a scale + opacity transition.
- * - Purely presentational: does not alter any homepage/page content.
- */
+
 export default function LoadingScreen({ children }: { children: ReactNode }) {
   const prefersReducedMotion = useReducedMotion()
+  useEffect(() => {
+  const img = new Image()
+  img.src = "/image.png"
+  img.decode().catch(() => {})
+}, [])
 
   const [loading, setLoading] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true
@@ -111,8 +109,8 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
               aria-hidden
               className="absolute rounded-full"
               style={{
-                width: 320,
-                height: 320,
+              width: 260,
+              height: 260,
                 background:
                   'radial-gradient(circle, rgba(184,138,43,0.32) 0%, rgba(184,138,43,0.08) 45%, rgba(184,138,43,0) 72%)',
                 filter: 'blur(2px)',
@@ -128,7 +126,7 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
             {/* Logo mark — gently floating */}
             <motion.div
               className="relative z-10 flex flex-col items-center"
-              animate={prefersReducedMotion ? {} : { y: [0, -8, 0] }}
+              animate={prefersReducedMotion ? {} : { y: [0, -4, 0] }}
               transition={{ duration: 3.4, repeat: prefersReducedMotion ? 0 : Infinity, ease: 'easeInOut' }}
             >
               <div className="relative overflow-hidden">
