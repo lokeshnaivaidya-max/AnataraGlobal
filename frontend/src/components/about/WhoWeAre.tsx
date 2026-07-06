@@ -144,12 +144,14 @@ export default function WhoWeAre() {
                       <button
                         key={item.id}
                         onClick={() => setActiveConnection(item.id)}
-                        className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all duration-300 ${
+                        className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all duration-300 shadow-sm ${
                           isActive
-                            ? 'shadow-md scale-105'
-                            : 'text-black/60 border-black/10 bg-white hover:border-[#FC9E00]/30 hover:text-black hover:shadow-sm'
+                            ? 'scale-105'
+                            : 'hover:shadow-md'
                         }`}
-                        style={isActive ? { backgroundColor: '#FFFFFF', borderColor: '#FD7C06', color: '#FD7C06' } : undefined}
+                        style={isActive ? { backgroundColor: '#FFFFFF', borderColor: '#FD7C06', color: '#FD7C06' } : { backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)', color: 'rgba(0,0,0,0.6)' }}
+                        onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.borderColor = 'rgba(252,158,0,0.3)'; e.currentTarget.style.color = '#000000' } }}
+                        onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.1)'; e.currentTarget.style.color = 'rgba(0,0,0,0.6)' } }}
                       >
                         <Icon className="h-3.5 w-3.5" style={{ color: isActive ? '#FD7C06' : '#FC9E00' }} />
                         {item.label}
