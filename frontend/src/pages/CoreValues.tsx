@@ -233,22 +233,7 @@ export default function CoreValues() {
               </div>
             </div>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a href="/contact"
-                className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-                style={{ backgroundColor: '#000000' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
-                Connect With Us <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="/target-audience"
-                className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300"
-                style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.6)' }}>
-                Start Your Journey
-              </a>
-            </div>
+
           </motion.div>
         </div>
       </section>
