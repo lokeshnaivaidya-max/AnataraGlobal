@@ -86,25 +86,8 @@ export default function Differentiator() {
                     { step: '04', title: 'Grow', desc: 'Scale & create lasting value' },
                   ].map((t, idx) => (
                     <div key={t.step} className="flex flex-col items-center flex-1 relative z-10">
-                      {idx === 0 ? (
-                        <motion.div
-                          className="w-4 h-4 rounded-full border-2 mb-3"
-                          style={{ borderColor: '#FD7C06' }}
-                          animate={{
-                            backgroundColor: ['#FD7C06', '#FFFFFF', '#FD7C06'],
-                            boxShadow: [
-                              '0 0 16px rgba(253,124,6,0.25)',
-                              '0 0 4px rgba(253,124,6,0)',
-                              '0 0 16px rgba(253,124,6,0.25)',
-                            ],
-                            scale: [1, 0.85, 1],
-                          }}
-                          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                        />
-                      ) : (
-                        <div className="w-4 h-4 rounded-full border-2 mb-3"
-                          style={{ backgroundColor: '#FFFFFF', borderColor: '#FD7C06', boxShadow: 'none' }} />
-                      )}
+                      <div className="w-4 h-4 rounded-full border-2 mb-3"
+                        style={{ backgroundColor: idx === 0 ? '#FD7C06' : '#FFFFFF', borderColor: '#FD7C06', boxShadow: idx === 0 ? '0 0 16px rgba(253,124,6,0.25)' : 'none' }} />
                       <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#AAA' }}>Step {t.step}</span>
                       <span className="text-sm font-bold mt-1 text-center" style={{ color: '#1A1A1A' }}>{t.title}</span>
                       <span className="text-xs text-center mt-0.5 leading-tight max-w-[130px]" style={{ color: '#999' }}>{t.desc}</span>
