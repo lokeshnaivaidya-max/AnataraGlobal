@@ -58,6 +58,7 @@ model User {
   documentApprovals DocumentApproval[]
   notifications    Notification[]
   documents        Document[]
+  sharedDocuments  DocumentShare[]
   progress         ProgressTracking[]
   signatures       DigitalSignature[]
   billingLedgers   BillingLedger[]
@@ -354,6 +355,7 @@ model ProgressTracking {
   description   String?
   targetDate    DateTime
   status        String   @default("not_started")
+  createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   client        User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
 }
@@ -368,12 +370,16 @@ model Document {
   currentVersion Int                @default(1)
   isSensitive    Boolean            @default(false)
   expiryDate     DateTime?
+  description    String?
+  tags           String[]
+  fileSize       Int                @default(0)
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   owner          User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   startup        Startup?           @relation(fields: [startupId], references: [id], onDelete: SetNull)
   versions       DocumentVersion[]
   approvals      DocumentApproval[]
+  shares         DocumentShare[]
   signature      DigitalSignature?
 }
 
@@ -399,6 +405,19 @@ model DocumentApproval {
   reviewedAt    DateTime?
   document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
   reviewer      User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+}
+
+model DocumentShare {
+  id         String   @id @default(uuid())
+  documentId String
+  sharedById String
+  sharedWith String
+  permission String   @default("view")
+  createdAt  DateTime @default(now())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  sharedBy   User     @relation(fields: [sharedById], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, sharedWith])
 }
 
 model Notification {

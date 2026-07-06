@@ -42,7 +42,7 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const { isAuthenticated, user, logout } = useAuth()
-  const [location, setLocation] = useLocation()
+  const [_location, setLocation] = useLocation()
 
   const goHome = useCallback(
     (e: MouseEvent<HTMLAnchorElement>) => {

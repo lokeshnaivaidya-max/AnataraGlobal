@@ -3,7 +3,8 @@
     "target": "es2023",
     "module": "esnext",
     "lib": ["ES2023", "DOM"],
-    "types": ["vite/client"],
+    "types": [],
+    "typeRoots": ["./node_modules/@types", "./node_modules/vite"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 

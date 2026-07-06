@@ -35,9 +35,11 @@ interface SendMailParams {
   subject: string;
   text: string;
   html?: string;
+  fromName?: string;
+  replyTo?: string;
 }
 
-export async function sendEmail({ to, subject, text, html }: SendMailParams): Promise<boolean> {
+export async function sendEmail({ to, subject, text, html, fromName, replyTo }: SendMailParams): Promise<boolean> {
   console.log(`[Email Service] Attempting to send email to: ${to}`);
   console.log(`[Email Service] Subject: ${subject}`);
   console.log(`[Email Service] Content Preview: ${text.slice(0, 100)}...`);
@@ -46,12 +48,24 @@ export async function sendEmail({ to, subject, text, html }: SendMailParams): Pr
 
   if (transporter) {
     try {
+      let fromHeader = SMTP_FROM || 'noreply@antara.com';
+      if (replyTo) {
+        fromHeader = fromName ? `"${fromName}" <${replyTo}>` : replyTo;
+      } else if (fromName && SMTP_FROM) {
+        const emailMatch = SMTP_FROM.match(/<([^>]+)>/);
+        const emailAddr = emailMatch ? emailMatch[1] : SMTP_FROM;
+        fromHeader = `"${fromName} (via Antara)" <${emailAddr}>`;
+      } else if (fromName) {
+        fromHeader = `"${fromName}" <noreply@antara.com>`;
+      }
+
       const info = await transporter.sendMail({
-        from: SMTP_FROM || 'noreply@antara.com',
+        from: fromHeader,
         to,
         subject,
         text,
         html: html || text.replace(/\n/g, '<br>'),
+        ...(replyTo && { replyTo }),
       });
       console.log(`[Email Service] Real email sent. Message ID: ${info.messageId}`);
       status = 'sent';

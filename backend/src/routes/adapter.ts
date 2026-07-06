@@ -2111,21 +2111,53 @@ router.post('/venture-readiness/reassess', authenticate, async (req: Authenticat
 
 router.get('/advisors', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    const { expertise, search } = req.query;
+
+    // Build dynamic filter
+    const where: any = {};
+    if (expertise && String(expertise).trim()) {
+      // Filter advisors whose expertise array contains the given expertise (case-insensitive)
+      where.expertise = {
+        has: String(expertise),
+      };
+    }
+
     const list = await prisma.advisor.findMany({
-      include: { user: true },
+      where,
+      include: {
+        user: true,
+        meetings: {
+          select: { id: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
     });
 
-    res.status(200).json(
-      list.map((adv) => ({
-        id: adv.id,
-        name: `${adv.user.firstName} ${adv.user.lastName}`,
-        expertise: adv.expertise,
-        availability: adv.availabilitySlots,
-        bio: adv.bio || 'Experienced advisor',
-        rate: adv.rate,
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=60',
-      }))
-    );
+    let results = list.map((adv) => ({
+      id: adv.id,
+      name: `${adv.user.firstName} ${adv.user.lastName}`,
+      email: adv.user.email,
+      expertise: adv.expertise as string[],
+      availabilitySlots: adv.availabilitySlots,
+      bio: adv.bio || null,
+      rate: adv.rate,
+      status: adv.status,
+      sessionCount: adv.meetings.length,
+      avatar: null as string | null,
+    }));
+
+    // Apply optional text search on name/bio/expertise client-side after DB fetch
+    if (search && String(search).trim()) {
+      const q = String(search).toLowerCase();
+      results = results.filter(
+        (a) =>
+          a.name.toLowerCase().includes(q) ||
+          (a.bio || '').toLowerCase().includes(q) ||
+          a.expertise.some((e) => e.toLowerCase().includes(q))
+      );
+    }
+
+    res.status(200).json(results);
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
   }
@@ -2133,10 +2165,13 @@ router.get('/advisors', authenticate, async (req: AuthenticatedRequest, res: Res
 
 router.get('/advisors/:id', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const adv = (await prisma.advisor.findUnique({
+    const adv = await prisma.advisor.findUnique({
       where: { id: req.params.id as string },
-      include: { user: true },
-    })) as any;
+      include: {
+        user: true,
+        meetings: { select: { id: true } },
+      },
+    });
 
     if (!adv) {
       res.status(404).json({ status: 'fail', message: 'Advisor not found' });
@@ -2146,11 +2181,14 @@ router.get('/advisors/:id', authenticate, async (req: AuthenticatedRequest, res:
     res.status(200).json({
       id: adv.id,
       name: `${adv.user.firstName} ${adv.user.lastName}`,
+      email: adv.user.email,
       expertise: adv.expertise,
-      availability: adv.availabilitySlots,
-      bio: adv.bio || 'Experienced advisor',
+      availabilitySlots: adv.availabilitySlots,
+      bio: adv.bio || null,
       rate: adv.rate,
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=60',
+      status: adv.status,
+      sessionCount: adv.meetings.length,
+      avatar: null,
     });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
@@ -2184,7 +2222,12 @@ router.get('/advisors/sessions', authenticate, async (req: AuthenticatedRequest,
 
 router.post('/advisors/book', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { advisorId, date, time, notes } = req.body;
+    const { advisorId, scheduledAt, date, time, duration, topic, notes } = req.body;
+
+    if (!advisorId) {
+      res.status(400).json({ status: 'fail', message: 'advisorId is required' });
+      return;
+    }
 
     const advisor = await prisma.advisor.findUnique({
       where: { id: advisorId },
@@ -2196,33 +2239,78 @@ router.post('/advisors/book', authenticate, async (req: AuthenticatedRequest, re
       return;
     }
 
-    // Combine date and time
-    const sched = new Date(date + 'T' + (time || '10:00:00'));
+    // Parse the scheduled datetime from ISO string or date+time pair
+    let sched: Date;
+    if (scheduledAt) {
+      sched = new Date(scheduledAt);
+    } else if (date) {
+      sched = new Date(date + 'T' + (time || '10:00:00'));
+    } else {
+      res.status(400).json({ status: 'fail', message: 'scheduledAt or date is required' });
+      return;
+    }
+
+    if (isNaN(sched.getTime())) {
+      res.status(400).json({ status: 'fail', message: 'Invalid scheduled date/time format' });
+      return;
+    }
+
+    const durationMinutes = duration || 60;
+
+    // Check for double-booking: does this advisor have another active meeting overlapping?
+    const endTime = new Date(sched.getTime() + durationMinutes * 60 * 1000);
+    const conflicting = await prisma.meeting.findFirst({
+      where: {
+        advisorId,
+        status: { notIn: ['cancelled'] },
+        scheduledAt: { lt: endTime },
+        AND: [
+          {
+            scheduledAt: {
+              gte: new Date(sched.getTime() - durationMinutes * 60 * 1000),
+            },
+          },
+        ],
+      },
+    });
+
+    if (conflicting) {
+      res.status(409).json({
+        status: 'fail',
+        message: 'This time slot is already booked for the selected advisor. Please choose a different time.',
+      });
+      return;
+    }
 
     const meeting = await prisma.meeting.create({
       data: {
         advisorId,
         clientId: req.user!.id,
         scheduledAt: sched,
-        durationMinutes: 60,
-        notes: notes || '',
-        meetingLink: 'https://zoom.us/j/' + Math.floor(100000000 + Math.random() * 900000000),
+        durationMinutes,
+        notes: topic ? `Topic: ${topic}${notes ? '\n' + notes : ''}` : (notes || ''),
+        meetingLink: 'https://meet.google.com/' + Math.random().toString(36).substring(2, 11),
       },
       include: { advisor: { include: { user: true } } },
     });
 
-    await sendConsultationBookedEmail(req.user!.email, `Advisor: ${advisor.user.firstName} ${advisor.user.lastName}\nScheduled Date: ${sched.toLocaleString()}\nMeeting Link: ${meeting.meetingLink}`);
+    await sendConsultationBookedEmail(
+      req.user!.email,
+      `Advisor: ${advisor.user.firstName} ${advisor.user.lastName}\nTopic: ${topic || 'General Consultation'}\nScheduled Date: ${sched.toLocaleString()}\nDuration: ${durationMinutes} mins\nMeeting Link: ${meeting.meetingLink}`
+    );
 
     res.status(201).json({
       id: meeting.id,
       advisorId: meeting.advisorId,
       advisorName: `${advisor.user.firstName} ${advisor.user.lastName}`,
+      scheduledAt: meeting.scheduledAt.toISOString(),
       date: meeting.scheduledAt.toISOString(),
-      time: time || '10:00 AM',
+      time: meeting.scheduledAt.toTimeString().slice(0, 5),
       duration: meeting.durationMinutes,
-      status: meeting.status as any,
+      status: meeting.status,
       meetingLink: meeting.meetingLink || '',
       notes: meeting.notes || '',
+      topic: topic || null,
     });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
@@ -2243,8 +2331,173 @@ router.delete('/advisors/sessions/:id', authenticate, async (req: AuthenticatedR
 });
 
 // ==========================================
-// MODULE 6: DOCUMENT MANAGEMENT
+// MODULE 5: MILESTONE (PROGRESS TRACKING) CRUD
 // ==========================================
+
+// List milestones for the logged-in user (client)
+router.get('/milestones', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const milestones = await prisma.progressTracking.findMany({
+      where: { clientId: req.user!.id },
+      orderBy: { targetDate: 'asc' },
+    });
+    res.status(200).json(
+      milestones.map((m) => ({
+        id: m.id,
+        milestoneName: m.milestoneName,
+        description: m.description || '',
+        targetDate: m.targetDate.toISOString(),
+        status: m.status,
+        createdAt: m.createdAt.toISOString(),
+        updatedAt: m.updatedAt.toISOString(),
+      }))
+    );
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Create a milestone
+router.post('/milestones', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { milestoneName, description, targetDate, status } = req.body;
+
+    if (!milestoneName || !targetDate) {
+      res.status(400).json({ status: 'fail', message: 'milestoneName and targetDate are required' });
+      return;
+    }
+
+    const parsedDate = new Date(targetDate);
+    if (isNaN(parsedDate.getTime())) {
+      res.status(400).json({ status: 'fail', message: 'Invalid targetDate format' });
+      return;
+    }
+
+    const milestone = await prisma.progressTracking.create({
+      data: {
+        clientId: req.user!.id,
+        milestoneName,
+        description: description || null,
+        targetDate: parsedDate,
+        status: status || 'not_started',
+      },
+    });
+
+    res.status(201).json({
+      id: milestone.id,
+      milestoneName: milestone.milestoneName,
+      description: milestone.description || '',
+      targetDate: milestone.targetDate.toISOString(),
+      status: milestone.status,
+      createdAt: milestone.createdAt.toISOString(),
+      updatedAt: milestone.updatedAt.toISOString(),
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Update a milestone (status, description, targetDate)
+router.put('/milestones/:id', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const { milestoneName, description, targetDate, status } = req.body;
+
+    const existing = await prisma.progressTracking.findFirst({
+      where: { id, clientId: req.user!.id },
+    });
+
+    if (!existing) {
+      res.status(404).json({ status: 'fail', message: 'Milestone not found or access denied' });
+      return;
+    }
+
+    const updated = await prisma.progressTracking.update({
+      where: { id },
+      data: {
+        ...(milestoneName !== undefined && { milestoneName }),
+        ...(description !== undefined && { description }),
+        ...(targetDate !== undefined && { targetDate: new Date(targetDate) }),
+        ...(status !== undefined && { status }),
+      },
+    });
+
+    res.status(200).json({
+      id: updated.id,
+      milestoneName: updated.milestoneName,
+      description: updated.description || '',
+      targetDate: updated.targetDate.toISOString(),
+      status: updated.status,
+      createdAt: updated.createdAt.toISOString(),
+      updatedAt: updated.updatedAt.toISOString(),
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Delete a milestone
+router.delete('/milestones/:id', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const existing = await prisma.progressTracking.findFirst({
+      where: { id, clientId: req.user!.id },
+    });
+    if (!existing) {
+      res.status(404).json({ status: 'fail', message: 'Milestone not found or access denied' });
+      return;
+    }
+    await prisma.progressTracking.delete({ where: { id } });
+    res.status(200).json({ status: 'success', message: 'Milestone deleted' });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Timeline: merged list of meetings + milestones sorted by date
+router.get('/advisors/timeline', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const [meetings, milestones] = await Promise.all([
+      prisma.meeting.findMany({
+        where: { clientId: req.user!.id },
+        include: { advisor: { include: { user: true } } },
+        orderBy: { scheduledAt: 'asc' },
+      }),
+      prisma.progressTracking.findMany({
+        where: { clientId: req.user!.id },
+        orderBy: { targetDate: 'asc' },
+      }),
+    ]);
+
+    const timelineItems = [
+      ...meetings.map((m) => ({
+        id: m.id,
+        type: 'meeting' as const,
+        title: `Meeting with ${m.advisor.user.firstName} ${m.advisor.user.lastName}`,
+        date: m.scheduledAt.toISOString(),
+        status: m.status,
+        meetingLink: m.meetingLink || null,
+        notes: m.notes || '',
+        duration: m.durationMinutes,
+      })),
+      ...milestones.map((ms) => ({
+        id: ms.id,
+        type: 'milestone' as const,
+        title: ms.milestoneName,
+        date: ms.targetDate.toISOString(),
+        status: ms.status,
+        description: ms.description || '',
+        meetingLink: null,
+        notes: '',
+        duration: null,
+      })),
+    ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    res.status(200).json(timelineItems);
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
 
 // Helper to derive mimeType from file extension
 const getMimeType = (fileName: string): string => {
@@ -2280,6 +2533,19 @@ const getCategoryId = (category: string): string => {
   return map[category] || 'other';
 };
 
+const getCategoryNameFromId = (categoryId: string): string => {
+  const map: Record<string, string> = {
+    'business-plan': 'Business Plan',
+    'financial': 'Financial',
+    'legal': 'Legal',
+    'product': 'Product',
+    'team': 'Team',
+    'marketing': 'Marketing',
+    'other': 'Other',
+  };
+  return map[categoryId] || 'Other';
+};
+
 // Helper mapping — returns the full shape the frontend Document type expects
 const mapDocFields = (d: any) => ({
   id: d.id,
@@ -2287,12 +2553,12 @@ const mapDocFields = (d: any) => ({
   startupId: d.startupId || '',
   // DocumentsPage fields
   name: d.fileName,
-  description: '',
-  tags: [] as string[],
+  description: d.description || '',
+  tags: d.tags || [],
   categoryId: getCategoryId(d.category),
   currentVersion: d.currentVersion || 1,
   status: 'approved' as const,
-  sharedWith: [] as string[],
+  sharedWith: d.shares ? d.shares.map((s: any) => s.sharedWith) : [],
   fileUrl: `/api/documents/${d.id}/download`,
   fileSize: d.fileSize || 0,
   mimeType: getMimeType(d.fileName),
@@ -2309,6 +2575,7 @@ router.get('/founder/documents', authenticate, async (req: AuthenticatedRequest,
   try {
     const list = await prisma.document.findMany({
       where: { ownerId: req.user!.id },
+      include: { shares: true },
     });
     res.status(200).json(list.map(mapDocFields));
   } catch (error: any) {
@@ -2318,10 +2585,57 @@ router.get('/founder/documents', authenticate, async (req: AuthenticatedRequest,
 
 router.get('/documents', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const list = await prisma.document.findMany({
-      where: { ownerId: req.user!.id },
+    const userId   = req.user!.id;
+    const userEmail = req.user!.email;
+    const isAdmin  = ['Admin', 'Super Admin'].includes(req.user!.roleName || '');
+
+    // 1. Fetch documents the user owns
+    const ownedDocs = await prisma.document.findMany({
+      where: { ownerId: userId },
+      include: { shares: true },
     });
-    res.status(200).json(list.map(mapDocFields));
+
+    // 2. Fetch documents shared with this user (via email)
+    const shareRecords = await prisma.documentShare.findMany({
+      where: { sharedWith: userEmail },
+      include: {
+        document: {
+          include: { shares: true },
+        },
+      },
+    });
+
+    const sharedDocs = shareRecords.map((sr) => ({
+      ...mapDocFields(sr.document),
+      myPermission: sr.permission,   // 'view' | 'edit'
+      sharedById: sr.sharedById,
+    }));
+
+    // 3. For admin, also include everything (de-duped)
+    if (isAdmin) {
+      const allDocs = await prisma.document.findMany({
+        include: { shares: true },
+      });
+      const ownedIds = new Set(ownedDocs.map((d) => d.id));
+      const sharedIds = new Set(sharedDocs.map((d: any) => d.id));
+      const adminExtra = allDocs
+        .filter((d) => !ownedIds.has(d.id) && !sharedIds.has(d.id))
+        .map(mapDocFields);
+      return res.status(200).json([
+        ...ownedDocs.map(mapDocFields),
+        ...sharedDocs,
+        ...adminExtra,
+      ]);
+    }
+
+    // De-duplicate: if a doc appears in both (owner shared with self edge-case), owned wins
+    const ownedIds = new Set(ownedDocs.map((d) => d.id));
+    const dedupedShared = sharedDocs.filter((d: any) => !ownedIds.has(d.id));
+
+    res.status(200).json([
+      ...ownedDocs.map((d) => ({ ...mapDocFields(d), myPermission: 'owner' })),
+      ...dedupedShared,
+    ]);
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
   }
@@ -2419,18 +2733,23 @@ router.post('/founder/kyc/upload', authenticate, upload.single('kycDocument'), a
 
 router.post('/documents/upload', authenticate, upload.single('file'), async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { type } = req.body;
+    const { type, categoryId, description, name } = req.body;
     if (!req.file) {
       res.status(400).json({ status: 'fail', message: 'File is required' });
       return;
     }
 
+    const docCategory = getCategoryNameFromId(categoryId || type || '');
+
     const doc = await prisma.document.create({
       data: {
         ownerId: req.user!.id,
-        category: type || 'Incorporation',
-        fileName: req.file.originalname,
+        category: docCategory,
+        fileName: name || req.file.originalname,
         filePath: req.file.path,
+        fileSize: req.file.size,
+        description: description || '',
+        tags: [],
       },
     });
 
@@ -2512,13 +2831,31 @@ router.get('/documents/:id/download', authenticate, async (req: AuthenticatedReq
   try {
     const id = req.params.id as string;
     const doc = await prisma.document.findUnique({ where: { id } });
-    if (!doc || (doc.ownerId !== req.user!.id && req.user!.roleName !== 'Super Admin')) {
+
+    if (!doc) {
+      res.status(404).json({ status: 'fail', message: 'Document not found' });
+      return;
+    }
+
+    const isOwner = doc.ownerId === req.user!.id;
+    const isAdmin = ['Admin', 'Super Admin'].includes(req.user!.roleName || '');
+
+    // Check if the user has been explicitly shared this document
+    let isSharedWith = false;
+    if (!isOwner && !isAdmin) {
+      const shareRecord = await prisma.documentShare.findUnique({
+        where: { documentId_sharedWith: { documentId: id, sharedWith: req.user!.email } },
+      });
+      isSharedWith = !!shareRecord;
+    }
+
+    if (!isOwner && !isAdmin && !isSharedWith) {
       res.status(403).json({ status: 'fail', message: 'Unauthorized access' });
       return;
     }
 
     if (!fs.existsSync(doc.filePath)) {
-      res.status(404).json({ status: 'fail', message: 'File not found' });
+      res.status(404).json({ status: 'fail', message: 'File not found on server' });
       return;
     }
 
@@ -2533,23 +2870,228 @@ router.get('/documents/:id', authenticate, async (req: AuthenticatedRequest, res
     const id = req.params.id as string;
     const doc = await prisma.document.findUnique({ where: { id } });
     if (!doc) {
-      res.status(404).json({ status: 'fail' });
+      res.status(404).json({ status: 'fail', message: 'Document not found' });
       return;
     }
-    res.status(200).json(mapDocFields(doc));
+
+    const isOwner = doc.ownerId === req.user!.id;
+    const isAdmin = ['Admin', 'Super Admin'].includes(req.user!.roleName || '');
+
+    // Check if the document is shared with this user
+    let shareRecord = null;
+    if (!isOwner && !isAdmin) {
+      shareRecord = await prisma.documentShare.findUnique({
+        where: { documentId_sharedWith: { documentId: id, sharedWith: req.user!.email } },
+      });
+      if (!shareRecord) {
+        res.status(403).json({ status: 'fail', message: 'Access denied' });
+        return;
+      }
+    }
+
+    res.status(200).json({
+      ...mapDocFields(doc),
+      myPermission: isOwner ? 'owner' : isAdmin ? 'admin' : shareRecord!.permission,
+    });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
 
+// Share a document with another user by email (sends email invite dynamically)
 router.post('/documents/:id/share', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { email } = req.body;
-    res.status(200).json({ status: 'success', message: `Document successfully shared with ${email}` });
+    const documentId = req.params.id as string;
+    const { email, permission } = req.body;
+
+    if (!email) {
+      res.status(400).json({ status: 'fail', message: 'Recipient email is required' });
+      return;
+    }
+
+    // Verify the document exists and the requester is the owner
+    const doc = await prisma.document.findUnique({ where: { id: documentId } });
+    if (!doc) {
+      res.status(404).json({ status: 'fail', message: 'Document not found' });
+      return;
+    }
+    if (doc.ownerId !== req.user!.id) {
+      res.status(403).json({ status: 'fail', message: 'Only the document owner can share it' });
+      return;
+    }
+
+    // Cannot share with yourself
+    if (email === req.user!.email) {
+      res.status(400).json({ status: 'fail', message: 'You cannot share a document with yourself' });
+      return;
+    }
+
+    // Look up recipient user by email (if they exist)
+    const recipient = await prisma.user.findUnique({ where: { email } });
+    const greetingName = recipient ? recipient.firstName : 'User';
+    const recipientFullName = recipient ? `${recipient.firstName} ${recipient.lastName}` : email;
+
+    // Upsert share record (update permission if already shared)
+    const share = await prisma.documentShare.upsert({
+      where: { documentId_sharedWith: { documentId, sharedWith: email } },
+      update: { permission: permission || 'view' },
+      create: {
+        documentId,
+        sharedById: req.user!.id,
+        sharedWith: email,
+        permission: permission || 'view',
+      },
+    });
+
+    // Send email invite notification dynamically
+    const senderName = `${req.user!.firstName} ${req.user!.lastName}`;
+    const accessUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/dashboard/founder/documents`;
+
+    await sendEmail({
+      to: email,
+      subject: `Document Shared with You: ${doc.fileName}`,
+      text: `Hello ${greetingName},\n\n${senderName} has shared a document with you on Antara.\n\nDocument Name: ${doc.fileName}\nPermission: ${permission || 'view'}\n\nYou can access it by logging into your dashboard under the Documents tab:\n${accessUrl}\n\nBest regards,\nThe Antara Team`,
+      fromName: senderName,
+      replyTo: req.user!.email,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: `Document successfully shared with ${recipientFullName} (${email})`,
+      share: {
+        id: share.id,
+        sharedWith: share.sharedWith,
+        recipientName: recipientFullName,
+        permission: share.permission,
+        createdAt: share.createdAt.toISOString(),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
+
+// Update document details (PUT /documents/:id)
+router.put('/documents/:id', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const id = req.params.id as string;
+    const { name, description, tags, categoryId } = req.body;
+
+    const doc = await prisma.document.findUnique({
+      where: { id },
+      include: { shares: true },
+    });
+
+    if (!doc) {
+      res.status(404).json({ status: 'fail', message: 'Document not found' });
+      return;
+    }
+
+    const isOwner = doc.ownerId === req.user!.id;
+    const isAdmin = ['Admin', 'Super Admin'].includes(req.user!.roleName || '');
+
+    let canEdit = isOwner || isAdmin;
+    if (!canEdit) {
+      const shareRecord = await prisma.documentShare.findUnique({
+        where: { documentId_sharedWith: { documentId: id, sharedWith: req.user!.email } },
+      });
+      if (shareRecord && shareRecord.permission === 'edit') {
+        canEdit = true;
+      }
+    }
+
+    if (!canEdit) {
+      res.status(403).json({ status: 'fail', message: 'Access denied or insufficient permission to edit' });
+      return;
+    }
+
+    const updateData: any = {};
+    if (name !== undefined) updateData.fileName = name;
+    if (description !== undefined) updateData.description = description;
+    if (tags !== undefined) updateData.tags = tags;
+    if (categoryId !== undefined) updateData.category = getCategoryNameFromId(categoryId);
+
+    const updated = await prisma.document.update({
+      where: { id },
+      data: updateData,
+      include: { shares: true },
+    });
+
+    res.status(200).json(mapDocFields(updated));
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Get the list of users a document is shared with
+router.get('/documents/:id/shares', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const documentId = req.params.id as string;
+
+    const doc = await prisma.document.findUnique({ where: { id: documentId } });
+    if (!doc) {
+      res.status(404).json({ status: 'fail', message: 'Document not found' });
+      return;
+    }
+    if (doc.ownerId !== req.user!.id) {
+      res.status(403).json({ status: 'fail', message: 'Access denied' });
+      return;
+    }
+
+    const shares = await prisma.documentShare.findMany({
+      where: { documentId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // Resolve recipient names from user table
+    const emails = shares.map((s) => s.sharedWith);
+    const users = await prisma.user.findMany({
+      where: { email: { in: emails } },
+      select: { email: true, firstName: true, lastName: true },
+    });
+    const userMap = Object.fromEntries(users.map((u) => [u.email, `${u.firstName} ${u.lastName}`]));
+
+    res.status(200).json(
+      shares.map((s) => ({
+        id: s.id,
+        sharedWith: s.sharedWith,
+        recipientName: userMap[s.sharedWith] || s.sharedWith,
+        permission: s.permission,
+        createdAt: s.createdAt.toISOString(),
+      }))
+    );
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Revoke sharing for a specific email
+router.delete('/documents/:id/shares', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const documentId = req.params.id as string;
+    const { email } = req.body;
+
+    if (!email) {
+      res.status(400).json({ status: 'fail', message: 'email is required to revoke sharing' });
+      return;
+    }
+
+    const doc = await prisma.document.findUnique({ where: { id: documentId } });
+    if (!doc || doc.ownerId !== req.user!.id) {
+      res.status(403).json({ status: 'fail', message: 'Only the document owner can revoke sharing' });
+      return;
+    }
+
+    await prisma.documentShare.deleteMany({
+      where: { documentId, sharedWith: email },
+    });
+
+    res.status(200).json({ status: 'success', message: `Sharing revoked for ${email}` });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
 
 // ==========================================
 // MODULE 7: ADMIN DASHBOARD
