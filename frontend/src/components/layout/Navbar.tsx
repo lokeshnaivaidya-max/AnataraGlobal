@@ -3,7 +3,6 @@ import { Link, useLocation } from 'wouter'
 import {
   Menu,
   X,
-  Sparkles,
   ChevronDown,
   LogOut,
   User,
@@ -196,16 +195,6 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
                 >
                   {authLinks.login.label}
                 </Link>
-                <Link
-                  href={authLinks.register.href}
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border shadow-lg transition-all duration-300 hover:shadow-xl"
-                  style={{ backgroundColor: 'rgba(206,160,65,0.08)', borderColor: 'rgba(206,160,65,0.25)', color: '#CEA041' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#CEA041'; e.currentTarget.style.color = '#FFFFFF' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(206,160,65,0.08)'; e.currentTarget.style.color = '#CEA041' }}
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {authLinks.register.label}
-                </Link>
               </>
             )}
           </div>
@@ -323,16 +312,6 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <Link
-                    href={authLinks.register.href}
-                    onClick={closeMobile}
-                    className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold border shadow-lg"
-                    style={{ backgroundColor: 'rgba(206,160,65,0.08)', borderColor: 'rgba(206,160,65,0.25)', color: '#CEA041' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#CEA041'; e.currentTarget.style.color = '#FFFFFF' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(206,160,65,0.08)'; e.currentTarget.style.color = '#CEA041' }}
-                  >
-                    {authLinks.register.label}
-                  </Link>
                   <Link
                     href={authLinks.login.href}
                     onClick={closeMobile}
