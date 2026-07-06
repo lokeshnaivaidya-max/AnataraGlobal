@@ -497,16 +497,16 @@ export default function HeroSection() {
               >
                 <a
                   href="#services"
-                  className="group inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold border border-black shadow-lg hover:scale-105 transition-all duration-300"
-                  style={{ color: '#FC9E00' }}
+                  className="group inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold shadow-lg hover:scale-105 transition-all duration-300"
+                  style={{ color: '#FC9E00', border: '1px solid #000000' }}
                 >
                   Explore Services
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" style={{ color: '#FC9E00' }} />
                 </a>
                 <a
                   href="#consultation"
-                  className="inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold border border-black hover:scale-105 transition-all duration-300"
-                  style={{ color: '#FC9E00' }}
+                  className="inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold hover:scale-105 transition-all duration-300"
+                  style={{ color: '#FC9E00', border: '1px solid #000000' }}
                 >
                   <Play className="h-4 w-4" style={{ color: '#FC9E00' }} />
                   Book Strategy Session
@@ -516,7 +516,8 @@ export default function HeroSection() {
               {/* Trusted Indicators */}
               <motion.div 
                 variants={itemVariants} 
-                className="mt-12 flex items-center gap-6 text-white/50 text-xs"
+                className="mt-12 flex items-center gap-6 text-xs"
+                style={{ color: 'rgba(0,0,0,0.5)' }}
               >
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4].map((i) => (
@@ -529,8 +530,8 @@ export default function HeroSection() {
                   ))}
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-black">Global Connectivity</span>
-                  <span className="tracking-wide text-[10px] mt-0.5 text-black/60">Serving Founders & Investors Worldwide</span>
+                  <span className="font-semibold" style={{ color: '#000000' }}>Global Connectivity</span>
+                  <span className="tracking-wide text-[10px] mt-0.5" style={{ color: 'rgba(0,0,0,0.6)' }}>Serving Founders & Investors Worldwide</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -545,9 +546,9 @@ export default function HeroSection() {
               className="relative w-full max-w-xl mx-auto"
             >
               {/* Premium Glow Aura */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-gold/20 via-emerald/10 to-transparent blur-md pointer-events-none" />
+              <div className="absolute -inset-1 rounded-3xl blur-md pointer-events-none" style={{ background: 'linear-gradient(to top right, rgba(253,124,6,0.2), rgba(16,185,129,0.1), transparent)' }} />
 
-              <div className="relative rounded-3xl backdrop-blur-md border border-black p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch bg-white">
+              <div className="relative rounded-3xl backdrop-blur-md p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch" style={{ backgroundColor: '#FFFFFF', border: '1px solid #000000' }}>
                 
                 {/* Steps Selector Column */}
                 <div className="flex md:flex-col justify-between md:justify-center gap-3">
@@ -561,19 +562,25 @@ export default function HeroSection() {
                         className={`h-14 w-14 rounded-2xl flex flex-col items-center justify-center transition-all duration-500 relative ${
                           isSelected
                             ? 'text-white scale-110'
-                            : 'bg-white border-2 border-black text-black hover:bg-black/5 hover:scale-105 hover:shadow-md'
+                            : 'hover:scale-105 hover:shadow-md'
                         }`}
                         style={isSelected ? {
                           background: 'radial-gradient(circle at 30% 30%, #000000, #333333)',
                           boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
                           border: 'none'
-                        } : undefined}
+                        } : {
+                          backgroundColor: '#FFFFFF',
+                          border: '2px solid #000000',
+                          color: '#000000'
+                        }}
+                        onMouseEnter={(e) => { if (!isSelected) { e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.04)' } }}
+                        onMouseLeave={(e) => { if (!isSelected) { e.currentTarget.style.backgroundColor = '#FFFFFF' } }}
                       >
                         {isSelected && (
                           <>
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-black/30 via-black/10 to-transparent blur-sm -z-10" />
-                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2 ring-offset-black/10" />
+                            <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)' }} />
+                            <div className="absolute -inset-1 rounded-2xl blur-sm -z-10" style={{ background: 'linear-gradient(to bottom right, rgba(0,0,0,0.3), rgba(0,0,0,0.1), transparent)' }} />
+                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2" style={{ ringOffsetColor: 'rgba(0,0,0,0.1)' }} />
                           </>
                         )}
                         <div className={`relative flex flex-col items-center justify-center ${isSelected ? 'animate-pulse-glow' : ''}`}>
@@ -582,7 +589,7 @@ export default function HeroSection() {
                         </div>
                         {isSelected && (
                           <div className="absolute -right-3 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center">
-                            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-black shadow-lg shadow-black/20">
+                            <div className="flex items-center justify-center h-6 w-6 rounded-full shadow-lg" style={{ backgroundColor: '#000000', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="m9 18 6-6-6-6" />
                               </svg>
