@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, ArrowRight, Shield, CheckCircle, Sparkles, Calculator, Building, AlertCircle } from 'lucide-react'
-import { useCreateLead } from '../../lib/crm-hooks'
+import { useCreateLead } from '../lib/crm-hooks'
 
 type Stage = 'concept' | 'mvp' | 'traction' | 'scaling'
 
