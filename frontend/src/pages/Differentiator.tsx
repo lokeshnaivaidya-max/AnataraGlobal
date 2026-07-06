@@ -67,17 +67,17 @@ export default function Differentiator() {
             {/* Right: Journey Timeline */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
               className="rounded-3xl p-8 sm:p-10" style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
-              <div className="text-center mb-8">
-                <div style={{ width: 50, height: 2, backgroundColor: '#FD7C06', margin: '0 auto 0.75rem', borderRadius: 2 }} />
-                <p className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(0,0,0,0.4)' }}>✦ Your Journey with Antara Global ✦</p>
-                <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mt-1" style={{ color: '#000000' }}>
+              <div className="text-center mb-10">
+                <div style={{ width: 60, height: 3, backgroundColor: '#FD7C06', margin: '0 auto 0.75rem', borderRadius: 2 }} />
+                <p className="text-sm uppercase tracking-widest font-semibold" style={{ color: 'rgba(0,0,0,0.4)' }}>✦ Your Journey with Antara Global ✦</p>
+                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2" style={{ color: '#000000' }}>
                   From Discovery to <span style={{ color: '#FD7C06' }}>Growth</span>
                 </h3>
               </div>
 
               {/* Desktop horizontal timeline */}
-              <div className="hidden md:block relative py-2">
-                <div className="absolute top-[15px] left-[8%] right-[8%] h-[2px] rounded" style={{ background: 'linear-gradient(90deg, #ddd, #FD7C06, #ddd)' }} />
+              <div className="hidden md:block relative py-4">
+                <div className="absolute top-[18px] left-[8%] right-[8%] h-[2px] rounded" style={{ background: 'linear-gradient(90deg, #ddd, #FD7C06, #ddd)' }} />
                 <div className="flex justify-between items-start">
                   {[
                     { step: '01', title: 'Discovery', desc: 'Assess readiness & identify gaps' },
@@ -86,11 +86,11 @@ export default function Differentiator() {
                     { step: '04', title: 'Grow', desc: 'Scale & create lasting value' },
                   ].map((t, idx) => (
                     <div key={t.step} className="flex flex-col items-center flex-1 relative z-10">
-                      <div className="w-3.5 h-3.5 rounded-full border-2 mb-2"
+                      <div className="w-4 h-4 rounded-full border-2 mb-3"
                         style={{ backgroundColor: idx === 0 ? '#FD7C06' : '#FFFFFF', borderColor: '#FD7C06', boxShadow: idx === 0 ? '0 0 16px rgba(253,124,6,0.25)' : 'none' }} />
-                      <span className="text-[9px] uppercase tracking-wider font-semibold" style={{ color: '#AAA' }}>Step {t.step}</span>
-                      <span className="text-xs font-bold mt-1 text-center" style={{ color: '#1A1A1A' }}>{t.title}</span>
-                      <span className="text-[10px] text-center mt-0.5 leading-tight max-w-[110px]" style={{ color: '#999' }}>{t.desc}</span>
+                      <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#AAA' }}>Step {t.step}</span>
+                      <span className="text-sm font-bold mt-1 text-center" style={{ color: '#1A1A1A' }}>{t.title}</span>
+                      <span className="text-xs text-center mt-0.5 leading-tight max-w-[130px]" style={{ color: '#999' }}>{t.desc}</span>
                     </div>
                   ))}
                 </div>
@@ -98,7 +98,7 @@ export default function Differentiator() {
 
               {/* Mobile vertical timeline */}
               <div className="md:hidden relative">
-                <div className="absolute left-[7px] top-0 bottom-0 w-px" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }} />
+                <div className="absolute left-[9px] top-0 bottom-0 w-px" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }} />
                 <div className="space-y-6">
                   {[
                     { step: '01', title: 'Discovery', desc: 'Assess readiness & identify gaps' },
@@ -107,12 +107,12 @@ export default function Differentiator() {
                     { step: '04', title: 'Grow', desc: 'Scale & create lasting value' },
                   ].map((t, idx) => (
                     <motion.div key={t.step} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 + idx * 0.1 }}
-                      className="relative pl-9">
-                      <div className="absolute left-[2px] top-1 w-2.5 h-2.5 rounded-full border-2" style={{ backgroundColor: idx === 0 ? '#FD7C06' : '#FFFFFF', borderColor: '#FD7C06' }} />
-                      <div className="rounded-xl p-3" style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
-                        <span className="text-[9px] uppercase tracking-wider font-semibold" style={{ color: '#AAA' }}>Step {t.step}</span>
-                        <h4 className="text-xs font-bold mt-0.5" style={{ color: '#1A1A1A' }}>{t.title}</h4>
-                        <p className="text-[10px] mt-0.5" style={{ color: '#999' }}>{t.desc}</p>
+                      className="relative pl-10">
+                      <div className="absolute left-[3px] top-1 w-3 h-3 rounded-full border-2" style={{ backgroundColor: idx === 0 ? '#FD7C06' : '#FFFFFF', borderColor: '#FD7C06' }} />
+                      <div className="rounded-xl p-4" style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                        <span className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#AAA' }}>Step {t.step}</span>
+                        <h4 className="text-sm font-bold mt-0.5" style={{ color: '#1A1A1A' }}>{t.title}</h4>
+                        <p className="text-xs mt-0.5" style={{ color: '#999' }}>{t.desc}</p>
                       </div>
                     </motion.div>
                   ))}
