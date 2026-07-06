@@ -580,7 +580,7 @@ export default function HeroSection() {
                           <>
                             <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)' }} />
                             <div className="absolute -inset-1 rounded-2xl blur-sm -z-10" style={{ background: 'linear-gradient(to bottom right, rgba(0,0,0,0.3), rgba(0,0,0,0.1), transparent)' }} />
-                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2" style={{ ringOffsetColor: 'rgba(0,0,0,0.1)' }} />
+                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2" />
                           </>
                         )}
                         <div className={`relative flex flex-col items-center justify-center ${isSelected ? 'animate-pulse-glow' : ''}`}>
