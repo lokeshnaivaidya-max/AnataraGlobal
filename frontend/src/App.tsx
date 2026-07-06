@@ -10,6 +10,7 @@ import Differentiator from './pages/Differentiator'
 import CoreValues from './pages/CoreValues'
 import KnowledgeHub from './pages/KnowledgeHub'
 import Contact from './pages/Contact'
+import ContactSection from './components/about/ContactSection'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import VerifyOTP from './pages/auth/VerifyOTP'
@@ -381,6 +382,7 @@ export default function App() {
             <Route path="/auth/callback" component={OAuthCallback} />
           </Switch>
         </main>
+        <ContactSection />
         <Footer />
       </div>
     </LoadingScreen>
