@@ -44,7 +44,7 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
     }
   })
 
-  const particles = useMemo(() => generateParticles(16), [])
+  const particles = useMemo(() => generateParticles(8), [])
 
   useEffect(() => {
     if (!loading) return
@@ -74,8 +74,8 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
                 'radial-gradient(circle at 50% 42%, #FFFFFF 0%, #FBF8F0 45%, #F7F1E4 100%)',
             }}
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.04 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Ambient particles */}
             <div className="absolute inset-0">
@@ -115,7 +115,7 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
                 height: 320,
                 background:
                   'radial-gradient(circle, rgba(184,138,43,0.32) 0%, rgba(184,138,43,0.08) 45%, rgba(184,138,43,0) 72%)',
-                filter: 'blur(6px)',
+                filter: 'blur(2px)',
               }}
               animate={
                 prefersReducedMotion
