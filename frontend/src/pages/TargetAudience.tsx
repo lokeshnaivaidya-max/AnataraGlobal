@@ -419,36 +419,7 @@ export default function TargetAudience() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#000000' }}>
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(253,124,6,0.08)' }} />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Ready to Grow Your Business?
-          </h2>
-          <p className="mt-4 text-lg max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.6)' }}>
-            Let us help you build the foundation for sustainable success.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-              style={{ backgroundColor: '#FD7C06' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#CEA041'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}>
-              Start Your Journey <ArrowRight className="h-4 w-4" />
-            </a>
-            <a href="/services"
-              className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300"
-              style={{ borderColor: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.7)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FFFFFF' }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}>
-              View Our Services
-            </a>
-          </div>
-        </div>
-      </section>
+
     </>
   )
 }
