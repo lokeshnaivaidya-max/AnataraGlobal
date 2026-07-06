@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 
 const SESSION_KEY = 'antara-loaded'
-const LOADING_DURATION_MS = 2600
+const LOADING_DURATION_MS = 1400
 
 type Particle = {
   id: number
