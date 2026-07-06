@@ -1,5 +1,5 @@
 import { Link } from 'wouter'
-import { Mail, MapPin, Globe, Share2, Play, Sparkles } from 'lucide-react'
+import { Mail, MapPin, Globe, Share2, Play } from 'lucide-react'
 
 const socialLinks = [
   { icon: Globe, label: 'LinkedIn' },
@@ -20,7 +20,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 group">
-              <Sparkles className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" style={{ color: '#FD7C06' }} />
+              <img
+                src="/image.png"
+                alt="Antara Global"
+                className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-110"
+              />
               <span className="text-2xl font-bold tracking-tight" style={{ color: '#FFFFFF' }}>
                 ANTARA{' '}
                 <span className="font-light" style={{ color: '#FD7C06' }}>GLOBAL</span>
@@ -32,7 +36,7 @@ export default function Footer() {
             </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map(({ icon: Icon, label }) => (
-                <a
+                
                   key={label}
                   href="#"
                   className="flex h-10 w-10 items-center justify-center rounded-xl border transition-all duration-200 hover:scale-110"
