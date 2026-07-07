@@ -158,7 +158,7 @@ export default function Solutions() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <span className="text-xs font-semibold tracking-widest uppercase text-gold">Who We Empower</span>
+            <span className="inline-block rounded-full px-4 py-1 text-xs font-semibold tracking-widest uppercase" style={{ backgroundColor: '#000000', color: '#FFFFFF' }}>Who We Empower</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-deep-navy tracking-tight">
               Solutions For Every Business
             </h2>
@@ -207,14 +207,15 @@ export default function Solutions() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.08 }}
                       whileHover={{ y: -4 }}
-                      className="rounded-2xl border border-border-gray bg-light-gray/50 p-6 shadow-md hover:shadow-xl transition-all duration-300"
+                      className="rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300"
+                      style={{ backgroundColor: '#FFFFFF', border: '1px solid #000000' }}
                     >
-                      <h3 className="text-base font-extrabold text-deep-navy mb-1">{group.title}</h3>
-                      <p className="text-xs text-medium-gray mb-4">{group.desc}</p>
+                      <h3 className="text-base font-extrabold mb-1" style={{ color: '#000000' }}>{group.title}</h3>
+                      <p className="text-xs mb-4" style={{ color: 'rgba(0,0,0,0.5)' }}>{group.desc}</p>
                       <div className="space-y-2">
                         {group.points.map((point) => (
-                          <div key={point} className="flex items-center gap-2 text-xs text-deep-navy/70 font-medium">
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald shrink-0" />
+                          <div key={point} className="flex items-center gap-2 text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
+                            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
                             {point}
                           </div>
                         ))}
@@ -236,16 +237,18 @@ export default function Solutions() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.08 }}
                         whileHover={{ y: -4 }}
-                        className="rounded-2xl border border-border-gray bg-light-gray/50 p-6 shadow-md hover:shadow-xl hover:border-gold/30 transition-all duration-300"
+                        className="rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300"
+                        style={{ backgroundColor: '#FFFFFF', border: '1px solid #000000' }}
                       >
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-gold/15 to-gold/5 text-gold border border-gold/15 mb-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl border mb-4"
+                          style={{ backgroundColor: 'rgba(0,128,129,0.08)', borderColor: 'rgba(0,128,129,0.15)', color: 'var(--color-accent)' }}>
                           <IndIcon className="h-6 w-6" />
                         </div>
-                        <h3 className="text-base font-extrabold text-deep-navy mb-3">{ind.label}</h3>
+                        <h3 className="text-base font-extrabold mb-3" style={{ color: '#000000' }}>{ind.label}</h3>
                         <div className="space-y-2">
                           {ind.points.map((point) => (
-                            <div key={point} className="flex items-center gap-2 text-xs text-deep-navy/70 font-medium">
-                              <span className="h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
+                            <div key={point} className="flex items-center gap-2 text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
+                              <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                               {point}
                             </div>
                           ))}
@@ -269,21 +272,17 @@ export default function Solutions() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <span className="text-xs font-semibold tracking-widest uppercase text-gold">Growth Journey</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold text-deep-navy tracking-tight">
+            <span className="inline-block rounded-full px-4 py-1 text-xs font-semibold tracking-widest uppercase" style={{ backgroundColor: '#000000', color: '#FFFFFF' }}>Growth Journey</span>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: 'var(--color-accent)' }}>
               From Foundation To Scale
             </h2>
           </motion.div>
 
           <div className="relative">
-            <div className="hidden lg:block absolute top-[44px] left-0 right-0 h-px bg-border-gray">
-              <motion.div
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
+            <div className="hidden lg:block absolute top-[13px] left-0 right-0 h-px" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
+              <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
                 transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full origin-left bg-gradient-to-r from-emerald via-gold to-emerald"
-              />
+                className="h-full origin-left" style={{ background: 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light), var(--color-accent))' }} />
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -297,15 +296,17 @@ export default function Solutions() {
                   className="relative"
                 >
                   <div className="hidden lg:flex relative z-10 h-[26px] items-center mb-6">
-                    <div className="h-6 w-6 rounded-full bg-white border-2 border-gold shadow-lg shadow-gold/20 flex items-center justify-center">
-                      <span className="h-2 w-2 rounded-full bg-gold animate-pulse-glow" />
+                    <div className="h-6 w-6 rounded-full bg-white border-2 flex items-center justify-center"
+                      style={{ borderColor: 'var(--color-accent-light)' }}>
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-border-gray bg-white p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gold">{stage.stage}</span>
-                    <h3 className="text-lg font-extrabold text-deep-navy mt-1">{stage.title}</h3>
-                    <p className="text-xs text-medium-gray mt-2">{stage.desc}</p>
+                  <div className="rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                    style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
+                    <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--color-accent-light)' }}>{stage.stage}</span>
+                    <h3 className="text-lg font-extrabold mt-1" style={{ color: '#000000' }}>{stage.title}</h3>
+                    <p className="text-xs mt-2" style={{ color: 'rgba(0,0,0,0.5)' }}>{stage.desc}</p>
                   </div>
                 </motion.div>
               ))}
