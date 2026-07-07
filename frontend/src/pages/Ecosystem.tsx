@@ -194,7 +194,7 @@ export default function Ecosystem() {
 
             <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}
               className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {ecosystemSteps.map((step, idx) => {
+              {ecosystemSteps.map((step) => {
                 const Icon = step.icon
                 const isGold = step.color === 'gold'
                 return (
