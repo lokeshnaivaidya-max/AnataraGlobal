@@ -549,7 +549,7 @@ export default function HeroSection() {
               {/* Premium Glow Aura */}
               <div className="absolute -inset-1 rounded-3xl blur-md pointer-events-none" style={{ background: 'linear-gradient(to top right, rgba(0,128,129,0.2), rgba(16,185,129,0.1), transparent)' }} />
 
-              <div className="relative rounded-3xl backdrop-blur-md p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch" style={{ backgroundColor: '#FFFFFF', border: '1px solid #000000' }}>
+              <div className="relative rounded-3xl backdrop-blur-md p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch" style={{ backgroundColor: '#000000', border: '1px solid var(--color-accent)' }}>
                 
                 {/* Steps Selector Column */}
                 <div className="flex md:flex-col justify-between md:justify-center gap-3">
@@ -568,11 +568,11 @@ export default function HeroSection() {
                         style={isSelected ? {
                           background: 'radial-gradient(circle at 30% 30%, #000000, #333333)',
                           boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
-                          border: 'none'
+                          border: '2px solid var(--color-accent)'
                         } : {
                           backgroundColor: '#FFFFFF',
-                          border: '2px solid #000000',
-                          color: '#000000'
+                          border: '2px solid var(--color-accent)',
+                          color: 'var(--color-accent)'
                         }}
                         onMouseEnter={(e) => { if (!isSelected) { e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.04)' } }}
                         onMouseLeave={(e) => { if (!isSelected) { e.currentTarget.style.backgroundColor = '#FFFFFF' } }}
@@ -603,7 +603,7 @@ export default function HeroSection() {
                 </div>
 
                 {/* Dashboard Details Screen */}
-                <div className="flex-1 rounded-2xl border border-black p-6 flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: 'var(--color-accent)' }}>
+                <div className="flex-1 rounded-2xl border border-[var(--color-accent)] p-6 flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: '#000000' }}>
                   <div className="absolute -top-10 -right-10 h-24 w-24 rounded-full bg-white/10 blur-xl" />
                   
                   <AnimatePresence mode="wait">
@@ -619,7 +619,7 @@ export default function HeroSection() {
                         <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">
                           {currentStep.label} Node Status
                         </span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(0,128,129,0.2)', color: 'var(--color-accent)', border: '1px solid var(--color-accent)' }}>
                           <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse-glow" />
                           {currentStep.metrics.status}
                         </span>
