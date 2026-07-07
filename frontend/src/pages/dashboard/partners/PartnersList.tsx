@@ -48,7 +48,7 @@ export default function PartnersList() {
               className="block rounded-2xl border border-border-gray bg-white p-5 hover:shadow-lg hover:border-gold/20 transition-all group"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10 text-lg font-extrabold text-gold shrink-0">{partner.name.charAt(0)}</div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10 text-lg font-extrabold text-gold shrink-0">{partner.name?.charAt(0) || ''}</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-deep-navy group-hover:text-gold transition-colors truncate">{partner.name}</p>
                   <span className="rounded-full bg-light-gray text-medium-gray px-2.5 py-0.5 text-[10px] font-semibold">{PARTNER_TYPES.find(t => t.value === partner.type)?.label || partner.type}</span>
@@ -56,7 +56,7 @@ export default function PartnersList() {
               </div>
               <p className="text-xs text-medium-gray line-clamp-2 mb-3">{partner.description}</p>
               <div className="flex flex-wrap gap-1.5 mb-3">
-                {partner.benefits.slice(0, 3).map(b => (
+                {(partner.benefits || []).slice(0, 3).map(b => (
                   <span key={b} className="rounded-full bg-gold/5 text-gold-dark px-2 py-0.5 text-[10px] font-semibold">{b}</span>
                 ))}
               </div>

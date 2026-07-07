@@ -15,6 +15,8 @@ export default function TasksPage() {
   const [newPriority, setNewPriority] = useState('medium')
   const [newListId, setNewListId] = useState('todo')
   const [newDue, setNewDue] = useState('')
+  const [successMsg, setSuccessMsg] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const columns = DEFAULT_TASK_LISTS.map(list => ({
     ...list,
@@ -23,13 +25,33 @@ export default function TasksPage() {
 
   const handleCreate = async () => {
     if (!newTitle) return
-    await createTask.mutateAsync({ title: newTitle, priority: newPriority as any, status: newListId as any, listId: newListId, dueDate: newDue || undefined, labels: [], attachments: 0, comments: 0 } as any)
-    setShowForm(false)
-    setNewTitle('')
-    setNewPriority('medium')
-    setNewListId('todo')
-    setNewDue('')
-    refetch()
+    setSuccessMsg(false)
+    setErrorMsg('')
+    try {
+      await createTask.mutateAsync({ 
+        title: newTitle, 
+        priority: newPriority as any, 
+        status: newListId as any, 
+        listId: newListId, 
+        dueDate: newDue || undefined, 
+        labels: [], 
+        attachments: 0, 
+        comments: 0 
+      } as any)
+      setSuccessMsg(true)
+      setNewTitle('')
+      setNewPriority('medium')
+      setNewListId('todo')
+      setNewDue('')
+      refetch()
+      setTimeout(() => {
+        setShowForm(false)
+        setSuccessMsg(false)
+      }, 1500)
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || 'Failed to create task.'
+      setErrorMsg(msg)
+    }
   }
 
   const moveTask = (taskId: string, newStatus: string) => {
@@ -101,6 +123,27 @@ export default function TasksPage() {
             className="w-full max-w-md rounded-2xl bg-white p-6 space-y-4" onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between"><h2 className="text-lg font-extrabold text-deep-navy">New Task</h2><button onClick={() => setShowForm(false)} className="p-1 text-medium-gray hover:text-error"><X className="h-5 w-5" /></button></div>
+            
+            {successMsg && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-success/20 bg-success/10 px-4 py-2.5 text-sm text-success font-medium"
+              >
+                Task created successfully!
+              </motion.div>
+            )}
+
+            {errorMsg && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-error/20 bg-error/10 px-4 py-2.5 text-sm text-error font-medium"
+              >
+                {errorMsg}
+              </motion.div>
+            )}
+
             <div><label className="text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5 block">Title</label><input value={newTitle} onChange={e => setNewTitle(e.target.value)} className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all" placeholder="What needs to be done?" /></div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div><label className="text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5 block">List</label><select value={newListId} onChange={e => setNewListId(e.target.value)} className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all">
@@ -111,8 +154,8 @@ export default function TasksPage() {
               </select></div>
             </div>
             <div><label className="text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5 block">Due Date</label><input value={newDue} onChange={e => setNewDue(e.target.value)} type="date" className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all" /></div>
-            <button onClick={handleCreate} disabled={createTask.isPending || !newTitle}
-              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-light py-3 text-sm font-bold text-white shadow-lg shadow-gold/20 hover:shadow-xl transition-all disabled:opacity-60"
+            <button onClick={handleCreate} disabled={createTask.isPending || !newTitle || successMsg}
+              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-light py-3 text-sm font-bold text-white shadow-lg shadow-gold/20 hover:shadow-xl transition-all disabled:opacity-60 cursor-pointer"
             >{createTask.isPending ? <Loader2 className="h-4 w-4 animate-spin inline" /> : 'Create Task'}</button>
           </motion.div>
         </motion.div>

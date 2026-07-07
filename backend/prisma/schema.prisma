@@ -63,6 +63,7 @@ model User {
   progress          ProgressTracking[]
   signatures        DigitalSignature[]
   billingLedgers    BillingLedger[]
+  aiReports         AiReport[]
 }
 
 model UserSession {
@@ -310,15 +311,16 @@ model Meeting {
 
 model Task {
   id           String   @id @default(uuid())
-  meetingId    String
+  meetingId    String?
   assignedToId String
   title        String
   description  String?
   dueDate      DateTime
   status       String   @default("pending")
+  priority     String   @default("medium")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  meeting      Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  meeting      Meeting? @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   assignedTo   User     @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
 }
 
@@ -462,6 +464,12 @@ model InvestorProfile {
   investmentStage String[]
   minTicket       Float
   maxTicket       Float
+  type            String   @default("vc_fund")
+  description     String?
+  currency        String   @default("USD")
+  products        String[] @default(["Equity Capital"])
+  eligibility     String[] @default(["Growth Stage startup", "Strong metrics"])
+  status          String   @default("active")
   createdAt       DateTime @default(now())
 }
 
@@ -501,12 +509,17 @@ model Partner {
   description String?
   status      String   @default("pending")
   ratingAvg   Float    @default(0)
+  website     String?
+  benefits    String[] @default(["Mentorship Sessions", "Compliance Support"])
+  tags        String[] @default(["Partner"])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  category   PartnerCategory    @relation(fields: [categoryId], references: [id])
-  agreements PartnerAgreement[]
-  ratings    PartnerRating[]
+  category       PartnerCategory         @relation(fields: [categoryId], references: [id])
+  agreements     PartnerAgreement[]
+  ratings        PartnerRating[]
+  serviceCatalog PartnerServiceCatalog[]
+  availability   PartnerAvailability[]
 }
 
 model PartnerAgreement {
@@ -618,3 +631,296 @@ model SystemReport {
   data      Json
   createdAt DateTime @default(now())
 }
+
+model SystemSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+  type        String   @default("string") // string, boolean, number
+  category    String   @default("general") // general, feature_flag
+  updatedAt   DateTime @updatedAt
+}
+
+model AiReport {
+  id         String   @id @default(uuid())
+  userId     String
+  reportType String   // health_analyzer, pitch_deck, business_plan, etc.
+  inputData  Json?
+  result     Json
+  score      Float?
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  userEmail String?
+  action    String
+  category  String   // auth, document, payment, system
+  ipAddress String?
+  details   String?
+  createdAt DateTime @default(now())
+}
+
+// ---- Partner Service Catalog & Availability ----
+model PartnerServiceCatalog {
+  id          String   @id @default(uuid())
+  partnerId   String
+  title       String
+  description String?
+  price       Float    @default(0)
+  currency    String   @default("INR")
+  duration    String?  // e.g. "2 hours", "1 week"
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+}
+
+model PartnerAvailability {
+  id        String   @id @default(uuid())
+  partnerId String
+  dayOfWeek Int      // 0=Sunday, 1=Monday...6=Saturday
+  startTime String   // e.g. "09:00"
+  endTime   String   // e.g. "17:00"
+  isBooked  Boolean  @default(false)
+  bookedBy  String?
+  createdAt DateTime @default(now())
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+}
+
+// ---- CRM Pipeline ----
+model CrmPipelineStage {
+  id          String   @id @default(uuid())
+  name        String
+  order       Int      @default(0)
+  color       String   @default("#4f46e5")
+  description String?
+  createdAt   DateTime @default(now())
+  leads       CrmLead[]
+}
+
+model CrmLead {
+  id          String   @id @default(uuid())
+  stageId     String
+  companyName String
+  contactName String
+  email       String?
+  phone       String?
+  value       Float    @default(0)
+  notes       String?
+  ownerId     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stage CrmPipelineStage @relation(fields: [stageId], references: [id], onDelete: Cascade)
+}
+
+// ---- Workflow Automation ----
+model WorkflowRule {
+  id          String   @id @default(uuid())
+  name        String
+  trigger     String   // e.g. "user_registered", "payment_received"
+  action      String   // e.g. "send_email", "create_task", "notify_admin"
+  conditions  Json?    // Optional JSON conditions
+  payload     Json?    // Action payload (e.g. email template id)
+  isActive    Boolean  @default(true)
+  runCount    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ---- Custom Reports ----
+model CustomReport {
+  id          String   @id @default(uuid())
+  createdById String
+  name        String
+  description String?
+  filters     Json?
+  columns     Json?
+  data        Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ---- Refund ----
+model Refund {
+  id        String   @id @default(uuid())
+  paymentId String
+  userId    String
+  amount    Float
+  reason    String?
+  status    String   @default("requested") // requested, approved, rejected, processed
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---- Founder CRM Leads ----
+model CrmFounderLead {
+  id         String   @id @default(uuid())
+  ownerId    String
+  name       String
+  email      String?
+  phone      String?
+  company    String?
+  status     String   @default("new")  // new, contacted, qualified, proposal, won, lost
+  value      Float    @default(0)
+  notes      String?
+  source     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  activities CrmLeadActivity[]
+}
+
+model CrmLeadActivity {
+  id          String         @id @default(uuid())
+  leadId      String
+  type        String   // email, call, meeting, note
+  description String
+  createdAt   DateTime @default(now())
+
+  lead CrmFounderLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+}
+
+// ---- Investor CRM ----
+model InvestorContact {
+  id           String   @id @default(uuid())
+  ownerId      String
+  name         String
+  email        String?
+  phone        String?
+  company      String?
+  firm         String?
+  role         String?
+  title        String?
+  linkedinUrl  String?
+  type         String   @default("vc") // vc, angel, family_office, corporate
+  status       String   @default("contacted") // warm, contacted, cold, invested
+  tags         String[]
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  communications InvestorCommunication[]
+  meetings       InvestorContactMeeting[]
+  tasks          InvestorContactTask[]
+}
+
+model InvestorCommunication {
+  id          String   @id @default(uuid())
+  contactId   String
+  type        String   // email, call, linkedin, meeting
+  direction   String   @default("outbound") // inbound, outbound
+  subject     String?
+  summary     String?
+  content     String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  contact InvestorContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model InvestorContactMeeting {
+  id          String   @id @default(uuid())
+  contactId   String
+  title       String
+  scheduledAt DateTime
+  meetingLink String?
+  notes       String?
+  actionItems Json?
+  createdAt   DateTime @default(now())
+
+  contact InvestorContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model InvestorContactTask {
+  id          String   @id @default(uuid())
+  contactId   String
+  title       String
+  dueDate     DateTime
+  status      String   @default("pending") // pending, done
+  priority    String   @default("medium") // low, medium, high
+  createdAt   DateTime @default(now())
+
+  contact InvestorContact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+// ---- Fundraising ----
+model FundraisingRound {
+  id           String   @id @default(uuid())
+  ownerId      String
+  type         String   // pre_seed, seed, series_a, series_b
+  status       String   @default("active") // active, closed, cancelled
+  targetAmount Float    @default(0)
+  raisedAmount Float    @default(0)
+  closedAmount Float    @default(0)
+  valuation    Float    @default(0)
+  closedAt     DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  investors FundraisingRoundInvestor[]
+}
+
+model FundraisingRoundInvestor {
+  id           String   @id @default(uuid())
+  roundId      String
+  name         String
+  commitment   Float    @default(0)
+  shares       Int      @default(0)
+  status       String   @default("pending") // pending, committed, closed
+  notes        String?
+  investorType String   @default("vc")
+  email        String?
+  createdAt    DateTime @default(now())
+
+  round FundraisingRound @relation(fields: [roundId], references: [id], onDelete: Cascade)
+}
+
+model FundraisingMetrics {
+  id        String   @id @default(uuid())
+  ownerId   String   @unique
+  burnRate  Float    @default(0)
+  runway    Float    @default(0)
+  ltv       Float    @default(0)
+  cac       Float    @default(0)
+  mrr       Float    @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+// ---- Knowledge Hub ----
+model KnowledgeResource {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  type        String   // guide, template, video, article
+  category    String
+  url         String?
+  author      String?
+  duration    String?
+  tags        String[]
+  viewCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  bookmarks KnowledgeBookmark[]
+}
+
+model KnowledgeBookmark {
+  id         String   @id @default(uuid())
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+
+  resource KnowledgeResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, resourceId])
+}
+
+

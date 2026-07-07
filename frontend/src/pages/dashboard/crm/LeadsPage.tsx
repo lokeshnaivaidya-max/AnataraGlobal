@@ -17,6 +17,8 @@ export default function LeadsPage() {
   const [company, setCompany] = useState('')
   const [source, setSource] = useState('referral')
   const [value, setValue] = useState('')
+  const [successMsg, setSuccessMsg] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const filtered = leads?.filter(l =>
     l.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -31,10 +33,31 @@ export default function LeadsPage() {
 
   const handleCreate = async () => {
     if (!name) return
-    await createLead.mutateAsync({ name, email: email || undefined, company: company || undefined, source: source as any, stage: 'new', value: parseFloat(value) || 0, currency: 'USD', tags: [], createdAt: new Date().toISOString() } as any)
-    setShowForm(false)
-    setName(''); setEmail(''); setCompany(''); setSource('referral'); setValue('')
-    refetch()
+    setSuccessMsg(false)
+    setErrorMsg('')
+    try {
+      await createLead.mutateAsync({ 
+        name, 
+        email: email || undefined, 
+        company: company || undefined, 
+        source: source as any, 
+        stage: 'new', 
+        value: parseFloat(value) || 0, 
+        currency: 'USD', 
+        tags: [], 
+        createdAt: new Date().toISOString() 
+      } as any)
+      setSuccessMsg(true)
+      setName(''); setEmail(''); setCompany(''); setSource('referral'); setValue('')
+      refetch()
+      setTimeout(() => {
+        setShowForm(false)
+        setSuccessMsg(false)
+      }, 1500)
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || 'Failed to add lead.'
+      setErrorMsg(msg)
+    }
   }
 
   const advanceStage = (leadId: string, currentStage: string) => {
@@ -108,6 +131,27 @@ export default function LeadsPage() {
             className="w-full max-w-md rounded-2xl bg-white p-6 space-y-4" onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between"><h2 className="text-lg font-extrabold text-deep-navy">Add Lead</h2><button onClick={() => setShowForm(false)} className="p-1 text-medium-gray hover:text-error"><X className="h-5 w-5" /></button></div>
+            
+            {successMsg && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-success/20 bg-success/10 px-4 py-2.5 text-sm text-success font-medium"
+              >
+                Lead added successfully!
+              </motion.div>
+            )}
+
+            {errorMsg && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-error/20 bg-error/10 px-4 py-2.5 text-sm text-error font-medium"
+              >
+                {errorMsg}
+              </motion.div>
+            )}
+
             <div><label className="text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5 block">Name *</label><input value={name} onChange={e => setName(e.target.value)} className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all" /></div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div><label className="text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5 block">Email</label><input value={email} onChange={e => setEmail(e.target.value)} type="email" className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all" /></div>
@@ -119,8 +163,8 @@ export default function LeadsPage() {
               </select></div>
               <div><label className="text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5 block">Value (USD)</label><input value={value} onChange={e => setValue(e.target.value)} type="number" className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all" /></div>
             </div>
-            <button onClick={handleCreate} disabled={createLead.isPending || !name}
-              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-light py-3 text-sm font-bold text-white shadow-lg shadow-gold/20 hover:shadow-xl transition-all disabled:opacity-60"
+            <button onClick={handleCreate} disabled={createLead.isPending || !name || successMsg}
+              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-light py-3 text-sm font-bold text-white shadow-lg shadow-gold/20 hover:shadow-xl transition-all disabled:opacity-60 cursor-pointer"
             >{createLead.isPending ? <Loader2 className="h-4 w-4 animate-spin inline" /> : 'Add Lead'}</button>
           </motion.div>
         </motion.div>

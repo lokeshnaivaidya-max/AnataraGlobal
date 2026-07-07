@@ -42,22 +42,37 @@ export function useEducation() {
 }
 
 export function useAddEducation() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: Omit<Education, 'id' | 'founderId'>) =>
       api.post<Education>('/founder/education', data).then(res => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-education'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
 export function useUpdateEducation() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Education> }) =>
       api.put<Education>(`/founder/education/${id}`, data).then(res => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-education'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
 export function useDeleteEducation() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => api.delete(`/founder/education/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-education'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
@@ -69,22 +84,37 @@ export function useExperience() {
 }
 
 export function useAddExperience() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: Omit<Experience, 'id' | 'founderId'>) =>
       api.post<Experience>('/founder/experience', data).then(res => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-experience'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
 export function useUpdateExperience() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Experience> }) =>
       api.put<Experience>(`/founder/experience/${id}`, data).then(res => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-experience'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
 export function useDeleteExperience() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => api.delete(`/founder/experience/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-experience'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
@@ -96,15 +126,25 @@ export function useSkills() {
 }
 
 export function useAddSkill() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: Omit<Skill, 'id' | 'founderId'>) =>
       api.post<Skill>('/founder/skills', data).then(res => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-skills'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 
 export function useDeleteSkill() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => api.delete(`/founder/skills/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['founder-skills'] })
+      queryClient.invalidateQueries({ queryKey: ['founder-profile'] })
+    },
   })
 }
 

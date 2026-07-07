@@ -107,8 +107,8 @@ export default function AnalyticsPage() {
             >
               <h3 className="text-sm font-bold text-deep-navy mb-4">User Growth</h3>
               <div className="flex items-end gap-1.5 h-32">
-                {report.userGrowth.map((ug, i) => {
-                  const max = Math.max(...report.userGrowth.map(x => x.users))
+                {(report.userGrowth || []).map((ug, i) => {
+                  const max = Math.max(...(report.userGrowth || []).map(x => x.users), 1)
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-1">
                       <MiniBar value={ug.users} max={max} color="#1B2A4A" />
@@ -126,8 +126,8 @@ export default function AnalyticsPage() {
             >
               <h3 className="text-sm font-bold text-deep-navy mb-4">Revenue History</h3>
               <div className="flex items-end gap-1.5 h-32">
-                {report.revenueHistory.map((rv, i) => {
-                  const max = Math.max(...report.revenueHistory.map(x => x.revenue))
+                {(report.revenueHistory || []).map((rv, i) => {
+                  const max = Math.max(...(report.revenueHistory || []).map(x => x.revenue), 1)
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-1">
                       <MiniBar value={rv.revenue} max={max} color="#22c55e" />
@@ -146,7 +146,7 @@ export default function AnalyticsPage() {
           >
             <h3 className="text-sm font-bold text-deep-navy mb-4">Top Pages</h3>
             <div className="space-y-3">
-              {report.topPages.map((pg, i) => (
+              {(report.topPages || []).map((pg, i) => (
                 <div key={i} className="flex items-center gap-4 text-sm">
                   <span className="text-xs font-bold text-medium-gray w-5">{i + 1}</span>
                   <span className="flex-1 font-semibold text-deep-navy">{pg.path}</span>

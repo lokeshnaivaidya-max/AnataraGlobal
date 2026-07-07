@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Loader2, Plus, Trash2, Save, GraduationCap, Briefcase, Wrench } from 'lucide-react'
 import {
@@ -32,6 +32,16 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState(founder?.phone || '')
   const [linkedinUrl, setLinkedinUrl] = useState(founder?.linkedinUrl || '')
   const [saving, setSaving] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const [saveError, setSaveError] = useState('')
+
+  useEffect(() => {
+    if (founder) {
+      setBio(founder.bio || '')
+      setPhone(founder.phone || '')
+      setLinkedinUrl(founder.linkedinUrl || '')
+    }
+  }, [founder])
 
   const [newEdu, setNewEdu] = useState({ degree: '', institution: '', startYear: new Date().getFullYear() })
   const [newExp, setNewExp] = useState({ company: '', role: '', startYear: new Date().getFullYear() })
@@ -39,8 +49,15 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     setSaving(true)
+    setSaveSuccess(false)
+    setSaveError('')
     try {
       await updateProfile.mutateAsync({ bio, phone, linkedinUrl })
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+    } catch (err: any) {
+      const msg = err instanceof Error ? err.message : 'Failed to save changes.'
+      setSaveError(msg)
     } finally {
       setSaving(false)
     }
@@ -105,6 +122,26 @@ export default function ProfilePage() {
               placeholder="https://linkedin.com/in/..." />
           </div>
         </div>
+
+        {saveSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success font-medium"
+          >
+            Changes saved successfully!
+          </motion.div>
+        )}
+
+        {saveError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-xl border border-error/20 bg-error/10 px-4 py-3 text-sm text-error font-medium"
+          >
+            {saveError}
+          </motion.div>
+        )}
 
         <button onClick={handleSave} disabled={saving}
           className="flex items-center gap-2 rounded-xl bg-deep-navy px-5 py-2.5 text-sm font-bold text-white hover:bg-deep-navy-light transition-all disabled:opacity-60"

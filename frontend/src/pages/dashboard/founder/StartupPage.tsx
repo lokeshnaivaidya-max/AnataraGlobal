@@ -34,6 +34,9 @@ export default function StartupPage() {
     fundingStageId: '',
   })
 
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const [saveError, setSaveError] = useState('')
+
   useEffect(() => {
     if (startup) {
       setForm({
@@ -58,8 +61,17 @@ export default function StartupPage() {
   }, [startup])
 
   const handleSave = async () => {
-    await updateStartup.mutateAsync(form)
-    refetch()
+    setSaveSuccess(false)
+    setSaveError('')
+    try {
+      await updateStartup.mutateAsync(form)
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+      refetch()
+    } catch (err: any) {
+      const msg = err instanceof Error ? err.message : 'Failed to save startup details.'
+      setSaveError(msg)
+    }
   }
 
   if (isLoading) {
@@ -186,7 +198,27 @@ export default function StartupPage() {
           </div>
         </div>
 
-        <div className="flex justify-end pt-2">
+        <div className="flex flex-col items-end gap-3 pt-2">
+          {saveSuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-xl border border-success/20 bg-success/10 px-4 py-2.5 text-sm text-success font-medium"
+            >
+              Startup details saved successfully!
+            </motion.div>
+          )}
+
+          {saveError && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-xl border border-error/20 bg-error/10 px-4 py-2.5 text-sm text-error font-medium"
+            >
+              {saveError}
+            </motion.div>
+          )}
+
           <button onClick={handleSave} disabled={updateStartup.isPending || !form.name}
             className="flex items-center gap-2 rounded-xl bg-deep-navy px-6 py-3 text-sm font-bold text-white hover:bg-deep-navy-light transition-all disabled:opacity-60"
           >

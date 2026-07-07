@@ -1,3 +1,4 @@
+process.env.TZ = 'Asia/Kolkata';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -124,6 +125,10 @@ app.listen(PORT, () => {
 
   // Start background schedulers
   startExpiryAlertScheduler();
+
+  // Import and trigger new background scheduler/cron manager
+  const { startCronScheduler } = require('./services/queue');
+  startCronScheduler();
 });
 
 

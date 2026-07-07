@@ -61,10 +61,10 @@ function MfaSetupContent() {
         {step === 'intro' && (
           <div className="space-y-6">
             <div className="flex flex-col items-center gap-3 py-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/20">
-                <Smartphone className="h-8 w-8 text-gold" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(253, 124, 6, 0.1)' }}>
+                <Smartphone className="h-8 w-8" style={{ color: '#FD7C06' }} />
               </div>
-              <p className="text-center text-sm text-white/60">
+              <p className="text-center text-sm" style={{ color: 'rgba(0,0,0,0.6)' }}>
                 Add an extra layer of security to your account by requiring a
                 verification code from your mobile device in addition to your password.
               </p>
@@ -72,7 +72,10 @@ function MfaSetupContent() {
             <button
               onClick={handleSetup}
               disabled={setupMfa.isPending}
-              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-dark px-4 py-3.5 text-sm font-bold text-white hover:from-gold-light hover:to-gold transition-all duration-300 shadow-lg shadow-gold/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full rounded-xl px-4 py-3.5 text-sm font-bold text-white transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              style={{ backgroundColor: '#CEA041' }}
+              onMouseEnter={(e) => { if (!setupMfa.isPending) e.currentTarget.style.backgroundColor = '#FD7C06' }}
+              onMouseLeave={(e) => { if (!setupMfa.isPending) e.currentTarget.style.backgroundColor = '#CEA041' }}
             >
               {setupMfa.isPending ? (
                 <><Loader2 className="h-4 w-4 animate-spin" /> Setting up...</>
@@ -85,22 +88,22 @@ function MfaSetupContent() {
 
         {step === 'qr' && (
           <div className="space-y-5">
-            <p className="text-center text-sm text-white/60">
+            <p className="text-center text-sm" style={{ color: 'rgba(0,0,0,0.6)' }}>
               Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)
             </p>
             <div className="flex justify-center">
-              <div className="rounded-xl border border-white/10 bg-white p-4">
+              <div className="rounded-xl border p-4 animate-fade-in" style={{ borderColor: 'rgba(0,0,0,0.12)', backgroundColor: '#FFFFFF' }}>
                 <img src={qrCode} alt="MFA QR Code" className="h-48 w-48" />
               </div>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1">Manual Setup Code</p>
-              <p className="text-sm font-mono text-white/80 break-all">{secret}</p>
+            <div className="rounded-xl border px-4 py-3" style={{ backgroundColor: '#F9F8F6', borderColor: 'rgba(0,0,0,0.12)' }}>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'rgba(0,0,0,0.5)' }}>Manual Setup Code</p>
+              <p className="text-sm font-mono break-all" style={{ color: 'rgba(0,0,0,0.8)' }}>{secret}</p>
             </div>
 
             <form onSubmit={handleSubmit(handleVerify)} className="space-y-4">
               <div>
-                <label htmlFor="code" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+                <label htmlFor="code" className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>
                   Verification Code
                 </label>
                 <input
@@ -109,8 +112,11 @@ function MfaSetupContent() {
                   inputMode="numeric"
                   autoComplete="one-time-code"
                   {...register('code')}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 text-center text-lg tracking-widest focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+                  className="w-full rounded-xl border px-4 py-3 text-sm text-center text-lg tracking-widest focus:outline-none transition-all duration-200 placeholder:text-black/35"
+                  style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
                   placeholder="000000"
+                  onFocus={(e) => e.target.style.borderColor = '#FD7C06'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
                 />
                 {errors.code && (
                   <p className="mt-1 text-xs text-error">{errors.code.message}</p>
@@ -119,7 +125,10 @@ function MfaSetupContent() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-dark px-4 py-3.5 text-sm font-bold text-white hover:from-gold-light hover:to-gold transition-all duration-300 shadow-lg shadow-gold/20 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full rounded-xl px-4 py-3.5 text-sm font-bold text-white transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#CEA041' }}
+                onMouseEnter={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = '#FD7C06' }}
+                onMouseLeave={(e) => { if (!isSubmitting) e.currentTarget.style.backgroundColor = '#CEA041' }}
               >
                 {isSubmitting ? (
                   <><Loader2 className="h-4 w-4 animate-spin" /> Verifying...</>
@@ -136,10 +145,10 @@ function MfaSetupContent() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
               <ShieldCheck className="h-8 w-8 text-success" />
             </div>
-            <p className="text-center text-sm text-white/60">
+            <p className="text-center text-sm animate-fade-in" style={{ color: 'rgba(0,0,0,0.6)' }}>
               Two-factor authentication has been enabled for your account.
             </p>
-            <Link href="/dashboard/founder" className="text-sm font-semibold text-gold-light hover:text-gold transition-colors">
+            <Link href="/dashboard/founder" className="text-sm font-semibold transition-colors" style={{ color: '#FD7C06' }}>
               Go to Dashboard
             </Link>
           </div>

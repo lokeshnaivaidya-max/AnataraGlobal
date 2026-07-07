@@ -9,10 +9,11 @@ export default function CapitalProviders() {
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('')
 
-  const filtered = providers?.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) &&
-    (!typeFilter || p.type === typeFilter)
-  )
+  const filtered = providers?.filter(p => {
+    const nameToUse = p.name || 'Capital Provider';
+    return nameToUse.toLowerCase().includes(search.toLowerCase()) &&
+      (!typeFilter || p.type === typeFilter);
+  })
 
   if (isLoading) return <div className="flex items-center justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-gold" /></div>
 
@@ -46,20 +47,20 @@ export default function CapitalProviders() {
             className="rounded-2xl border border-border-gray bg-white p-5 hover:shadow-lg hover:border-gold/20 transition-all group"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10 text-lg font-extrabold text-gold shrink-0">{provider.name.charAt(0)}</div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10 text-lg font-extrabold text-gold shrink-0">{(provider.name || 'C').charAt(0)}</div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-deep-navy truncate">{provider.name}</p>
-                <span className="rounded-full bg-light-gray text-medium-gray px-2.5 py-0.5 text-[10px] font-semibold">{CAPITAL_PROVIDER_TYPES.find(t => t.value === provider.type)?.label || provider.type}</span>
+                <span className="rounded-full bg-light-gray text-medium-gray px-2.5 py-0.5 text-[10px] font-semibold">{CAPITAL_PROVIDER_TYPES.find(t => t.value === provider.type)?.label || provider.type || 'VC Fund'}</span>
               </div>
             </div>
             <p className="text-xs text-medium-gray line-clamp-2 mb-3">{provider.description}</p>
             <div className="flex items-center gap-3 text-xs text-medium-gray mb-3">
-              <span className="flex items-center gap-1"><DollarSign className="h-3.5 w-3.5 text-gold" />{provider.currency} {(provider.minAmount / 1000).toFixed(0)}K - {(provider.maxAmount / 1000).toFixed(0)}K</span>
+              <span className="flex items-center gap-1"><DollarSign className="h-3.5 w-3.5 text-gold" />{provider.currency || 'USD'} {((provider.minAmount || 0) / 1000).toFixed(0)}K - {((provider.maxAmount || 0) / 1000).toFixed(0)}K</span>
               {provider.interestRate && <span className="flex items-center gap-1"><Percent className="h-3.5 w-3.5 text-gold" />{provider.interestRate}%</span>}
               {provider.tenure && <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />{provider.tenure}</span>}
             </div>
             <div className="flex flex-wrap gap-1">
-              {provider.products.slice(0, 3).map(p => (
+              {(provider.products || []).slice(0, 3).map(p => (
                 <span key={p} className="rounded-full bg-gold/5 text-gold-dark px-2 py-0.5 text-[10px] font-semibold">{p}</span>
               ))}
             </div>

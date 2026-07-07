@@ -51,6 +51,8 @@ export default function DocumentsPage() {
 
   const [shareDoc, setShareDoc] = useState<Document | null>(null)
   const [shareEmail, setShareEmail] = useState('')
+  const [shareSuccess, setShareSuccess] = useState(false)
+  const [shareError, setShareError] = useState('')
 
   const { data: documents, isLoading } = useDocuments(categoryFilter || undefined)
   const uploadDoc = useUploadDocument()
@@ -93,9 +95,46 @@ export default function DocumentsPage() {
 
   const handleShare = async () => {
     if (!shareDoc || !shareEmail) return
-    await shareDocMutation.mutateAsync({ id: shareDoc.id, email: shareEmail })
-    setShareDoc(null)
-    setShareEmail('')
+    setShareSuccess(false)
+    setShareError('')
+    try {
+      await shareDocMutation.mutateAsync({ id: shareDoc.id, email: shareEmail })
+      setShareSuccess(true)
+      setShareEmail('')
+      setTimeout(() => {
+        setShareDoc(null)
+        setShareSuccess(false)
+      }, 2000)
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || 'Failed to send share invite.'
+      setShareError(msg)
+    }
+  }
+
+  const handleDownload = async (docId: string, fileName: string) => {
+    try {
+      const token = localStorage.getItem('token')
+      const headers: Record<string, string> = {}
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+      const response = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/documents/${docId}/download`, {
+        headers,
+      })
+      if (!response.ok) throw new Error('Download failed')
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Download error:', error)
+      alert('Failed to download document. Please make sure you are logged in.')
+    }
   }
 
   if (isLoading) {
@@ -188,9 +227,9 @@ export default function DocumentsPage() {
               </div>
 
               <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border-gray">
-                <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-medium-gray hover:bg-light-gray hover:text-deep-navy transition-colors"
-                ><Download className="h-3.5 w-3.5" /> Download</a>
+                <button onClick={() => handleDownload(doc.id, doc.name)}
+                  className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-medium-gray hover:bg-light-gray hover:text-deep-navy transition-colors cursor-pointer"
+                ><Download className="h-3.5 w-3.5" /> Download</button>
                 <button onClick={() => { setShareDoc(doc); setShareEmail('') }}
                   className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-medium-gray hover:bg-light-gray hover:text-deep-navy transition-colors"
                 ><Share2 className="h-3.5 w-3.5" /> Share</button>
@@ -221,7 +260,7 @@ export default function DocumentsPage() {
                 {DOCUMENT_STATUS_LABELS[doc.status]}
               </span>
               <div className="flex items-center gap-1 shrink-0">
-                <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="p-2 text-medium-gray hover:text-deep-navy hover:bg-light-gray rounded-lg transition-colors"><Download className="h-4 w-4" /></a>
+                <button onClick={() => handleDownload(doc.id, doc.name)} className="p-2 text-medium-gray hover:text-deep-navy hover:bg-light-gray rounded-lg transition-colors cursor-pointer"><Download className="h-4 w-4" /></button>
                 <button onClick={() => { setShareDoc(doc); setShareEmail('') }} className="p-2 text-medium-gray hover:text-deep-navy hover:bg-light-gray rounded-lg transition-colors"><Share2 className="h-4 w-4" /></button>
                 <button onClick={() => deleteDoc.mutateAsync(doc.id)} className="p-2 text-error/60 hover:text-error hover:bg-error/5 rounded-lg transition-colors"><Trash2 className="h-4 w-4" /></button>
               </div>
@@ -347,13 +386,34 @@ export default function DocumentsPage() {
                 <button onClick={() => setShareDoc(null)} className="p-1 text-medium-gray hover:text-error transition-colors"><X className="h-5 w-5" /></button>
               </div>
               <p className="text-sm text-medium-gray">Share <span className="font-bold text-deep-navy">{shareDoc.name}</span> with:</p>
+              
+              {shareSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-success/20 bg-success/10 px-4 py-2.5 text-sm text-success font-medium"
+                >
+                  Invite sent successfully!
+                </motion.div>
+              )}
+
+              {shareError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-error/20 bg-error/10 px-4 py-2.5 text-sm text-error font-medium"
+                >
+                  {shareError}
+                </motion.div>
+              )}
+
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5">Email Address</label>
                 <input value={shareEmail} onChange={e => setShareEmail(e.target.value)} type="email"
                   placeholder="colleague@example.com"
                   className="w-full rounded-xl border border-border-gray bg-light-gray/50 px-4 py-3 text-sm text-charcoal placeholder:text-medium-gray/50 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/10 transition-all" />
               </div>
-              <button onClick={handleShare} disabled={shareDocMutation.isPending || !shareEmail}
+              <button onClick={handleShare} disabled={shareDocMutation.isPending || !shareEmail || shareSuccess}
                 className="w-full rounded-xl bg-deep-navy py-3 text-sm font-bold text-white hover:bg-deep-navy-light transition-all disabled:opacity-60"
               >
                 {shareDocMutation.isPending ? <><Loader2 className="h-4 w-4 animate-spin inline" /> Sending...</> : 'Send Invite'}

@@ -7,7 +7,10 @@ import { INVESTOR_STAGES, INVESTOR_TYPES } from '../../../lib/fundraising-types'
 const stageOrder = ['identified', 'contacted', 'meeting_scheduled', 'due_diligence', 'term_sheet', 'closed', 'passed']
 
 export default function InvestorPipeline() {
-  const { data: investors, isLoading, refetch } = useInvestorPipeline()
+  const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
+  const roundId = params.get('roundId') || ''
+
+  const { data: investors, isLoading, refetch } = useInvestorPipeline(roundId)
   const addInvestor = useAddInvestor()
   const updateStage = useUpdateInvestorStage()
 
@@ -16,6 +19,8 @@ export default function InvestorPipeline() {
   const [investorType, setInvestorType] = useState('vc')
   const [email, setEmail] = useState('')
   const [notes, setNotes] = useState('')
+  const [successMsg, setSuccessMsg] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const grouped = INVESTOR_STAGES.map(s => ({
     ...s,
@@ -24,21 +29,32 @@ export default function InvestorPipeline() {
 
   const handleAdd = async () => {
     if (!name) return
-    await addInvestor.mutateAsync({
-      investorName: name,
-      investorType: investorType as any,
-      contactEmail: email || undefined,
-      notes: notes || undefined,
-      stage: 'identified',
-      roundId: '',
-      createdAt: new Date().toISOString(),
-    } as any)
-    setShowForm(false)
-    setName('')
-    setInvestorType('vc')
-    setEmail('')
-    setNotes('')
-    refetch()
+    setSuccessMsg(false)
+    setErrorMsg('')
+    try {
+      await addInvestor.mutateAsync({
+        investorName: name,
+        investorType: investorType as any,
+        contactEmail: email || undefined,
+        notes: notes || undefined,
+        stage: 'identified',
+        roundId: roundId,
+        createdAt: new Date().toISOString(),
+      } as any)
+      setSuccessMsg(true)
+      setName('')
+      setInvestorType('vc')
+      setEmail('')
+      setNotes('')
+      refetch()
+      setTimeout(() => {
+        setShowForm(false)
+        setSuccessMsg(false)
+      }, 1500)
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || 'Failed to add investor.'
+      setErrorMsg(msg)
+    }
   }
 
   const advanceStage = (current: string) => {
@@ -123,6 +139,27 @@ export default function InvestorPipeline() {
               <h2 className="text-lg font-extrabold text-deep-navy">Add Investor</h2>
               <button onClick={() => setShowForm(false)} className="p-1 text-medium-gray hover:text-error"><X className="h-5 w-5" /></button>
             </div>
+
+            {successMsg && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-success/20 bg-success/10 px-4 py-2.5 text-sm text-success font-medium"
+              >
+                Investor added to pipeline successfully!
+              </motion.div>
+            )}
+
+            {errorMsg && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-error/20 bg-error/10 px-4 py-2.5 text-sm text-error font-medium"
+              >
+                {errorMsg}
+              </motion.div>
+            )}
+
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-medium-gray mb-1.5">Investor Name</label>
               <input value={name} onChange={e => setName(e.target.value)}
@@ -152,8 +189,8 @@ export default function InvestorPipeline() {
                 placeholder="Any notes..."
               />
             </div>
-            <button onClick={handleAdd} disabled={addInvestor.isPending || !name}
-              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-light py-3 text-sm font-bold text-white shadow-lg shadow-gold/20 hover:shadow-xl transition-all disabled:opacity-60"
+            <button onClick={handleAdd} disabled={addInvestor.isPending || !name || successMsg}
+              className="w-full rounded-xl bg-gradient-to-r from-gold to-gold-light py-3 text-sm font-bold text-white shadow-lg shadow-gold/20 hover:shadow-xl transition-all disabled:opacity-60 cursor-pointer"
             >
               {addInvestor.isPending ? <><Loader2 className="h-4 w-4 animate-spin inline" /> Adding...</> : 'Add to Pipeline'}
             </button>
