@@ -54,17 +54,20 @@ export default function Login() {
           <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(0,0,0,0.6)' }}>
             Email Address
           </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            {...register('email')}
-            className="w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 placeholder:text-black/35"
-            style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
-            placeholder="you@example.com"
-            onFocus={(e) => e.target.style.borderColor = '#FD7C06'}
-            onBlur={(e) => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
-          />
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              {...register('email', {
+                onBlur: (e) => {
+                  e.target.style.borderColor = 'rgba(0,0,0,0.12)'
+                },
+              })}
+              className="w-full rounded-xl border px-4 py-3 text-sm transition-all duration-200 placeholder:text-black/35"
+              style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
+              placeholder="you@example.com"
+              onFocus={(e) => e.target.style.borderColor = '#FD7C06'}
+            />
           {errors.email && (
             <p className="mt-1 text-xs" style={{ color: '#DC2626' }}>{errors.email.message}</p>
           )}
@@ -79,12 +82,15 @@ export default function Login() {
               id="password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
-              {...register('password')}
+              {...register('password', {
+                onBlur: (e) => {
+                  e.target.style.borderColor = 'rgba(0,0,0,0.12)'
+                },
+              })}
             className="w-full rounded-xl border px-4 py-3 pr-11 text-sm transition-all duration-200 placeholder:text-black/35"
             style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
             placeholder="Enter your password"
             onFocus={(e) => e.target.style.borderColor = '#FD7C06'}
-            onBlur={(e) => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
           />
             <button
               type="button"

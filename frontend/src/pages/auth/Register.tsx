@@ -123,12 +123,15 @@ export default function Register() {
               id="confirmPassword"
               type={showConfirm ? 'text' : 'password'}
               autoComplete="new-password"
-              {...register('confirmPassword')}
+              {...register('confirmPassword', {
+                onBlur: (e) => {
+                  e.target.style.borderColor = 'rgba(0,0,0,0.12)'
+                },
+              })}
               className="w-full rounded-xl border px-4 py-3 pr-11 text-sm transition-all duration-200 focus:outline-none focus:ring-2 placeholder:text-black/35"
               style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: '#000000' }}
               placeholder="Repeat your password"
               onFocus={(e) => { e.target.style.borderColor = '#FD7C06'; e.target.style.setProperty('--tw-ring-color', 'rgba(253,124,6,0.2)') }}
-              onBlur={(e) => { e.target.style.borderColor = 'rgba(0,0,0,0.12)' }}
             />
             <button
               type="button"
