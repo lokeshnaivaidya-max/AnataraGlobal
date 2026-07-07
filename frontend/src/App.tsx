@@ -393,7 +393,7 @@ export default function App() {
             <Route path="/auth/callback" component={OAuthCallback} />
           </Switch>
         </main>
-        <ContactSection />
+        {location !== '/target-audience' && location !== '/services' && location !== '/ecosystem' && location !== '/differentiator' && location !== '/why%20us' && location !== '/core-values' && <ContactSection />}
         <Footer />
       </div>
     </LoadingScreen>
