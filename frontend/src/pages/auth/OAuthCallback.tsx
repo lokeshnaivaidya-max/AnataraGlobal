@@ -28,7 +28,10 @@ export default function OAuthCallback() {
       fetch(`${import.meta.env.VITE_API_URL || '/api'}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch user profile')
+          return res.json()
+        })
         .then(user => {
           updateUser(user)
           setStatus('success')

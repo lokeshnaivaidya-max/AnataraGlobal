@@ -7,7 +7,16 @@ const socialLinks = [
   { icon: Play, label: 'YouTube' },
 ]
 
-const quickLinks = ['Home', 'Services', 'Target Audience', 'Ecosystem', 'Why Us', 'Core Values', 'Contact']
+const quickLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Target Audience', href: '/target-audience' },
+  { label: 'Ecosystem', href: '/ecosystem' },
+  { label: 'Why Us', href: '/differentiator' },
+  { label: 'Core Values', href: '/core-values' },
+  { label: 'Knowledge', href: '/knowledge' },
+  { label: 'Contact', href: '/contact' },
+]
 
 export default function Footer() {
   return (
@@ -57,15 +66,15 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {quickLinks.map((item) => (
-                <li key={item}>
+                <li key={item.label}>
                   <Link
-                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                    href={item.href}
                     className="text-sm transition-all duration-200 inline-block"
                     style={{ color: 'rgba(255,255,255,0.4)' }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = '#FD7C06'; e.currentTarget.style.transform = 'translateX(4px)' }}
                     onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; e.currentTarget.style.transform = 'translateX(0)' }}
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 </li>
               ))}

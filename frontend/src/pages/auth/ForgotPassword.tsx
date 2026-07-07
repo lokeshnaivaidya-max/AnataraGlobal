@@ -30,7 +30,7 @@ export default function ForgotPassword() {
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
             <MailCheck className="h-8 w-8 text-success" />
           </div>
-          <p className="text-center text-sm text-white/60">
+          <p className="text-center text-sm text-black/60">
             If an account exists with that email, you'll receive a password reset link shortly.
           </p>
           <Link href="/login" className="mt-2 text-sm font-semibold text-gold-light hover:text-gold transition-colors">
@@ -48,7 +48,7 @@ export default function ForgotPassword() {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-black/60 mb-1.5">
             Email Address
           </label>
           <input
@@ -56,7 +56,7 @@ export default function ForgotPassword() {
             type="email"
             autoComplete="email"
             {...register('email')}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+            className="w-full rounded-xl border border-black/10 bg-black/5 px-4 py-3 text-sm text-black placeholder:text-black/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
             placeholder="you@example.com"
           />
           {errors.email && (
@@ -80,7 +80,7 @@ export default function ForgotPassword() {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-white/50">
+      <p className="mt-6 text-center text-sm text-black/50">
         Remember your password?{' '}
         <Link href="/login" className="font-semibold text-gold-light hover:text-gold transition-colors">
           Sign in

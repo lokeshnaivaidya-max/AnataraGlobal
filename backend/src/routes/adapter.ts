@@ -14,11 +14,26 @@ import { localCache } from '../utils/cache';
 import { backgroundQueue } from '../services/queue';
 import { generateGeminiJson, generateGeminiText } from '../services/gemini';
 import { createRazorpayOrder, verifyRazorpaySignature, createStripePaymentIntent, refundGatewayPayment } from '../services/payment';
-
+import investorsRouter from './investors';
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'antara-super-secret-jwt-key-change-in-production';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '30d';
+
+const generateTokens = (user: { id: string; email: string; role: { name: string } }) => {
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role.name },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
+  );
+  const refreshToken = jwt.sign(
+    { id: user.id, email: user.email, role: user.role.name, type: 'refresh' },
+    JWT_SECRET,
+    { expiresIn: JWT_REFRESH_EXPIRES_IN } as jwt.SignOptions
+  );
+  return { token, refreshToken };
+};
 
 // Require email verification middleware for protected routes
 const requireVerified = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -147,12 +162,8 @@ router.post('/auth/register', async (req: Request, res: Response) => {
       text: `Hello ${firstName},\n\nWelcome to Antara! Your verification code is: ${otpCode}.\nIt will expire in 10 minutes.`,
     });
 
-    // Auto generate active token
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role.name },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
-    );
+    // Generate tokens
+    const { token, refreshToken } = generateTokens(user);
 
     // Save session in DB
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -169,7 +180,7 @@ router.post('/auth/register', async (req: Request, res: Response) => {
     res.status(201).json({
       status: 'success',
       token,
-      refreshToken: token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -246,12 +257,8 @@ router.post('/auth/login', async (req: Request, res: Response) => {
       return;
     }
 
-    // Generate final JWT only when MFA is not enabled
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role.name },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
-    );
+    // Generate tokens
+    const { token, refreshToken } = generateTokens(user);
 
     // Create session in DB
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -268,7 +275,7 @@ router.post('/auth/login', async (req: Request, res: Response) => {
     res.status(200).json({
       status: 'success',
       token,
-      refreshToken: token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -343,12 +350,8 @@ router.post('/auth/mfa/authenticate', async (req: Request, res: Response) => {
       return;
     }
 
-    // Generate JWT
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role.name },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
-    );
+    // Generate tokens
+    const { token, refreshToken } = generateTokens(user);
 
     // Create session in DB
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -365,7 +368,7 @@ router.post('/auth/mfa/authenticate', async (req: Request, res: Response) => {
     res.status(200).json({
       status: 'success',
       token,
-      refreshToken: token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -427,12 +430,8 @@ router.post('/auth/verify-otp', async (req: Request, res: Response) => {
       });
     }
 
-    // Generate active session
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role.name },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
-    );
+    // Generate tokens
+    const { token, refreshToken } = generateTokens(user);
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     await prisma.userSession.create({
@@ -448,7 +447,7 @@ router.post('/auth/verify-otp', async (req: Request, res: Response) => {
     res.status(200).json({
       status: 'success',
       token,
-      refreshToken: token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -461,6 +460,90 @@ router.post('/auth/verify-otp', async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('Verify OTP adapter error:', error);
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Resend OTP
+router.post('/auth/resend-otp', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      res.status(400).json({ status: 'fail', message: 'Email is required' });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      // Don't reveal whether email exists
+      res.status(200).json({ status: 'success', message: 'If the email exists, a new OTP has been sent.' });
+      return;
+    }
+
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await prisma.otpLog.create({
+      data: {
+        userId: user.id,
+        code: otpCode,
+        purpose: 'email_verification',
+        expiresAt,
+      },
+    });
+
+    await sendEmail({
+      to: email,
+      subject: 'Your Antara verification code',
+      text: `Your new verification code is: ${otpCode}.\nIt will expire in 10 minutes.`,
+    });
+
+    res.status(200).json({ status: 'success', message: 'If the email exists, a new OTP has been sent.' });
+  } catch (error: any) {
+    console.error('Resend OTP adapter error:', error);
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Verify Email (via token link)
+router.post('/auth/verify-email', async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      res.status(400).json({ status: 'fail', message: 'Verification token is required' });
+      return;
+    }
+
+    const otpLog = await prisma.otpLog.findFirst({
+      where: {
+        code: token,
+        purpose: 'email_verification',
+        isUsed: false,
+        expiresAt: { gte: new Date() },
+      },
+      include: { user: true },
+    });
+
+    if (!otpLog) {
+      res.status(400).json({ status: 'fail', message: 'Invalid or expired verification token' });
+      return;
+    }
+
+    // Mark OTP as used
+    await prisma.otpLog.update({
+      where: { id: otpLog.id },
+      data: { isUsed: true },
+    });
+
+    // Mark email as verified
+    await prisma.user.update({
+      where: { id: otpLog.userId },
+      data: { isEmailVerified: true },
+    });
+
+    res.status(200).json({ status: 'success', message: 'Email verified successfully' });
+  } catch (error: any) {
+    console.error('Verify email adapter error:', error);
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
@@ -629,34 +712,59 @@ router.post('/auth/refresh', async (req: Request, res: Response) => {
       return;
     }
 
-    // Look up session
-    const session = await prisma.userSession.findUnique({
-      where: { token: refreshToken },
-      include: { user: { include: { role: true } } },
-    });
-
-    if (!session || !session.isActive || session.expiresAt < new Date()) {
-      res.status(401).json({ status: 'fail', message: 'Invalid or expired session' });
+    // Verify and decode the refresh JWT
+    let decoded: { id: string; email: string; role: string; type?: string };
+    try {
+      decoded = jwt.verify(refreshToken, JWT_SECRET) as any;
+    } catch {
+      res.status(401).json({ status: 'fail', message: 'Invalid or expired refresh token' });
       return;
     }
 
-    // Create new token
-    const token = jwt.sign(
-      { id: session.user.id, email: session.user.email, role: session.user.role.name },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
-    );
+    if (decoded.type !== 'refresh') {
+      res.status(401).json({ status: 'fail', message: 'Invalid token type' });
+      return;
+    }
 
-    // Update session
-    await prisma.userSession.update({
-      where: { id: session.id },
-      data: { token, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+      include: { role: true },
     });
+
+    if (!user) {
+      res.status(401).json({ status: 'fail', message: 'User not found' });
+      return;
+    }
+
+    // Generate new token pair
+    const { token, refreshToken: newRefreshToken } = generateTokens(user);
+
+    // Update existing session if found, otherwise create one
+    const existingSession = await prisma.userSession.findFirst({
+      where: { userId: user.id, isActive: true },
+    });
+
+    if (existingSession) {
+      await prisma.userSession.update({
+        where: { id: existingSession.id },
+        data: { token, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+      });
+    } else {
+      await prisma.userSession.create({
+        data: {
+          userId: user.id,
+          token,
+          deviceInfo: req.headers['user-agent'] || 'Unknown',
+          ipAddress: req.ip || '0.0.0.0',
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        },
+      });
+    }
 
     res.status(200).json({
       status: 'success',
       token,
-      refreshToken: token,
+      refreshToken: newRefreshToken,
     });
   } catch (error: any) {
     console.error('Refresh token adapter error:', error);
@@ -664,12 +772,244 @@ router.post('/auth/refresh', async (req: Request, res: Response) => {
   }
 });
 
+// CRM: Create lead (public - from contact forms)
+router.post('/crm/leads', async (req: Request, res: Response) => {
+  try {
+    const { name, email, phone, company, notes } = req.body;
+    if (!name || !email) {
+      res.status(400).json({ status: 'fail', message: 'Name and email are required' });
+      return;
+    }
+    const lead = await prisma.crmLead.create({
+      data: { name, email, phone, company, notes },
+    });
+    sendLeadReceivedEmail(name, email, notes || company || 'No message').catch(() => {});
+    res.status(201).json({ status: 'success', data: lead });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
 // Google OAuth routes (publicly accessible)
 router.use('/auth', googleAuthRouter);
+
+// ========== PHASE 2: Events ==========
+// Note: Specific routes MUST come before parameterized /:id to avoid Express matching "my-registrations" as an id
+router.get('/events', async (req: Request, res: Response) => {
+  try {
+    const events = await prisma.platformEvent.findMany({ orderBy: { eventDate: 'desc' } });
+    res.json({ status: 'success', data: events });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.get('/events/my-registrations', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const registrations = await prisma.eventRegistration.findMany({
+      where: { userId: req.user!.id },
+      include: { event: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json({ status: 'success', data: registrations });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.get('/events/:id', async (req: Request, res: Response) => {
+  try {
+    const event = await prisma.platformEvent.findUnique({ where: { id: req.params.id } });
+    if (!event) return res.status(404).json({ status: 'fail', message: 'Event not found' });
+    res.json({ status: 'success', data: event });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.post('/events/:id/register', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const existing = await prisma.eventRegistration.findUnique({
+      where: { eventId_userId: { eventId: req.params.id, userId: req.user!.id } },
+    });
+    if (existing) return res.status(400).json({ status: 'fail', message: 'Already registered' });
+    const registration = await prisma.eventRegistration.create({
+      data: { eventId: req.params.id, userId: req.user!.id },
+    });
+    res.status(201).json({ status: 'success', data: registration });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.delete('/events/:id/register', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    await prisma.eventRegistration.delete({
+      where: { eventId_userId: { eventId: req.params.id, userId: req.user!.id } },
+    });
+    res.json({ status: 'success', data: null });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// ========== PHASE 2: Knowledge Hub (Public) ==========
+router.get('/knowledge', async (req: Request, res: Response) => {
+  try {
+    const where: any = { status: 'published' };
+    if (req.query.category) {
+      where.category = { name: req.query.category as string };
+    }
+    const articles = await prisma.knowledgeArticle.findMany({
+      where, include: { category: true }, orderBy: { createdAt: 'desc' },
+    });
+    res.json({ status: 'success', data: articles });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.get('/knowledge/:id', async (req: Request, res: Response) => {
+  try {
+    const article = await prisma.knowledgeArticle.findUnique({
+      where: { id: req.params.id }, include: { category: true },
+    });
+    if (!article) return res.status(404).json({ status: 'fail', message: 'Article not found' });
+    await prisma.knowledgeArticle.update({
+      where: { id: req.params.id }, data: { viewCount: { increment: 1 } },
+    });
+    res.json({ status: 'success', data: article });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.post('/knowledge/:id/bookmark', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const existing = await prisma.userBookmark.findUnique({
+      where: { userId_articleId: { userId: req.user!.id, articleId: req.params.id } },
+    });
+    if (existing) {
+      await prisma.userBookmark.delete({ where: { id: existing.id } });
+      return res.json({ status: 'success', data: { bookmarked: false } });
+    }
+    await prisma.userBookmark.create({
+      data: { userId: req.user!.id, articleId: req.params.id },
+    });
+    res.json({ status: 'success', data: { bookmarked: true } });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
 
 // Enforce authentication and verification for all subsequent endpoints
 router.use(authenticate);
 router.use(requireVerified);
+
+// ========== PHASE 2: Investor CRM ==========
+router.use('/investor-crm', investorsRouter);
+
+// ========== PHASE 2: Fundraising ==========
+router.get('/fundraising/rounds', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const projects = await prisma.fundraisingProject.findMany({
+      where: { founder: { userId: req.user!.id } },
+      include: { investors: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json({ status: 'success', data: projects });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.get('/fundraising/rounds/:id', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const project = await prisma.fundraisingProject.findFirst({
+      where: { id: req.params.id, founder: { userId: req.user!.id } },
+      include: { investors: true },
+    });
+    if (!project) return res.status(404).json({ status: 'fail', message: 'Round not found' });
+    res.json({ status: 'success', data: project });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.post('/fundraising/rounds', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const founder = await prisma.founder.findUnique({ where: { userId: req.user!.id } });
+    if (!founder) return res.status(400).json({ status: 'fail', message: 'Complete founder profile first' });
+    const project = await prisma.fundraisingProject.create({
+      data: { ...req.body, founderId: founder.id },
+    });
+    res.status(201).json({ status: 'success', data: project });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.put('/fundraising/rounds/:id', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const project = await prisma.fundraisingProject.updateMany({
+      where: { id: req.params.id, founder: { userId: req.user!.id } },
+      data: req.body,
+    });
+    if (project.count === 0) return res.status(404).json({ status: 'fail', message: 'Round not found' });
+    res.json({ status: 'success', data: project });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.get('/fundraising/investors', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const where: any = { project: { founder: { userId: req.user!.id } } };
+    if (req.query.roundId) where.projectId = req.query.roundId as string;
+    const investors = await prisma.fundraisingInvestor.findMany({
+      where, include: { project: true }, orderBy: { createdAt: 'desc' },
+    });
+    res.json({ status: 'success', data: investors });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.post('/fundraising/investors', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const investor = await prisma.fundraisingInvestor.create({
+      data: { ...req.body },
+    });
+    res.status(201).json({ status: 'success', data: investor });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.put('/fundraising/investors/:id/stage', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const investor = await prisma.fundraisingInvestor.update({
+      where: { id: req.params.id },
+      data: { status: req.body.stage },
+    });
+    res.json({ status: 'success', data: investor });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+router.get('/fundraising/metrics', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const projects = await prisma.fundraisingProject.findMany({
+      where: { founder: { userId: req.user!.id } },
+    });
+    const totalTarget = projects.reduce((sum, p) => sum + (p.targetAmount || 0), 0);
+    const totalRaised = projects.reduce((sum, p) => sum + (p.raisedAmount || 0), 0);
+    res.json({ status: 'success', data: { totalProjects: projects.length, totalTarget, totalRaised, projects } });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
 
 // Setup MFA
 router.get('/auth/mfa/setup', async (req: AuthenticatedRequest, res: Response) => {
@@ -5622,6 +5962,204 @@ router.post('/ai/chat', authenticate, async (req: AuthenticatedRequest, res: Res
     await prisma.analyticsEvent.create({ data: { userId: req.user!.id, eventType: 'ai_chat', metadata: { query: message, responseLength: chatResponse.length } } });
 
     res.json({ message: chatResponse, timestamp: new Date().toISOString(), context: { startupName: startup?.name, industry: startup?.industry } });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Venture Readiness: get latest assessment
+router.get('/venture-readiness', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const assessment = await prisma.businessAssessment.findFirst({
+      where: { userId: req.user!.id, assessmentType: 'readiness_checklist', status: 'completed' },
+      include: { answers: true, readinessScores: true },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!assessment) {
+      res.json({ status: 'success', data: null });
+      return;
+    }
+
+    const dimensionMap: Record<string, { score: number; maxScore: number; label: string }> = {
+      team: { score: 0, maxScore: 25, label: 'Team & Leadership' },
+      product: { score: 0, maxScore: 15, label: 'Product & Technology' },
+      market: { score: 0, maxScore: 15, label: 'Market & Opportunity' },
+      traction: { score: 0, maxScore: 20, label: 'Traction & Growth' },
+      financials: { score: 0, maxScore: 15, label: 'Financial Health' },
+      legal: { score: 0, maxScore: 10, label: 'Legal & Compliance' },
+    };
+
+    const answerMap: Record<string, boolean> = {};
+    assessment.answers.forEach((a) => { answerMap[a.questionKey] = a.answerValue === true || a.answerValue === 'true'; });
+
+    if (answerMap.businessPlan) { dimensionMap.team.score += 15; dimensionMap.product.score += 10; }
+    if (answerMap.pitchDeck) { dimensionMap.traction.score += 10; dimensionMap.market.score += 15; }
+    if (answerMap.financialModel) dimensionMap.financials.score += 15;
+    if (answerMap.legal) dimensionMap.legal.score += 10;
+    if (answerMap.capTable) { dimensionMap.team.score += 10; dimensionMap.legal.score += 0; }
+    if (answerMap.dueDiligence) { dimensionMap.traction.score += 10; }
+    if (answerMap.compliance) dimensionMap.legal.score += 0;
+    if (answerMap.revenueMetrics) dimensionMap.financials.score += 0;
+
+    const dimensionScores = Object.entries(dimensionMap).map(([dim, d]) => ({
+      dimension: dim as string,
+      score: d.score,
+      maxScore: d.maxScore,
+      percentage: Math.round((d.score / d.maxScore) * 100),
+    }));
+
+    const strengths: string[] = [];
+    const gaps: string[] = [];
+    const recommendations: string[] = [];
+
+    if (answerMap.businessPlan) strengths.push('Documented business plan'); else { gaps.push('Missing business plan'); recommendations.push('Draft a comprehensive business plan'); }
+    if (answerMap.pitchDeck) strengths.push('Investor pitch deck ready'); else { gaps.push('No pitch deck'); recommendations.push('Create a compelling pitch deck'); }
+    if (answerMap.financialModel) strengths.push('3-year financial model'); else { gaps.push('No financial model'); recommendations.push('Build a 3-statement financial model'); }
+    if (answerMap.legal) strengths.push('Legal structure in place'); else { gaps.push('Legal structure incomplete'); recommendations.push('Complete incorporation and agreements'); }
+    if (answerMap.capTable) strengths.push('Clean cap table'); else { gaps.push('Cap table not organized'); recommendations.push('Organize equity capitalization table'); }
+    if (answerMap.dueDiligence) strengths.push('Due diligence ready'); else { gaps.push('Virtual data room not ready'); recommendations.push('Prepare due diligence documentation'); }
+    if (answerMap.compliance) strengths.push('Regulatory compliance'); else { gaps.push('Compliance gaps'); recommendations.push('Complete regulatory filings'); }
+    if (answerMap.revenueMetrics) strengths.push('Revenue metrics tracked'); else { gaps.push('Key metrics not tracked'); recommendations.push('Set up MRR, CAC, LTV tracking'); }
+
+    const data = {
+      id: assessment.id,
+      startupId: assessment.userId,
+      overallScore: assessment.overallScore,
+      dimensionScores,
+      responses: assessment.answers.map((a) => ({ questionId: a.questionKey, score: a.answerValue === true || a.answerValue === 'true' ? 1 : 0, notes: a.comments || '' })),
+      strengths,
+      gaps,
+      recommendations,
+      assessedAt: assessment.updatedAt.toISOString(),
+    };
+
+    res.json({ status: 'success', data });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Venture Readiness: start new assessment
+router.post('/venture-readiness/reassess', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const assessment = await prisma.businessAssessment.create({
+      data: {
+        userId: req.user!.id,
+        assessmentType: 'readiness_checklist',
+        overallScore: 0,
+        riskScore: 0,
+        growthScore: 0,
+        investmentScore: 0,
+        status: 'draft',
+      },
+    });
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        id: assessment.id,
+        startupId: assessment.userId,
+        overallScore: 0,
+        dimensionScores: [],
+        responses: [],
+        strengths: [],
+        gaps: [],
+        recommendations: [],
+        assessedAt: null,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Venture Readiness: submit assessment responses
+router.post('/venture-readiness/assess', authenticate, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { responses } = req.body;
+    if (!responses || !Array.isArray(responses)) {
+      res.status(400).json({ status: 'fail', message: 'Responses array is required' });
+      return;
+    }
+
+    const assessment = await prisma.businessAssessment.create({
+      data: {
+        userId: req.user!.id,
+        assessmentType: 'readiness_checklist',
+        overallScore: 0,
+        riskScore: 0,
+        growthScore: 0,
+        investmentScore: 0,
+        status: 'draft',
+      },
+    });
+
+    const answersData = responses.map((r: { questionId: string; score: number; notes?: string }) => ({
+      assessmentId: assessment.id,
+      questionKey: r.questionId,
+      answerValue: r.score >= 1 ? 'true' : 'false',
+      comments: r.notes || null,
+    }));
+
+    await prisma.assessmentAnswer.createMany({ data: answersData });
+
+    const answerMap: Record<string, boolean> = {};
+    answersData.forEach((a: { questionKey: string; answerValue: string }) => { answerMap[a.questionKey] = a.answerValue === 'true'; });
+
+    const checklistKeys = ['businessPlan', 'pitchDeck', 'financialModel', 'legal', 'capTable', 'dueDiligence', 'compliance', 'revenueMetrics'];
+    const completedCount = checklistKeys.filter((k) => answerMap[k]).length;
+    const overallScore = Math.round((completedCount / checklistKeys.length) * 100);
+
+    await prisma.businessAssessment.update({
+      where: { id: assessment.id },
+      data: { overallScore, status: 'completed' },
+    });
+
+    const saved = await prisma.businessAssessment.findUnique({
+      where: { id: assessment.id },
+      include: { answers: true },
+    });
+
+    const dimensionMap: Record<string, { score: number; maxScore: number }> = {
+      team: { score: 0, maxScore: 25 },
+      product: { score: 0, maxScore: 15 },
+      market: { score: 0, maxScore: 15 },
+      traction: { score: 0, maxScore: 20 },
+      financials: { score: 0, maxScore: 15 },
+      legal: { score: 0, maxScore: 10 },
+    };
+
+    if (answerMap.businessPlan) { dimensionMap.team.score += 15; dimensionMap.product.score += 10; }
+    if (answerMap.pitchDeck) { dimensionMap.traction.score += 10; dimensionMap.market.score += 15; }
+    if (answerMap.financialModel) dimensionMap.financials.score += 15;
+    if (answerMap.legal) dimensionMap.legal.score += 10;
+    if (answerMap.capTable) dimensionMap.team.score += 10;
+    if (answerMap.dueDiligence) dimensionMap.traction.score += 10;
+    if (answerMap.compliance) dimensionMap.legal.score += 0;
+    if (answerMap.revenueMetrics) dimensionMap.financials.score += 0;
+
+    const dimensionScores = Object.entries(dimensionMap).map(([dim, d]) => ({
+      dimension: dim,
+      score: d.score,
+      maxScore: d.maxScore,
+      percentage: Math.round((d.score / d.maxScore) * 100),
+    }));
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        id: assessment.id,
+        startupId: assessment.userId,
+        overallScore,
+        dimensionScores,
+        responses: saved?.answers.map((a) => ({ questionId: a.questionKey, score: a.answerValue === 'true' ? 1 : 0, notes: a.comments || '' })) || [],
+        strengths: [],
+        gaps: [],
+        recommendations: [],
+        assessedAt: new Date().toISOString(),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
   }

@@ -1,3 +1,4 @@
+import { Link } from 'wouter'
 import { motion } from 'framer-motion'
 import { ShieldOff, XCircle, Ban, Building2, GraduationCap, ShieldCheck, Network, TrendingUp, Sparkles, ArrowRight } from 'lucide-react'
 
@@ -49,18 +50,18 @@ export default function Differentiator() {
                 Antara Global helps startups, MSMEs, and emerging businesses grow through strategic advisory, investor readiness, partnerships, and capital connections—delivering ecosystem-driven, long-term growth beyond traditional consulting.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-8 flex flex-wrap gap-4">
-                <a href="/services"
+                <Link href="/services"
                   className="group inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold border-2 border-black shadow-lg transition-all duration-300 hover:scale-105"
                   style={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
                   Explore Services <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-                <a href="/contact"
+                </Link>
+                <Link href="/contact"
                   className="inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105"
                   style={{ backgroundColor: '#000000' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                   Book Consultation
-                </a>
+                </Link>
               </motion.div>
             </div>
 

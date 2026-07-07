@@ -19,6 +19,7 @@ import investorsRouter from './routes/investors';
 import eventsRouter from './routes/events';
 import adapterRouter from './routes/adapter';
 import googleAuthRouter from './routes/googleAuth';
+import linkedinAuthRouter from './routes/linkedinAuth';
 import fundraisingRouter from './routes/fundraising';
 import knowledgeRouter from './routes/knowledge';
 import tasksRouter from './routes/tasks';
@@ -82,6 +83,7 @@ app.use('/api/v1/knowledge', knowledgeRouter);
 app.use('/api/v1/tasks', tasksRouter);
 app.use('/api/v1/crm', crmRouter);
 app.use('/api/v1/auth', googleAuthRouter);
+app.use('/api/v1/auth', linkedinAuthRouter);
 
 
 // Module 8: Notifications Test endpoint (Admin / Debug only utility)

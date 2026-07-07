@@ -4,6 +4,8 @@ import { ArrowRight, Shield, CheckCircle, Sparkles, Calculator, Building } from 
 
 type Stage = 'concept' | 'mvp' | 'traction' | 'scaling'
 
+const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || 'http://localhost:5001/api'
+
 export default function ContactSection() {
   const [stage, setStage] = useState<Stage>('mvp')
   const [revenue, setRevenue] = useState<number>(15)
@@ -40,13 +42,20 @@ export default function ContactSection() {
     return 'Highly Investment Ready'
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name || !email) return
     setFormState('submitting')
-    setTimeout(() => {
+    try {
+      await fetch(`${API_BASE}/crm/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, company: startup || undefined, notes: message }),
+      })
       setFormState('success')
-    }, 1500)
+    } catch {
+      setFormState('idle')
+    }
   }
 
   return (

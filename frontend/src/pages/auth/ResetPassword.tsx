@@ -56,7 +56,7 @@ export default function ResetPassword() {
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
             <CheckCircle2 className="h-8 w-8 text-success" />
           </div>
-          <p className="text-center text-sm text-white/60">Redirecting you to login...</p>
+          <p className="text-center text-sm text-black/60">Redirecting you to login...</p>
           <Link href="/login" className="text-sm font-semibold text-gold-light hover:text-gold transition-colors">
             Go to Login
           </Link>
@@ -82,7 +82,7 @@ export default function ResetPassword() {
         )}
 
         <div>
-          <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-black/60 mb-1.5">
             New Password
           </label>
           <div className="relative">
@@ -91,13 +91,13 @@ export default function ResetPassword() {
               type={showPassword ? 'text' : 'password'}
               autoComplete="new-password"
               {...register('password')}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-11 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+              className="w-full rounded-xl border border-black/10 bg-black/5 px-4 py-3 pr-11 text-sm text-black placeholder:text-black/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
               placeholder="Min. 6 characters"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black/40 hover:text-black/70 transition-colors"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -108,7 +108,7 @@ export default function ResetPassword() {
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-1.5">
+          <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wider text-black/60 mb-1.5">
             Confirm New Password
           </label>
           <div className="relative">
@@ -117,13 +117,13 @@ export default function ResetPassword() {
               type={showConfirm ? 'text' : 'password'}
               autoComplete="new-password"
               {...register('confirmPassword')}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pr-11 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
+              className="w-full rounded-xl border border-black/10 bg-black/5 px-4 py-3 pr-11 text-sm text-black placeholder:text-black/30 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all duration-200"
               placeholder="Repeat your password"
             />
             <button
               type="button"
               onClick={() => setShowConfirm(!showConfirm)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black/40 hover:text-black/70 transition-colors"
             >
               {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>

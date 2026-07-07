@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api'
+const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || 'http://localhost:5001/api'
 
 export default function SocialLoginButtons() {
   return (
@@ -16,7 +16,7 @@ export default function SocialLoginButtons() {
 
       <div className="grid grid-cols-2 gap-3">
         <a
-          href={`${API_URL}/auth/google`}
+          href={`${API_BASE}/v1/auth/google`}
           className="flex items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold transition-all duration-200"
           style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}
@@ -32,7 +32,7 @@ export default function SocialLoginButtons() {
         </a>
 
         <a
-          href={`${API_URL}/auth/linkedin`}
+          href={`${API_BASE}/v1/auth/linkedin`}
           className="flex items-center justify-center gap-2.5 rounded-xl border px-4 py-3 text-sm font-semibold transition-all duration-200"
           style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
           onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}

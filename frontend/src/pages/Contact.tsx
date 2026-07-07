@@ -54,7 +54,6 @@ export default function ContactSection() {
         email,
         company: startup || undefined,
         notes: message,
-        source: 'website',
       },
       {
         onError: (err: any) => {

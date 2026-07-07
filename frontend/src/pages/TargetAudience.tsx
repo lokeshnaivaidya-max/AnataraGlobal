@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
+import { Link } from 'wouter'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowRight, Sparkles, Lightbulb,
@@ -258,21 +259,21 @@ export default function TargetAudience() {
                 Antara Global works with startups, MSMEs, entrepreneurs, and emerging businesses by providing strategic guidance, venture readiness support, financial knowledge, and access to growth opportunities.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-8 flex flex-wrap gap-4">
-                <a href="/services"
+                <Link href="/services"
                   className="group inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                   style={{ backgroundColor: '#000000' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                   Explore Our Solutions <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-                <a href="/contact"
+                </Link>
+                <Link href="/contact"
                   className="inline-flex items-center gap-2.5 rounded-xl border px-6 py-3.5 text-sm font-semibold hover:scale-105 transition-all duration-300"
                   style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.6)' }}>
                   <Play className="h-4 w-4" />
                   Book Consultation
-                </a>
+                </Link>
               </motion.div>
             </div>
 

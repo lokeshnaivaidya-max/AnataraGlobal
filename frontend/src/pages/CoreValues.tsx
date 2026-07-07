@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Link } from 'wouter'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ShieldCheck, BookOpen, Sparkles, Users, Award, TrendingUp, ArrowRight
@@ -93,18 +94,18 @@ export default function CoreValues() {
                 Our values define how we build relationships, support businesses, and create meaningful growth opportunities through trust, knowledge, collaboration, and excellence. Every decision we make and every partnership we form is guided by these principles, ensuring long-term value creation for the businesses and ecosystems we serve. These core beliefs are the foundation upon which Antara Global was built and continues to grow.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-8 flex flex-wrap gap-4">
-                <a href="/services"
+                <Link href="/services"
                   className="group inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold border-2 border-black shadow-lg transition-all duration-300 hover:scale-105"
                   style={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
                   Explore Services <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-                <a href="/contact"
+                </Link>
+                <Link href="/contact"
                   className="inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105"
                   style={{ backgroundColor: '#000000' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                   Connect With Us
-                </a>
+                </Link>
               </motion.div>
             </div>
 
@@ -233,20 +234,20 @@ export default function CoreValues() {
               </div>
             </div>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a href="/contact"
+              <Link href="/contact"
                 className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
                 style={{ backgroundColor: '#000000' }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                 Connect With Us <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="/target-audience"
+              </Link>
+              <Link href="/target-audience"
                 className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300"
                 style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.6)' }}>
                 Start Your Journey
-              </a>
+              </Link>
             </div>
 
           </motion.div>

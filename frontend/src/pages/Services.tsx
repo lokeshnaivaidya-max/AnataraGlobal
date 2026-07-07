@@ -1,3 +1,4 @@
+import { Link } from 'wouter'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
@@ -179,21 +180,21 @@ export default function Services() {
               transition={{ delay: 0.3 }}
               className="mt-8 flex flex-wrap gap-4"
             >
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 className="group inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold border-2 border-black shadow-lg transition-all duration-300 hover:scale-105"
                 style={{ backgroundColor: '#FFFFFF', color: '#000000' }}
               >
                 Book Consultation
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/ecosystem"
                 className="inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105"
                 style={{ backgroundColor: '#000000' }}
               >
                 Explore Our Ecosystem
-              </a>
+              </Link>
             </motion.div>
           </div>
 

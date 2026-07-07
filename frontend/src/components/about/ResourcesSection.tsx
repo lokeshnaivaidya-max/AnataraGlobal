@@ -59,12 +59,20 @@ const resources: Resource[] = [
   }
 ]
 
+const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/+$/, '') || 'http://localhost:5001/api'
+
 export default function ResourcesSection() {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null)
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null)
 
-  const handleDownload = (title: string, e: React.MouseEvent) => {
+  const handleDownload = (slug: string, title: string, e: React.MouseEvent) => {
     e.stopPropagation()
+    const link = document.createElement('a')
+    link.href = `${API_BASE}/v1/knowledge/download/${slug}`
+    link.download = `${slug}.pdf`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
     setDownloadSuccess(title)
     setTimeout(() => {
       setDownloadSuccess(null)
@@ -145,7 +153,7 @@ export default function ResourcesSection() {
                 <span className="text-xs" style={{ color: 'rgba(0,0,0,0.4)' }}>{resource.pages} pages PDF</span>
                 <div className="flex gap-2">
                   <button
-                    onClick={(e) => handleDownload(resource.title, e)}
+                    onClick={(e) => handleDownload(resource.id, resource.title, e)}
                     className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200"
                     style={{ backgroundColor: '#FFF8F2', color: 'rgba(0,0,0,0.5)', border: '1px solid rgba(0,0,0,0.06)' }}
                     onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-accent)'; e.currentTarget.style.color = '#FFFFFF' }}
@@ -261,7 +269,7 @@ export default function ResourcesSection() {
                   </button>
                   <button
                     onClick={(e) => {
-                      handleDownload(selectedResource.title, e)
+                      handleDownload(selectedResource.id, selectedResource.title, e)
                       setSelectedResource(null)
                     }}
                     className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-semibold hover:scale-105 transition-all shadow-md cursor-pointer"
