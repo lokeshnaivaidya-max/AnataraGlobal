@@ -1,0 +1,9 @@
+@theme {
+  /* ── Teal Accent ──────────────────────────────────────────────
+     Replaces orange (#FD7C06) and gold (#CEA041) across the brand.
+  ──────────────────────────────────────────────────────────────── */
+  --color-accent: #008081;
+  --color-accent-hover: #009999;
+  --color-accent-dark: #005C5C;
+  --color-accent-light: #33B5B5;
+}
