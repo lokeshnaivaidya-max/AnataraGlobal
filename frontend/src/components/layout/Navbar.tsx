@@ -3,7 +3,6 @@ import { Link, useLocation } from 'wouter'
 import {
   Menu,
   X,
-  Sparkles,
   ChevronDown,
   LogOut,
   User,
@@ -80,10 +79,11 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
           aria-label="Main navigation"
         >
           <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="relative flex items-center">
-              <Sparkles className="h-5 w-5 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" style={{ color: '#FD7C06' }} />
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full animate-pulse-glow" style={{ backgroundColor: 'rgba(253,124,6,0.4)' }} />
-            </div>
+            <img
+              src="/image.png"
+              alt="Antara Global"
+              className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-110"
+            />
             <div className="flex flex-col leading-none">
               <span className="text-[17px] font-black tracking-tight transition-colors duration-300" style={{ color: '#000000' }}>
                 ANTARA{' '}
@@ -195,16 +195,6 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
                 >
                   {authLinks.login.label}
                 </Link>
-                <Link
-                  href={authLinks.register.href}
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border shadow-lg transition-all duration-300 hover:shadow-xl"
-                  style={{ backgroundColor: 'rgba(206,160,65,0.08)', borderColor: 'rgba(206,160,65,0.25)', color: '#CEA041' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#CEA041'; e.currentTarget.style.color = '#FFFFFF' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(206,160,65,0.08)'; e.currentTarget.style.color = '#CEA041' }}
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {authLinks.register.label}
-                </Link>
               </>
             )}
           </div>
@@ -251,7 +241,11 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
           >
             <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
               <Link href="/" onClick={closeMobile} className="flex items-center gap-2 group">
-                <Sparkles className="h-4.5 w-4.5 transition-transform duration-300 group-hover:rotate-12" style={{ color: '#FD7C06' }} />
+                <img
+                  src="/image.png"
+                  alt="Antara Global"
+                  className="h-8 w-8 object-contain transition-transform duration-300 group-hover:scale-110"
+                />
                 <span className="text-base font-black tracking-tight" style={{ color: '#000000' }}>
                   ANTARA{' '}
                   <span className="font-light" style={{ color: '#FD7C06' }}>GLOBAL</span>
@@ -318,16 +312,6 @@ export default function Navbar({ isAuthenticated: _isAuthenticated }: { isAuthen
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <Link
-                    href={authLinks.register.href}
-                    onClick={closeMobile}
-                    className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold border shadow-lg"
-                    style={{ backgroundColor: 'rgba(206,160,65,0.08)', borderColor: 'rgba(206,160,65,0.25)', color: '#CEA041' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#CEA041'; e.currentTarget.style.color = '#FFFFFF' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(206,160,65,0.08)'; e.currentTarget.style.color = '#CEA041' }}
-                  >
-                    {authLinks.register.label}
-                  </Link>
                   <Link
                     href={authLinks.login.href}
                     onClick={closeMobile}

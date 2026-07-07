@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 
 const SESSION_KEY = 'antara-loaded'
-const LOADING_DURATION_MS = 2600
+const LOADING_DURATION_MS = 1400
 
 type Particle = {
   id: number
@@ -24,16 +24,14 @@ function generateParticles(count: number): Particle[] {
   }))
 }
 
-/**
- * Premium, fully-automatic loading screen for ANTARA Global.
- *
- * - No user interaction of any kind is required or accepted.
- * - Plays once per browser session (tracked via sessionStorage), then
- *   reveals the site content with a scale + opacity transition.
- * - Purely presentational: does not alter any homepage/page content.
- */
+
 export default function LoadingScreen({ children }: { children: ReactNode }) {
   const prefersReducedMotion = useReducedMotion()
+  useEffect(() => {
+  const img = new Image()
+  img.src = "/image.png"
+  img.decode().catch(() => {})
+}, [])
 
   const [loading, setLoading] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true
@@ -44,7 +42,7 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
     }
   })
 
-  const particles = useMemo(() => generateParticles(16), [])
+  const particles = useMemo(() => generateParticles(8), [])
 
   useEffect(() => {
     if (!loading) return
@@ -74,8 +72,8 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
                 'radial-gradient(circle at 50% 42%, #FFFFFF 0%, #FBF8F0 45%, #F7F1E4 100%)',
             }}
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.04 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Ambient particles */}
             <div className="absolute inset-0">
@@ -111,11 +109,11 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
               aria-hidden
               className="absolute rounded-full"
               style={{
-                width: 320,
-                height: 320,
+              width: 260,
+              height: 260,
                 background:
                   'radial-gradient(circle, rgba(184,138,43,0.32) 0%, rgba(184,138,43,0.08) 45%, rgba(184,138,43,0) 72%)',
-                filter: 'blur(6px)',
+                filter: 'blur(2px)',
               }}
               animate={
                 prefersReducedMotion
@@ -128,7 +126,7 @@ export default function LoadingScreen({ children }: { children: ReactNode }) {
             {/* Logo mark — gently floating */}
             <motion.div
               className="relative z-10 flex flex-col items-center"
-              animate={prefersReducedMotion ? {} : { y: [0, -8, 0] }}
+              animate={prefersReducedMotion ? {} : { y: [0, -4, 0] }}
               transition={{ duration: 3.4, repeat: prefersReducedMotion ? 0 : Infinity, ease: 'easeInOut' }}
             >
               <div className="relative overflow-hidden">

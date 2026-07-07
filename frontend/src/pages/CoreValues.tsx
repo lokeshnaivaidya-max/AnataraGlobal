@@ -72,7 +72,7 @@ export default function CoreValues() {
     <>
       {/* ── Hero ── */}
       <section className="relative min-h-screen overflow-hidden pt-28 pb-16" style={{ backgroundColor: '#FFF8F2' }}>
-        <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, #FD7C06, transparent)' }} />
+        <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, var(--color-accent), transparent)' }} />
         <div className="mx-auto relative w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Left: Content */}
@@ -86,7 +86,7 @@ export default function CoreValues() {
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight" style={{ color: '#000000' }}>
                 Principles<br />
-                <span style={{ color: '#FD7C06' }}>That Drive Us</span>
+                <span style={{ color: 'var(--color-accent)' }}>That Drive Us</span>
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                 className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl min-h-[4.5rem]" style={{ color: 'rgba(0,0,0,0.6)' }}>
@@ -101,7 +101,7 @@ export default function CoreValues() {
                 <a href="/contact"
                   className="inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105"
                   style={{ backgroundColor: '#000000' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                   Connect With Us
                 </a>
@@ -132,8 +132,8 @@ export default function CoreValues() {
                           {/* icon */}
                           <div className="flex h-14 w-14 items-center justify-center rounded-2xl mb-6"
                             style={{
-                              backgroundColor: isOrange ? 'rgba(253,124,6,0.15)' : 'rgba(206,160,65,0.15)',
-                              color: isOrange ? '#FD7C06' : '#CEA041',
+                              backgroundColor: isOrange ? 'rgba(0,128,129,0.15)' : 'rgba(51,181,181,0.15)',
+                              color: isOrange ? 'var(--color-accent)' : 'var(--color-accent-light)',
                             }}>
                             <Icon className="h-7 w-7" />
                           </div>
@@ -148,7 +148,7 @@ export default function CoreValues() {
                           <ul className="mt-6 pt-6 space-y-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                             {value.points.map((point) => (
                               <li key={point} className="flex items-center gap-3 text-sm font-medium" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                                <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: isOrange ? '#FD7C06' : '#CEA041' }} />
+                                <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: isOrange ? 'var(--color-accent)' : 'var(--color-accent-light)' }} />
                                 {point}
                               </li>
                             ))}
@@ -166,7 +166,7 @@ export default function CoreValues() {
                       className="h-2 rounded-full transition-all duration-300"
                       style={{
                         width: idx === activeIdx ? '24px' : '8px',
-                        backgroundColor: idx === activeIdx ? '#FD7C06' : 'rgba(0,0,0,0.15)',
+                        backgroundColor: idx === activeIdx ? 'var(--color-accent)' : 'rgba(0,0,0,0.15)',
                       }}
                     />
                   ))}
@@ -189,15 +189,15 @@ export default function CoreValues() {
                 <motion.div key={value.title} variants={cardVariants} whileHover={{ y: -6 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 24 }}
                   className="group relative rounded-3xl p-7 shadow-md hover:shadow-2xl transition-all duration-500"
-                  style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                  style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
                   <div className="absolute top-0 left-0 w-full h-1 rounded-t-3xl"
-                    style={{ background: isOrange ? 'linear-gradient(90deg, #FD7C06, rgba(253,124,6,0.3))' : 'linear-gradient(90deg, #CEA041, rgba(206,160,65,0.3))' }} />
+                    style={{ background: isOrange ? 'linear-gradient(90deg, var(--color-accent), rgba(0,128,129,0.3))' : 'linear-gradient(90deg, var(--color-accent-light), rgba(51,181,181,0.3))' }} />
 
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl border mb-5 transition-all duration-300 group-hover:scale-110"
                     style={{
-                      backgroundColor: isOrange ? 'rgba(253,124,6,0.08)' : 'rgba(206,160,65,0.08)',
-                      borderColor: isOrange ? 'rgba(253,124,6,0.15)' : 'rgba(206,160,65,0.15)',
-                      color: isOrange ? '#FD7C06' : '#CEA041',
+                      backgroundColor: isOrange ? 'rgba(0,128,129,0.08)' : 'rgba(51,181,181,0.08)',
+                      borderColor: isOrange ? 'rgba(0,128,129,0.15)' : 'rgba(51,181,181,0.15)',
+                      color: isOrange ? 'var(--color-accent)' : 'var(--color-accent-light)',
                     }}>
                     <Icon className="h-6 w-6" />
                   </div>
@@ -210,7 +210,7 @@ export default function CoreValues() {
                   <ul className="mt-5 pt-5 space-y-2" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                     {value.points.map((point) => (
                       <li key={point} className="flex items-center gap-2 text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
-                        <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: isOrange ? '#FD7C06' : '#CEA041' }} />
+                        <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: isOrange ? 'var(--color-accent)' : 'var(--color-accent-light)' }} />
                         {point}
                       </li>
                     ))}
@@ -224,31 +224,31 @@ export default function CoreValues() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }} className="mt-16 text-center">
             <div className="relative inline-block max-w-3xl w-full">
-              <div className="absolute -inset-1 rounded-3xl" style={{ background: 'linear-gradient(135deg, rgba(253,124,6,0.15), rgba(206,160,65,0.08))', filter: 'blur(8px)' }} />
+              <div className="absolute -inset-1 rounded-3xl" style={{ background: 'linear-gradient(135deg, rgba(0,128,129,0.15), rgba(51,181,181,0.08))', filter: 'blur(8px)' }} />
               <div className="relative rounded-3xl p-8 sm:p-10 overflow-hidden" style={{ backgroundColor: '#000000', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, #FD7C06, transparent)' }} />
+                <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, var(--color-accent), transparent)' }} />
                 <p className="text-base sm:text-lg font-semibold leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.9)' }}>
                   At Antara Global, growth is not only measured by scale but by the strength of relationships, knowledge, partnerships, and sustainable impact created along the journey.
                 </p>
               </div>
             </div>
-
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <a href="/contact"
                 className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
                 style={{ backgroundColor: '#000000' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                 Connect With Us <ArrowRight className="h-4 w-4" />
               </a>
               <a href="/target-audience"
                 className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300"
                 style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.6)' }}>
                 Start Your Journey
               </a>
             </div>
+
           </motion.div>
         </div>
       </section>

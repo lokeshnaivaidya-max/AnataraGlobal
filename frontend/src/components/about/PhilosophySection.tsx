@@ -60,8 +60,8 @@ export default function PhilosophySection() {
         <div className="grid lg:grid-cols-12 gap-12 items-center mb-16 lg:mb-20">
           <div className="lg:col-span-6">
             <div className="flex items-center gap-3 mb-4">
-              <span className="h-px w-8" style={{ backgroundColor: '#FD7C06' }} />
-              <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#FD7C06' }}>Why We Exist</span>
+              <span className="h-px w-8" style={{ backgroundColor: 'var(--color-accent)' }} />
+              <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--color-accent)' }}>Why We Exist</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black tracking-tight leading-tight">
               Bridging the Gap Between Concept and Capital
@@ -73,13 +73,13 @@ export default function PhilosophySection() {
 
           <div className="lg:col-span-6">
             <div className="relative rounded-3xl border p-8 sm:p-10 shadow-xl overflow-hidden group transition-all duration-300" style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)' }}>
-              <Quote className="absolute -top-4 -left-2 h-16 w-16 pointer-events-none" style={{ color: '#FC9E00', opacity: 0.1 }} />
+              <Quote className="absolute -top-4 -left-2 h-16 w-16 pointer-events-none" style={{ color: 'var(--color-accent-hover)', opacity: 0.1 }} />
               <div className="relative">
-                <p className="text-base sm:text-lg italic leading-relaxed font-semibold pl-6 border-l-2" style={{ color: '#000000', borderColor: '#FD7C06' }}>
+                <p className="text-base sm:text-lg italic leading-relaxed font-semibold pl-6 border-l-2" style={{ color: '#000000', borderColor: 'var(--color-accent)' }}>
                   &ldquo;Many businesses do not struggle because they lack ideas or markets. They struggle because they lack the structure required to sustain growth.&rdquo;
                 </p>
                 <div className="mt-4 flex items-center gap-2 pl-6">
-                  <span className="h-0.5 w-4" style={{ backgroundColor: '#FC9E00' }} />
+                  <span className="h-0.5 w-4" style={{ backgroundColor: 'var(--color-accent-hover)' }} />
                   <span className="text-xs font-bold text-black">Antara Founding Philosophy</span>
                 </div>
               </div>
@@ -102,9 +102,9 @@ export default function PhilosophySection() {
               className="group relative rounded-2xl border p-6 hover:-translate-y-1 transition-all duration-300"
               style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.1)' }}
             >
-              <div className="absolute top-0 left-0 w-full h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ background: 'linear-gradient(to right, #FD7C06, transparent)' }} />
+              <div className="absolute top-0 left-0 w-full h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ background: 'linear-gradient(to right, var(--color-accent), transparent)' }} />
               <div className="relative">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border group-hover:scale-110 transition-all duration-300" style={{ backgroundColor: '#FC9E00', color: 'white', borderColor: 'transparent' }}>
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl border group-hover:scale-110 transition-all duration-300" style={{ backgroundColor: 'var(--color-accent-hover)', color: 'white', borderColor: 'transparent' }}>
                   <item.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-bold text-sm text-black">{item.label}</h3>
@@ -123,11 +123,11 @@ export default function PhilosophySection() {
           className="mt-16 text-center"
         >
           <div className="relative inline-block max-w-2xl w-full group">
-            <div className="absolute -inset-1 rounded-3xl blur-md group-hover:blur-lg transition-all duration-500" style={{ background: 'linear-gradient(to right, rgba(253,124,6,0.2), rgba(252,158,0,0.1), rgba(253,124,6,0.2))' }} />
-            <div className="relative rounded-3xl p-8 sm:p-10 border overflow-hidden" style={{ backgroundColor: '#FD7C06', borderColor: 'rgba(255,255,255,0.1)' }}>
-              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-              <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-white/10 blur-2xl animate-float" />
-              <p className="text-sm sm:text-base font-semibold text-white/90 leading-relaxed max-w-lg mx-auto">
+            <div className="absolute -inset-1 rounded-3xl blur-md group-hover:blur-lg transition-all duration-500" style={{ background: 'linear-gradient(to right, rgba(0,128,129,0.2), rgba(252,158,0,0.1), rgba(0,128,129,0.2))' }} />
+            <div className="relative rounded-3xl p-8 sm:p-10 border overflow-hidden" style={{ backgroundColor: '#FFFFFF', borderColor: '#000000' }}>
+              <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, #000000, transparent)' }} />
+              <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-black/5 blur-2xl animate-float" />
+              <p className="text-sm sm:text-base font-semibold leading-relaxed max-w-lg mx-auto" style={{ color: '#000000' }}>
                 We believe that structured, compliant, and transparent businesses will naturally attract capital. Our advisory acts as the catalyst to unlock that potential.
               </p>
             </div>

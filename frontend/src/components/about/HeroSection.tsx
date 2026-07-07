@@ -103,7 +103,7 @@ export default function HeroSection() {
     const ctx = canvas.getContext('2d')!
     if (!ctx) return
 
-    const ACCENT = '#FD7C06'
+    const ACCENT = 'var(--color-accent)'
     const BG = '#FFF8F2'
     const NODE_BASE_RADIUS = 2.2
     const NODE_MAX_RADIUS = 5.5
@@ -297,15 +297,15 @@ export default function HeroSection() {
         const depthFactor = 0.7 + 0.3 * (1 - (n.y / H))
         const finalOpacity = n.opacity * depthFactor
         const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius * 4)
-        grad.addColorStop(0, `rgba(253, 124, 6, ${0.15 * finalOpacity})`)
-        grad.addColorStop(1, 'rgba(253, 124, 6, 0)')
+        grad.addColorStop(0, `rgba(0, 128, 129, ${0.15 * finalOpacity})`)
+        grad.addColorStop(1, 'rgba(0, 128, 129, 0)')
         ctx.save()
         ctx.globalAlpha = finalOpacity
         ctx.fillStyle = grad
         ctx.beginPath()
         ctx.arc(n.x, n.y, n.radius * 4, 0, Math.PI * 2)
         ctx.fill()
-        ctx.shadowColor = `rgba(253, 124, 6, ${0.2 * finalOpacity})`
+        ctx.shadowColor = `rgba(0, 128, 129, ${0.2 * finalOpacity})`
         ctx.shadowBlur = 12
         ctx.fillStyle = ACCENT
         ctx.beginPath()
@@ -314,7 +314,7 @@ export default function HeroSection() {
         ctx.shadowBlur = 0
         if (n.isImportant) {
           const ringSize = n.radius * (2.2 + 0.6 * Math.sin(time * 0.003 + n.pulsePhase))
-          ctx.strokeStyle = `rgba(253, 124, 6, ${0.15 * finalOpacity})`
+          ctx.strokeStyle = `rgba(0, 128, 129, ${0.15 * finalOpacity})`
           ctx.lineWidth = 0.8
           ctx.beginPath()
           ctx.arc(n.x, n.y, ringSize, 0, Math.PI * 2)
@@ -334,17 +334,17 @@ export default function HeroSection() {
         const px = u * u * sx + 2 * u * t1 * (midX + perpX) + t1 * t1 * tx
         const py = u * u * sy + 2 * u * t1 * (midY + perpY) + t1 * t1 * ty
         const glow = ctx.createRadialGradient(px, py, 0, px, py, t.size * 3)
-        glow.addColorStop(0, 'rgba(253, 124, 6, 0.6)')
-        glow.addColorStop(1, 'rgba(253, 124, 6, 0)')
+        glow.addColorStop(0, 'rgba(0, 128, 129, 0.6)')
+        glow.addColorStop(1, 'rgba(0, 128, 129, 0)')
         ctx.save()
         ctx.globalAlpha = 0.7
         ctx.fillStyle = glow
         ctx.beginPath()
         ctx.arc(px, py, t.size * 3, 0, Math.PI * 2)
         ctx.fill()
-        ctx.shadowColor = 'rgba(253, 124, 6, 0.3)'
+        ctx.shadowColor = 'rgba(0, 128, 129, 0.3)'
         ctx.shadowBlur = 14
-        ctx.fillStyle = '#FD7C06'
+        ctx.fillStyle = 'var(--color-accent)'
         ctx.beginPath()
         ctx.arc(px, py, t.size * 0.8, 0, Math.PI * 2)
         ctx.fill()
@@ -467,16 +467,17 @@ export default function HeroSection() {
 
               <motion.div 
                 variants={itemVariants} 
-                className="inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-xs font-semibold text-gold-light border border-gold/20 mb-6 shadow-lg shadow-gold/5 w-fit"
+                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold mb-6 w-fit"
+                style={{ backgroundColor: 'rgba(0,128,129,0.08)', border: '1px solid rgba(0,128,129,0.2)', color: 'var(--color-accent)' }}
               >
-                <Sparkles className="h-3.5 w-3.5 text-gold animate-spin-slow" />
+                <Sparkles className="h-3.5 w-3.5 animate-spin-slow" style={{ color: 'var(--color-accent)' }} />
                 <span>Antara Global Advisory Platform</span>
               </motion.div>
 
               <motion.h1 
                 variants={itemVariants} 
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight"
-                style={{ color: '#FD7C06' }}
+                style={{ color: 'var(--color-accent)' }}
               >
                 Building Growth-Ready &{' '}
                 Investment-Ready Businesses
@@ -497,18 +498,18 @@ export default function HeroSection() {
               >
                 <a
                   href="#services"
-                  className="group inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold border border-black shadow-lg hover:scale-105 transition-all duration-300"
-                  style={{ color: '#FC9E00' }}
+                  className="group inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold shadow-lg hover:scale-105 transition-all duration-300"
+                  style={{ color: 'var(--color-accent-hover)', border: '1px solid #000000', backgroundColor: '#FFFFFF' }}
                 >
                   Explore Services
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" style={{ color: '#FC9E00' }} />
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" style={{ color: 'var(--color-accent-hover)' }} />
                 </a>
                 <a
                   href="#consultation"
-                  className="inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold border border-black hover:scale-105 transition-all duration-300"
-                  style={{ color: '#FC9E00' }}
+                  className="inline-flex items-center gap-2.5 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold hover:scale-105 transition-all duration-300"
+                  style={{ color: 'var(--color-accent-hover)', border: '1px solid #000000', backgroundColor: '#FFFFFF' }}
                 >
-                  <Play className="h-4 w-4" style={{ color: '#FC9E00' }} />
+                  <Play className="h-4 w-4" style={{ color: 'var(--color-accent-hover)' }} />
                   Book Strategy Session
                 </a>
               </motion.div>
@@ -516,21 +517,22 @@ export default function HeroSection() {
               {/* Trusted Indicators */}
               <motion.div 
                 variants={itemVariants} 
-                className="mt-12 flex items-center gap-6 text-white/50 text-xs"
+                className="mt-12 flex items-center gap-6 text-xs"
+                style={{ color: 'rgba(0,0,0,0.5)' }}
               >
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="h-9 w-9 rounded-full border-2 border-white bg-[#FC9E00] flex items-center justify-center text-[10px] font-bold shadow-lg text-white"
+                      className="h-9 w-9 rounded-full border-2 border-white bg-[var(--color-accent-hover)] flex items-center justify-center text-[10px] font-bold shadow-lg text-white"
                     >
                       {['IN', 'EU', 'US', 'ME'][i-1]}
                     </div>
                   ))}
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-black">Global Connectivity</span>
-                  <span className="tracking-wide text-[10px] mt-0.5 text-black/60">Serving Founders & Investors Worldwide</span>
+                  <span className="font-semibold" style={{ color: '#000000' }}>Global Connectivity</span>
+                  <span className="tracking-wide text-[10px] mt-0.5" style={{ color: 'rgba(0,0,0,0.6)' }}>Serving Founders & Investors Worldwide</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -545,9 +547,9 @@ export default function HeroSection() {
               className="relative w-full max-w-xl mx-auto"
             >
               {/* Premium Glow Aura */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-gold/20 via-emerald/10 to-transparent blur-md pointer-events-none" />
+              <div className="absolute -inset-1 rounded-3xl blur-md pointer-events-none" style={{ background: 'linear-gradient(to top right, rgba(0,128,129,0.2), rgba(16,185,129,0.1), transparent)' }} />
 
-              <div className="relative rounded-3xl backdrop-blur-md border border-black p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch bg-white">
+              <div className="relative rounded-3xl backdrop-blur-md p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 items-stretch" style={{ backgroundColor: '#000000', border: '1px solid var(--color-accent)' }}>
                 
                 {/* Steps Selector Column */}
                 <div className="flex md:flex-col justify-between md:justify-center gap-3">
@@ -561,19 +563,25 @@ export default function HeroSection() {
                         className={`h-14 w-14 rounded-2xl flex flex-col items-center justify-center transition-all duration-500 relative ${
                           isSelected
                             ? 'text-white scale-110'
-                            : 'bg-white border-2 border-black text-black hover:bg-black/5 hover:scale-105 hover:shadow-md'
+                            : 'hover:scale-105 hover:shadow-md'
                         }`}
                         style={isSelected ? {
                           background: 'radial-gradient(circle at 30% 30%, #000000, #333333)',
                           boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
-                          border: 'none'
-                        } : undefined}
+                          border: '2px solid var(--color-accent)'
+                        } : {
+                          backgroundColor: '#FFFFFF',
+                          border: '2px solid var(--color-accent)',
+                          color: 'var(--color-accent)'
+                        }}
+                        onMouseEnter={(e) => { if (!isSelected) { e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.04)' } }}
+                        onMouseLeave={(e) => { if (!isSelected) { e.currentTarget.style.backgroundColor = '#FFFFFF' } }}
                       >
                         {isSelected && (
                           <>
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-black/30 via-black/10 to-transparent blur-sm -z-10" />
-                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2 ring-offset-black/10" />
+                            <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)' }} />
+                            <div className="absolute -inset-1 rounded-2xl blur-sm -z-10" style={{ background: 'linear-gradient(to bottom right, rgba(0,0,0,0.3), rgba(0,0,0,0.1), transparent)' }} />
+                            <div className="absolute inset-0 rounded-2xl ring-2 ring-white/20 ring-offset-2" />
                           </>
                         )}
                         <div className={`relative flex flex-col items-center justify-center ${isSelected ? 'animate-pulse-glow' : ''}`}>
@@ -582,7 +590,7 @@ export default function HeroSection() {
                         </div>
                         {isSelected && (
                           <div className="absolute -right-3 top-1/2 -translate-y-1/2 hidden md:flex items-center justify-center">
-                            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-black shadow-lg shadow-black/20">
+                            <div className="flex items-center justify-center h-6 w-6 rounded-full shadow-lg" style={{ backgroundColor: '#000000', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="m9 18 6-6-6-6" />
                               </svg>
@@ -595,7 +603,7 @@ export default function HeroSection() {
                 </div>
 
                 {/* Dashboard Details Screen */}
-                <div className="flex-1 rounded-2xl border border-black p-6 flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: '#FD7C06' }}>
+                <div className="flex-1 rounded-2xl border border-[var(--color-accent)] p-6 flex flex-col justify-between relative overflow-hidden" style={{ backgroundColor: '#000000' }}>
                   <div className="absolute -top-10 -right-10 h-24 w-24 rounded-full bg-white/10 blur-xl" />
                   
                   <AnimatePresence mode="wait">
@@ -611,7 +619,7 @@ export default function HeroSection() {
                         <span className="text-[10px] font-bold uppercase tracking-wider text-white/80">
                           {currentStep.label} Node Status
                         </span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(0,128,129,0.2)', color: 'var(--color-accent)', border: '1px solid var(--color-accent)' }}>
                           <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse-glow" />
                           {currentStep.metrics.status}
                         </span>
@@ -656,8 +664,8 @@ export default function HeroSection() {
               </div>
 
               {/* Decorative Glow Dots */}
-              <div className="absolute -top-3 -right-3 h-24 w-24 rounded-2xl bg-gradient-to-br from-[#FD7C06]/20 to-[#FC9E00]/10 blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-2 -left-2 h-16 w-16 rounded-2xl bg-gradient-to-tr from-[#FD7C06]/10 to-transparent blur-xl pointer-events-none" />
+              <div className="absolute -top-3 -right-3 h-24 w-24 rounded-2xl bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-accent-hover)]/10 blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-2 -left-2 h-16 w-16 rounded-2xl bg-gradient-to-tr from-[var(--color-accent)]/10 to-transparent blur-xl pointer-events-none" />
             </motion.div>
           </div>
 

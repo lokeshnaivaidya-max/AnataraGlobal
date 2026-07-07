@@ -1,4 +1,5 @@
 import { Route, Switch, useLocation } from 'wouter'
+import { useEffect } from 'react'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import LoadingScreen from './components/layout/LoadingScreen'
@@ -10,6 +11,7 @@ import Differentiator from './pages/Differentiator'
 import CoreValues from './pages/CoreValues'
 import KnowledgeHub from './pages/KnowledgeHub'
 import Contact from './pages/Contact'
+import ContactSection from './components/about/ContactSection'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import VerifyOTP from './pages/auth/VerifyOTP'
@@ -72,6 +74,16 @@ function NavbarWithAuth() {
 export default function App() {
   const [location] = useLocation()
   const isDashboard = location.startsWith('/dashboard')
+
+  useEffect(() => {
+    try { history.scrollRestoration = 'manual' } catch { /* noop */ }
+  }, [])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [location])
 
   if (isDashboard) {
     return (
@@ -381,6 +393,7 @@ export default function App() {
             <Route path="/auth/callback" component={OAuthCallback} />
           </Switch>
         </main>
+        {location !== '/target-audience' && location !== '/services' && location !== '/ecosystem' && location !== '/differentiator' && location !== '/why%20us' && location !== '/core-values' && <ContactSection />}
         <Footer />
       </div>
     </LoadingScreen>

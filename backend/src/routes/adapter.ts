@@ -59,11 +59,28 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  fileFilter: (_req, file, cb) => {
+    const allowedMimes = [
+      'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'text/plain',
+      'application/zip',
+      'application/x-zip-compressed',
+    ];
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Unsupported file type: ${file.mimetype}. Allowed: images, PDF, DOC, DOCX, XLS, XLSX, TXT, ZIP`));
+    }
+  },
 });
 
 // --- ALL DATA IS NOW 100% DATABASE-DRIVEN ---
 // No in-memory arrays remain. Every module reads/writes from PostgreSQL via Prisma.
-
 
 // ==========================================
 // MODULE 1: AUTHENTICATION & USER MANAGEMENT
@@ -85,8 +102,8 @@ router.post('/auth/register', async (req: Request, res: Response) => {
       return;
     }
 
-    const defaultRole = await prisma.role.findFirst({
-      where: { name: { in: ['Founder', 'MSME'] } },
+    const defaultRole = await prisma.role.findUnique({
+      where: { name: 'Founder' },
     });
     if (!defaultRole) {
       res.status(500).json({ status: 'error', message: 'System role missing' });
@@ -134,7 +151,7 @@ router.post('/auth/register', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Save session in DB
@@ -233,7 +250,7 @@ router.post('/auth/login', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Create session in DB
@@ -330,7 +347,7 @@ router.post('/auth/mfa/authenticate', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Create session in DB
@@ -414,7 +431,7 @@ router.post('/auth/verify-otp', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -627,7 +644,7 @@ router.post('/auth/refresh', async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: session.user.id, email: session.user.email, role: session.user.role.name },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN as any }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     // Update session
@@ -2883,7 +2900,8 @@ router.post('/documents/:id/share', authenticate, async (req: AuthenticatedReque
       },
     });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('Document share error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -3204,9 +3222,6 @@ router.delete('/tasks/:id', authenticate, async (req: AuthenticatedRequest, res:
 });
 
 // ==========================================
-// MOCK ENDPOINTS FOR OTHER FRONTEND ROUTING
-// ==========================================
-
 // CRM leads
 // ==========================================
 // FOUNDER CRM LEADS (DB-DRIVEN)
@@ -5096,7 +5111,7 @@ router.get('/admin/crm/stages', authenticate, async (req: Request, res: Response
 router.post('/admin/crm/leads', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { stageId, companyName, contactName, email, phone, value, notes } = req.body;
-    const lead = await prisma.crmLead.create({ data: { stageId, companyName, contactName, email, phone, value: parseFloat(value || '0'), notes, ownerId: req.user!.id } });
+    const lead = await prisma.crmPipelineLead.create({ data: { stageId, companyName, contactName, email, phone, value: parseFloat(value || '0'), notes, ownerId: req.user!.id } });
     res.status(201).json(lead);
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
@@ -5105,7 +5120,7 @@ router.post('/admin/crm/leads', authenticate, async (req: AuthenticatedRequest, 
 
 router.put('/admin/crm/leads/:id', authenticate, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const updated = await prisma.crmLead.update({ where: { id: req.params.id as string }, data: req.body });
+    const updated = await prisma.crmPipelineLead.update({ where: { id: req.params.id as string }, data: req.body });
     res.json(updated);
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });
@@ -5114,7 +5129,7 @@ router.put('/admin/crm/leads/:id', authenticate, async (req: AuthenticatedReques
 
 router.delete('/admin/crm/leads/:id', authenticate, async (req: Request, res: Response) => {
   try {
-    await prisma.crmLead.delete({ where: { id: req.params.id as string } });
+    await prisma.crmPipelineLead.delete({ where: { id: req.params.id as string } });
     res.json({ status: 'success' });
   } catch (error: any) {
     res.status(500).json({ status: 'error', message: error.message });

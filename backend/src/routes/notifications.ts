@@ -50,7 +50,8 @@ router.post('/lead', validateRequest(leadSchema), async (req, res) => {
     await sendLeadReceivedEmail(leadName, leadEmail, leadMessage);
     res.status(200).json({ status: 'success', message: 'Lead notification sent to sales team' });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('Send lead notification error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -60,7 +61,8 @@ router.post('/partner-approval', validateRequest(partnerApprovalSchema), async (
     await sendPartnerApprovedEmail(partnerEmail, partnerName);
     res.status(200).json({ status: 'success', message: 'Partner welcome email sent' });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('Send partner approval email error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -70,7 +72,8 @@ router.post('/event', validateRequest(eventRegistrationSchema), async (req, res)
     await sendEventRegistrationEmail(userEmail, eventDetails);
     res.status(200).json({ status: 'success', message: 'Event registration confirmation sent' });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('Send event registration email error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -80,7 +83,8 @@ router.post('/milestone', validateRequest(fundraisingMilestoneSchema), async (re
     await sendFundraisingMilestoneEmail(founderEmail, startupName, milestoneDetails);
     res.status(200).json({ status: 'success', message: 'Milestone status update sent' });
   } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+    console.error('Send milestone email error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 

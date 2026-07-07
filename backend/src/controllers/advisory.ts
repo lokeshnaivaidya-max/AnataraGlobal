@@ -103,7 +103,8 @@ export const bookMeeting = async (req: AuthenticatedRequest, res: Response): Pro
     // Generate notification triggers
     const dateStr = new Date(scheduledAt).toLocaleString();
     const meetingDetails = `Advisor: ${advisor.user.firstName} ${advisor.user.lastName}\nTime: ${dateStr}\nDuration: ${durationMinutes} minutes\nLink: ${meetingLink || 'To be shared'}`;
-    await sendConsultationBookedEmail(req.user!.email, meetingDetails);
+    const advisorName = `${advisor.user.firstName} ${advisor.user.lastName}`;
+    await sendConsultationBookedEmail(req.user!.email, meetingDetails, advisorName, advisor.user.email);
 
     res.status(201).json({ status: 'success', data: meeting });
   } catch (error) {
@@ -169,7 +170,7 @@ export const updateMeeting = async (req: AuthenticatedRequest, res: Response): P
 
     // Auth check: Admin, client, or the booked advisor can update
     const isClient = meeting.clientId === userId;
-    const isAdvisor = (meeting as any).advisor.userId === userId;
+    const isAdvisor = meeting.advisor?.userId === userId;
     const isAdmin = role === 'Admin' || role === 'Super Admin';
 
     if (!isClient && !isAdvisor && !isAdmin) {
@@ -287,7 +288,7 @@ export const updateTaskStatus = async (req: AuthenticatedRequest, res: Response)
     }
 
     // Only assigned user or the advisor can update status
-    if (task.assignedToId !== userId && (task as any).meeting.advisor.userId !== userId && req.user!.roleName !== 'Super Admin') {
+    if (task.assignedToId !== userId && task.meeting?.advisor?.userId !== userId && req.user!.roleName !== 'Super Admin') {
       res.status(403).json({ status: 'fail', message: 'Unauthorized to update task' });
       return;
     }

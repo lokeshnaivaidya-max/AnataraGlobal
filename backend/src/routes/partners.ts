@@ -48,7 +48,7 @@ router.put('/:id/status', validateRequest(updateStatusSchema), async (req, res) 
     const advisor = await prisma.advisor.findUnique({
       where: { id },
       include: { user: true },
-    }) as any;
+    });
 
     if (!advisor) {
       res.status(404).json({ status: 'fail', message: 'Advisor profile not found' });
@@ -59,7 +59,7 @@ router.put('/:id/status', validateRequest(updateStatusSchema), async (req, res) 
       where: { id },
       data: { status },
       include: { user: true },
-    }) as any;
+    });
 
     // If status is changed to approved, trigger welcome email
     if (status === 'approved') {
@@ -72,7 +72,7 @@ router.put('/:id/status', validateRequest(updateStatusSchema), async (req, res) 
     res.status(200).json({ status: 'success', data: updated });
   } catch (error: any) {
     console.error('Update partner status error:', error);
-    res.status(500).json({ status: 'error', message: error.message });
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 

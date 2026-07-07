@@ -74,8 +74,8 @@ export default function ResourcesSection() {
   return (
     <section id="resources" className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#FFF8F2' }}>
       {/* Decorative ornaments */}
-      <div className="absolute top-10 left-10 w-40 h-40 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: '#FD7C06' }} />
-      <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: '#CEA041' }} />
+      <div className="absolute top-10 left-10 w-40 h-40 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: 'var(--color-accent)' }} />
+      <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: 'var(--color-accent-light)' }} />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -84,7 +84,7 @@ export default function ResourcesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border mb-4"
-            style={{ backgroundColor: 'rgba(253,124,6,0.08)', borderColor: 'rgba(253,124,6,0.2)', color: '#FD7C06' }}
+            style={{ backgroundColor: 'rgba(0,128,129,0.08)', borderColor: 'rgba(0,128,129,0.2)', color: 'var(--color-accent)' }}
           >
             <Sparkles className="h-3.5 w-3.5" />
             Insights & Tools
@@ -124,7 +124,7 @@ export default function ResourcesSection() {
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full"
-                    style={{ color: '#FD7C06', backgroundColor: 'rgba(253,124,6,0.08)' }}>
+                    style={{ color: 'var(--color-accent)', backgroundColor: 'rgba(0,128,129,0.08)' }}>
                     {resource.category}
                   </span>
                   <div className="flex items-center gap-2 text-xs" style={{ color: 'rgba(0,0,0,0.4)' }}>
@@ -148,7 +148,7 @@ export default function ResourcesSection() {
                     onClick={(e) => handleDownload(resource.title, e)}
                     className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200"
                     style={{ backgroundColor: '#FFF8F2', color: 'rgba(0,0,0,0.5)', border: '1px solid rgba(0,0,0,0.06)' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#FD7C06'; e.currentTarget.style.color = '#FFFFFF' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-accent)'; e.currentTarget.style.color = '#FFFFFF' }}
                     onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFF8F2'; e.currentTarget.style.color = 'rgba(0,0,0,0.5)' }}
                     title="Download Report"
                   >
@@ -156,7 +156,7 @@ export default function ResourcesSection() {
                   </button>
                   <button className="flex h-9 items-center justify-center rounded-lg px-4 text-xs font-semibold text-white hover:scale-105 transition-all duration-200"
                     style={{ backgroundColor: '#000000' }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                     Quick View
                   </button>
@@ -177,7 +177,7 @@ export default function ResourcesSection() {
             className="fixed bottom-8 right-8 z-50 flex items-center gap-3 rounded-2xl px-5 py-4 shadow-2xl"
             style={{ backgroundColor: '#000000', border: '1px solid rgba(255,255,255,0.06)' }}
           >
-            <CheckCircle className="h-5 w-5 shrink-0 animate-bounce" style={{ color: '#FD7C06' }} />
+            <CheckCircle className="h-5 w-5 shrink-0 animate-bounce" style={{ color: 'var(--color-accent)' }} />
             <div>
               <p className="text-xs font-bold" style={{ color: '#FFFFFF' }}>Download Started</p>
               <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.6)' }}>{downloadSuccess} is downloading...</p>
@@ -217,7 +217,7 @@ export default function ResourcesSection() {
 
               <div className="mb-4">
                 <span className="text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full"
-                  style={{ color: '#FD7C06', backgroundColor: 'rgba(253,124,6,0.08)' }}>
+                  style={{ color: 'var(--color-accent)', backgroundColor: 'rgba(0,128,129,0.08)' }}>
                   {selectedResource.category}
                 </span>
               </div>
@@ -231,14 +231,14 @@ export default function ResourcesSection() {
 
               <div className="mt-6 rounded-2xl p-6" style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
                 <h4 className="text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-1.5" style={{ color: '#000000' }}>
-                  <BookOpen className="h-4 w-4" style={{ color: '#FD7C06' }} />
+                  <BookOpen className="h-4 w-4" style={{ color: 'var(--color-accent)' }} />
                   Table of Contents & Core Insights Preview:
                 </h4>
                 <div className="space-y-3">
                   {selectedResource.previewContent.map((point, i) => (
                     <div key={i} className="flex gap-2.5 items-start text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>
                       <span className="h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5"
-                        style={{ color: '#FD7C06', backgroundColor: 'rgba(253,124,6,0.08)' }}>
+                        style={{ color: 'var(--color-accent)', backgroundColor: 'rgba(0,128,129,0.08)' }}>
                         {i + 1}
                       </span>
                       <p className="leading-relaxed"><strong style={{ color: '#000000' }}>{point.split(':')[0]}:</strong>{point.split(':')[1]}</p>
@@ -265,9 +265,9 @@ export default function ResourcesSection() {
                       setSelectedResource(null)
                     }}
                     className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-semibold hover:scale-105 transition-all shadow-md cursor-pointer"
-                    style={{ backgroundColor: '#FD7C06' }}
+                    style={{ backgroundColor: 'var(--color-accent)' }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#000000'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                   >
                     <Download className="h-3.5 w-3.5" />
                     Download Full PDF

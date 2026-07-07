@@ -34,8 +34,9 @@ router.get('/my-invoices', async (req: any, res) => {
       orderBy: { invoiceDate: 'desc' },
     });
     res.status(200).json({ status: 'success', data: list });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Get my invoices error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -57,8 +58,9 @@ router.get('/admin/billing', restrictTo('Admin', 'Super Admin'), async (req, res
       orderBy: { invoiceDate: 'desc' },
     });
     res.status(200).json({ status: 'success', data: list });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Get all invoices error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -84,8 +86,9 @@ router.post('/admin/billing', restrictTo('Admin', 'Super Admin'), validateReques
     });
 
     res.status(201).json({ status: 'success', data: invoice });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Create invoice error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 
@@ -107,8 +110,9 @@ router.put('/admin/billing/:id', restrictTo('Admin', 'Super Admin'), validateReq
     });
 
     res.status(200).json({ status: 'success', data: updated });
-  } catch (error: any) {
-    res.status(500).json({ status: 'error', message: error.message });
+  } catch (error) {
+    console.error('Update invoice error:', error);
+    res.status(500).json({ status: 'error', message: 'Internal server error' });
   }
 });
 

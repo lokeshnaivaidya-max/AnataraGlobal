@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, ArrowRight, Shield, CheckCircle, Sparkles, Calculator, Building } from 'lucide-react'
+import { ArrowRight, Shield, CheckCircle, Sparkles, Calculator, Building } from 'lucide-react'
 
 type Stage = 'concept' | 'mvp' | 'traction' | 'scaling'
 
@@ -30,8 +30,8 @@ export default function ContactSection() {
 
   const getScoreColor = (s: number) => {
     if (s < 40) return '#EF4444'
-    if (s < 75) return '#CEA041'
-    return '#FD7C06'
+    if (s < 75) return 'var(--color-accent-light)'
+    return 'var(--color-accent)'
   }
 
   const getScoreLabel = (s: number) => {
@@ -51,39 +51,26 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
-      <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, #FD7C06, transparent)' }} />
-      <div className="absolute top-1/3 left-10 w-64 h-64 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(253,124,6,0.04)' }} />
-      <div className="absolute bottom-1/3 right-10 w-64 h-64 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(206,160,65,0.04)' }} />
+      <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, var(--color-accent), transparent)' }} />
+      <div className="absolute top-1/3 left-10 w-64 h-64 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(0,128,129,0.04)' }} />
+      <div className="absolute bottom-1/3 right-10 w-64 h-64 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(51,181,181,0.04)' }} />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-24">
-          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border mb-4"
-            style={{ backgroundColor: 'rgba(253,124,6,0.08)', borderColor: 'rgba(253,124,6,0.2)', color: '#FD7C06' }}>
-            <Calendar className="h-3.5 w-3.5" style={{ color: '#FD7C06' }} />
-            Strategic Advisory
-          </motion.div>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight" style={{ color: '#000000' }}>
-            Connect With <span style={{ color: '#FD7C06' }}>Our Advisors</span>
-          </motion.h2>
-          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            className="mt-4 text-lg" style={{ color: 'rgba(0,0,0,0.5)' }}>
-            Calculate your startup's venture readiness score and apply for a strategy assessment round.
-          </motion.p>
+
         </div>
 
         <div className="grid lg:grid-cols-12 gap-12 items-stretch">
           {/* ── Left Column: Readiness Calculator ── */}
           <div className="lg:col-span-5 flex flex-col">
             <div className="flex-1 rounded-3xl p-8 shadow-xl flex flex-col justify-between relative overflow-hidden"
-              style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
               <div className="absolute top-0 right-0 h-32 w-32 rounded-bl-3xl pointer-events-none"
-                style={{ background: 'linear-gradient(to bottom left, rgba(253,124,6,0.05), transparent)' }} />
+                style={{ background: 'linear-gradient(to bottom left, rgba(0,128,129,0.05), transparent)' }} />
 
               <div>
                 <h3 className="text-lg font-bold flex items-center gap-2.5" style={{ color: '#000000' }}>
-                  <Calculator className="h-5 w-5" style={{ color: '#FD7C06' }} />
+                  <Calculator className="h-5 w-5" style={{ color: 'var(--color-accent)' }} />
                   Venture Readiness Index
                 </h3>
                 <p className="text-xs mt-1" style={{ color: 'rgba(0,0,0,0.5)' }}>Estimate how prepared your startup is for capital connectivity.</p>
@@ -96,9 +83,9 @@ export default function ContactSection() {
                       <button key={s} type="button" onClick={() => setStage(s)}
                         className="text-xs font-semibold px-3 py-2 rounded-xl border capitalize transition-all cursor-pointer"
                         style={stage === s
-                          ? { backgroundColor: '#FD7C06', borderColor: '#FD7C06', color: '#FFFFFF' }
+                          ? { backgroundColor: 'var(--color-accent)', borderColor: 'var(--color-accent)', color: '#FFFFFF' }
                           : { backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.06)', color: 'rgba(0,0,0,0.5)' }}
-                        onMouseEnter={(e) => { if (stage !== s) { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}}
+                        onMouseEnter={(e) => { if (stage !== s) { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}}
                         onMouseLeave={(e) => { if (stage !== s) { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'; e.currentTarget.style.color = 'rgba(0,0,0,0.5)' }}}>
                         {s === 'mvp' ? 'MVP Launch' : s === 'traction' ? 'Early Traction' : s}
                       </button>
@@ -110,12 +97,12 @@ export default function ContactSection() {
                 <div className="mt-6">
                   <div className="flex justify-between items-center">
                     <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#000000' }}>Monthly Revenue (USD)</label>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded" style={{ color: '#CEA041', backgroundColor: 'rgba(206,160,65,0.1)' }}>${revenue}k</span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded" style={{ color: 'var(--color-accent-light)', backgroundColor: 'rgba(51,181,181,0.1)' }}>${revenue}k</span>
                   </div>
                   <input type="range" min="0" max="100" step="5" value={revenue}
                     onChange={(e) => setRevenue(Number(e.target.value))}
                     className="w-full h-1 rounded-lg appearance-none cursor-pointer mt-3"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.06)', accentColor: '#FD7C06' }} />
+                    style={{ backgroundColor: 'rgba(0,0,0,0.06)', accentColor: 'var(--color-accent)' }} />
                   <div className="flex justify-between text-[10px] mt-1" style={{ color: 'rgba(0,0,0,0.4)' }}>
                     <span>$0</span>
                     <span>$50k</span>
@@ -136,7 +123,7 @@ export default function ContactSection() {
                       <label key={item.label} className="flex items-center gap-2.5 cursor-pointer text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>
                         <input type="checkbox" checked={item.val} onChange={(e) => item.set(e.target.checked)}
                           className="rounded h-4 w-4 cursor-pointer"
-                          style={{ accentColor: '#FD7C06', borderColor: 'rgba(0,0,0,0.06)' }} />
+                          style={{ accentColor: 'var(--color-accent)', borderColor: 'rgba(0,0,0,0.06)' }} />
                         <span>{item.label}</span>
                       </label>
                     ))}
@@ -173,16 +160,16 @@ export default function ContactSection() {
           {/* ── Right Column: Contact Form ── */}
           <div className="lg:col-span-7" id="consultation">
             <div className="h-full rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col justify-between relative overflow-hidden"
-              style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
-              <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, #FD7C06, rgba(253,124,6,0.2), transparent)' }} />
+              style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
+              <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, var(--color-accent), rgba(0,128,129,0.2), transparent)' }} />
               <div className="absolute top-0 right-0 h-32 w-32 rounded-bl-3xl pointer-events-none"
-                style={{ background: 'linear-gradient(to bottom left, rgba(253,124,6,0.06), transparent)' }} />
+                style={{ background: 'linear-gradient(to bottom left, rgba(0,128,129,0.06), transparent)' }} />
 
               <AnimatePresence mode="wait">
                 {formState !== 'success' ? (
                   <motion.form key="form" onSubmit={handleSubmit} className="space-y-6"
                     initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <div className="pb-4" style={{ borderBottom: '1px solid rgba(253,124,6,0.15)' }}>
+                    <div className="pb-4" style={{ borderBottom: '1px solid rgba(0,128,129,0.15)' }}>
                       <h3 className="text-xl font-bold" style={{ color: '#000000' }}>Confidential Strategy Session</h3>
                       <p className="text-xs mt-1" style={{ color: 'rgba(0,0,0,0.5)' }}>Our partners review applications weekly. Strategy assessments are protected under standard NDA.</p>
                     </div>
@@ -194,7 +181,7 @@ export default function ContactSection() {
                           placeholder="Your full name"
                           className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all"
                           style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.06)', color: '#000000' }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#FD7C06'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'}
                           onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'} />
                       </div>
                       <div>
@@ -203,7 +190,7 @@ export default function ContactSection() {
                           placeholder="you@company.com"
                           className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all"
                           style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.06)', color: '#000000' }}
-                          onFocus={(e) => e.currentTarget.style.borderColor = '#FD7C06'}
+                          onFocus={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'}
                           onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'} />
                       </div>
                     </div>
@@ -214,7 +201,7 @@ export default function ContactSection() {
                         placeholder="Company name"
                         className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all"
                         style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.06)', color: '#000000' }}
-                        onFocus={(e) => e.currentTarget.style.borderColor = '#FD7C06'}
+                        onFocus={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'}
                         onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'} />
                     </div>
 
@@ -224,19 +211,19 @@ export default function ContactSection() {
                         placeholder="Describe your current status, advisory needs, or funding timeline."
                         className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all resize-none"
                         style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.06)', color: '#000000' }}
-                        onFocus={(e) => e.currentTarget.style.borderColor = '#FD7C06'}
+                        onFocus={(e) => e.currentTarget.style.borderColor = 'var(--color-accent)'}
                         onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'} />
                     </div>
 
                     <div className="flex items-center justify-between gap-4 flex-wrap pt-4" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                       <div className="flex items-center gap-2 text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>
-                        <Shield className="h-4 w-4" style={{ color: '#FD7C06' }} />
+                        <Shield className="h-4 w-4" style={{ color: 'var(--color-accent)' }} />
                         <span>Data protected under 256-bit encryption</span>
                       </div>
                       <button type="submit" disabled={formState === 'submitting'}
                         className="group inline-flex items-center gap-2 rounded-xl text-white px-6 py-3.5 text-xs font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300 disabled:opacity-50 shadow-md cursor-pointer"
                         style={{ backgroundColor: '#000000' }}
-                        onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#FD7C06' }}
+                        onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'var(--color-accent)' }}
                         onMouseLeave={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#000000' }}>
                         {formState === 'submitting' ? 'Submitting...' : 'Apply for Strategy Assessment'}
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
@@ -247,8 +234,8 @@ export default function ContactSection() {
                   <motion.div key="success" className="flex flex-col items-center justify-center text-center py-12"
                     initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 100 }}>
                     <div className="h-16 w-16 rounded-full flex items-center justify-center mb-6"
-                      style={{ backgroundColor: 'rgba(253,124,6,0.08)', border: '1px solid rgba(253,124,6,0.15)' }}>
-                      <CheckCircle className="h-8 w-8" style={{ color: '#FD7C06' }} />
+                      style={{ backgroundColor: 'rgba(0,128,129,0.08)', border: '1px solid rgba(0,128,129,0.15)' }}>
+                      <CheckCircle className="h-8 w-8" style={{ color: 'var(--color-accent)' }} />
                     </div>
                     <h3 className="text-2xl font-bold" style={{ color: '#000000' }}>Application Submitted!</h3>
                     <p className="mt-3 text-sm leading-relaxed max-w-md" style={{ color: 'rgba(0,0,0,0.5)' }}>
@@ -256,22 +243,22 @@ export default function ContactSection() {
                     </p>
 
                     <div className="mt-8 rounded-2xl p-6 w-full max-w-md text-left"
-                      style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                      style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
                       <h4 className="text-xs font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5" style={{ color: '#000000' }}>
-                        <Sparkles className="h-4 w-4" style={{ color: '#CEA041' }} />
+                        <Sparkles className="h-4 w-4" style={{ color: 'var(--color-accent-light)' }} />
                         Next steps based on score ({score}%):
                       </h4>
                       <ul className="space-y-2.5 text-xs" style={{ color: 'rgba(0,0,0,0.5)' }}>
                         <li className="flex gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: '#CEA041' }} />
+                          <span className="h-1.5 w-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                           An Antara advisor will review your submitted files within 24 hours.
                         </li>
                         <li className="flex gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: '#CEA041' }} />
+                          <span className="h-1.5 w-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                           We will share custom recommendations to improve your score.
                         </li>
                         <li className="flex gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: '#CEA041' }} />
+                          <span className="h-1.5 w-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                           A scheduling link for a confidential Zoom session will be sent to <strong style={{ color: '#000000' }}>{email}</strong>.
                         </li>
                       </ul>
@@ -279,9 +266,9 @@ export default function ContactSection() {
 
                     <button onClick={() => { setFormState('idle'); setName(''); setEmail(''); setStartup(''); setMessage('') }}
                       className="mt-8 text-xs font-semibold transition-all cursor-pointer"
-                      style={{ color: '#CEA041' }}
-                      onMouseEnter={(e) => e.currentTarget.style.color = '#FD7C06'}
-                      onMouseLeave={(e) => e.currentTarget.style.color = '#CEA041'}>
+                      style={{ color: 'var(--color-accent-light)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-accent-light)'}>
                       Submit another request
                     </button>
                   </motion.div>

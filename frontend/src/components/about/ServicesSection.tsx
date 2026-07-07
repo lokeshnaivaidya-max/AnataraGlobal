@@ -20,8 +20,8 @@ const services = [
     ],
     metric: '45%',
     metricLabel: 'Average Efficiency Gain',
-    primaryColor: '#FD7C06',
-    primaryFaded: 'rgba(253,124,6,0.15)',
+    primaryColor: 'var(--color-accent)',
+    primaryFaded: 'rgba(0,128,129,0.15)',
   },
   {
     id: 'readiness',
@@ -37,8 +37,8 @@ const services = [
     ],
     metric: '10x',
     metricLabel: 'Faster Due Diligence',
-    primaryColor: '#CEA041',
-    primaryFaded: 'rgba(206,160,65,0.15)',
+    primaryColor: 'var(--color-accent-light)',
+    primaryFaded: 'rgba(51,181,181,0.15)',
   },
   {
     id: 'connectivity',
@@ -54,8 +54,8 @@ const services = [
     ],
     metric: '$80M+',
     metricLabel: 'Capital Network Access',
-    primaryColor: '#FD7C06',
-    primaryFaded: 'rgba(253,124,6,0.15)',
+    primaryColor: 'var(--color-accent)',
+    primaryFaded: 'rgba(0,128,129,0.15)',
   },
 ]
 
@@ -69,8 +69,8 @@ export default function ServicesSection() {
     <section id="services" className="relative py-24 lg:py-32 overflow-hidden" style={{ backgroundColor: '#000000' }}>
       {/* Decorative Gradients */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 right-0 w-96 h-96 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: '#FD7C06' }} />
-        <div className="absolute bottom-1/4 left-0 w-96 h-96 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: '#CEA041' }} />
+        <div className="absolute top-1/4 right-0 w-96 h-96 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: 'var(--color-accent)' }} />
+        <div className="absolute bottom-1/4 left-0 w-96 h-96 rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: 'var(--color-accent-light)' }} />
       </div>
 
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
@@ -82,7 +82,7 @@ export default function ServicesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border mb-4"
-            style={{ backgroundColor: 'rgba(206,160,65,0.08)', borderColor: 'rgba(206,160,65,0.2)', color: '#CEA041' }}
+            style={{ backgroundColor: 'rgba(51,181,181,0.08)', borderColor: 'rgba(51,181,181,0.2)', color: 'var(--color-accent-light)' }}
           >
             <Sparkles className="h-3.5 w-3.5" />
             Our Offerings

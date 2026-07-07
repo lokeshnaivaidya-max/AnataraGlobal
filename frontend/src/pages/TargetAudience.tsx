@@ -155,8 +155,8 @@ function GrowthChart() {
         {/* Gradient under line */}
         <defs>
           <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FD7C06" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#FD7C06" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={`${linePath} L440,250 L50,250 Z`} fill="url(#areaGrad)">
@@ -164,30 +164,30 @@ function GrowthChart() {
         </path>
 
         {/* Animated line */}
-        <path ref={pathRef} d={linePath} stroke="#FD7C06" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        <path ref={pathRef} d={linePath} stroke="var(--color-accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"
           strokeDasharray="700" strokeDashoffset="700">
           <animate attributeName="strokeDashoffset" from="700" to="0" dur="1.5s" begin="0.3s" fill="freeze" />
         </path>
 
         {/* Animated dots */}
-        <circle cx="140" cy="170" r="5" fill="#FFFFFF" stroke="#FD7C06" strokeWidth="2.5" opacity="0">
+        <circle cx="140" cy="170" r="5" fill="#FFFFFF" stroke="var(--color-accent)" strokeWidth="2.5" opacity="0">
           <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.9s" fill="freeze" />
         </circle>
-        <circle cx="310" cy="40" r="5" fill="#FFFFFF" stroke="#FD7C06" strokeWidth="2.5" opacity="0">
+        <circle cx="310" cy="40" r="5" fill="#FFFFFF" stroke="var(--color-accent)" strokeWidth="2.5" opacity="0">
           <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="1.2s" fill="freeze" />
         </circle>
-        <circle cx="420" cy="15" r="6" fill="#FD7C06" stroke="#FFFFFF" strokeWidth="3" opacity="0">
+        <circle cx="420" cy="15" r="6" fill="var(--color-accent)" stroke="#FFFFFF" strokeWidth="3" opacity="0">
           <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="1.5s" fill="freeze" />
         </circle>
 
         {/* Upward arrow */}
         <g opacity="0">
           <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2s" fill="freeze" />
-          <path d={arrowPath} stroke="#FD7C06" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <path d={arrowPath} stroke="var(--color-accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </g>
 
         {/* Pulsing glow */}
-        <circle cx="420" cy="15" r="14" fill="none" stroke="#FD7C06" strokeWidth="1.5" opacity="0">
+        <circle cx="420" cy="15" r="14" fill="none" stroke="var(--color-accent)" strokeWidth="1.5" opacity="0">
           <animate attributeName="r" values="10;20;10" dur="2s" begin="2.2s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" begin="2.2s" repeatCount="indefinite" />
         </circle>
@@ -199,7 +199,7 @@ function GrowthChart() {
 
         {/* Crosshair dot on curve */}
         {showCrosshair && (
-          <circle cx={cursorInfo!.svgX} cy={cursorInfo!.y} r="5" fill="#FD7C06" stroke="#FFFFFF" strokeWidth="2" />
+          <circle cx={cursorInfo!.svgX} cy={cursorInfo!.y} r="5" fill="var(--color-accent)" stroke="#FFFFFF" strokeWidth="2" />
         )}
       </svg>
 
@@ -210,7 +210,7 @@ function GrowthChart() {
             left: `${(cursorInfo.svgX / 480) * 100}%`,
             top: `${(cursorInfo.y / 300) * 100}%`,
             transform: 'translate(-50%, -120%)',
-            backgroundColor: '#FD7C06',
+            backgroundColor: 'var(--color-accent)',
             color: '#FFFFFF',
           }}>
           {cursorInfo.value}%
@@ -220,7 +220,7 @@ function GrowthChart() {
       {/* Floating label */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 2.4 }}
         className="absolute top-[6%] right-[4%] flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold shadow-lg pointer-events-none"
-        style={{ backgroundColor: '#FFFFFF', color: '#FD7C06' }}>
+        style={{ backgroundColor: '#FFFFFF', color: 'var(--color-accent)' }}>
         <TrendingUp className="h-3.5 w-3.5" />
         +84% Growth
       </motion.div>
@@ -237,21 +237,21 @@ export default function TargetAudience() {
     <>
       {/* ── Hero (left: content, right: graph animation) ── */}
       <section className="relative min-h-[82vh] flex items-center overflow-hidden pt-28 pb-16" style={{ backgroundColor: '#FFF8F2' }}>
-        <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, #FD7C06, transparent)' }} />
+        <div className="absolute top-0 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, var(--color-accent), transparent)' }} />
         <div className="mx-auto relative max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: Content */}
             <div>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold border mb-6"
-                style={{ backgroundColor: 'rgba(206,160,65,0.08)', borderColor: 'rgba(206,160,65,0.2)', color: '#CEA041' }}>
+                style={{ backgroundColor: 'rgba(51,181,181,0.08)', borderColor: 'rgba(51,181,181,0.2)', color: 'var(--color-accent-light)' }}>
                 <Sparkles className="h-3.5 w-3.5" />
                 Target Audience
               </motion.div>
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight" style={{ color: '#000000' }}>
                 Empowering Businesses<br />
-                <span style={{ color: '#FD7C06' }}>At Every Growth Stage</span>
+                <span style={{ color: 'var(--color-accent)' }}>At Every Growth Stage</span>
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
                 className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl" style={{ color: 'rgba(0,0,0,0.6)' }}>
@@ -261,14 +261,14 @@ export default function TargetAudience() {
                 <a href="/services"
                   className="group inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                   style={{ backgroundColor: '#000000' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#000000'}>
                   Explore Our Solutions <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a href="/contact"
                   className="inline-flex items-center gap-2.5 rounded-xl border px-6 py-3.5 text-sm font-semibold hover:scale-105 transition-all duration-300"
                   style={{ backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.6)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.12)'; e.currentTarget.style.color = 'rgba(0,0,0,0.6)' }}>
                   <Play className="h-4 w-4" />
                   Book Consultation
@@ -290,7 +290,7 @@ export default function TargetAudience() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#CEA041' }}>Who We Empower</span>
+            <span className="inline-block rounded-full px-4 py-1 text-xs font-semibold tracking-widest uppercase" style={{ backgroundColor: '#000000', color: '#FFFFFF' }}>Who We Empower</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: '#000000' }}>
               Solutions For Every Business
             </h2>
@@ -310,9 +310,9 @@ export default function TargetAudience() {
                   style={isActive
                     ? { backgroundColor: '#000000', borderColor: '#000000', color: '#FFFFFF' }
                     : { backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.06)', color: 'rgba(0,0,0,0.5)' }}
-                  onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FD7C06' }}}
+                  onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}}
                   onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'; e.currentTarget.style.color = 'rgba(0,0,0,0.5)' }}}>
-                  <Icon className="h-4 w-4" style={{ color: isActive ? '#CEA041' : 'inherit' }} />
+                  <Icon className="h-4 w-4" style={{ color: isActive ? 'var(--color-accent-light)' : 'inherit' }} />
                   {tab.label}
                 </button>
               )
@@ -328,13 +328,13 @@ export default function TargetAudience() {
                     <motion.div key={group.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.08 }} whileHover={{ y: -4 }}
                       className="rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300"
-                      style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                      style={{ backgroundColor: '#FFFFFF', border: '1px solid #000000' }}>
                       <h3 className="text-base font-extrabold mb-1" style={{ color: '#000000' }}>{group.title}</h3>
                       <p className="text-xs mb-4" style={{ color: 'rgba(0,0,0,0.5)' }}>{group.desc}</p>
                       <div className="space-y-2">
                         {group.points.map((point) => (
                           <div key={point} className="flex items-center gap-2 text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
-                            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: '#FD7C06' }} />
+                            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
                             {point}
                           </div>
                         ))}
@@ -353,16 +353,16 @@ export default function TargetAudience() {
                       <motion.div key={ind.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.08 }} whileHover={{ y: -4 }}
                         className="rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300"
-                        style={{ backgroundColor: '#FFF8F2', border: '1px solid rgba(0,0,0,0.06)' }}>
+                        style={{ backgroundColor: '#FFFFFF', border: '1px solid #000000' }}>
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl border mb-4"
-                          style={{ backgroundColor: 'rgba(253,124,6,0.08)', borderColor: 'rgba(253,124,6,0.15)', color: '#FD7C06' }}>
+                          style={{ backgroundColor: 'rgba(0,128,129,0.08)', borderColor: 'rgba(0,128,129,0.15)', color: 'var(--color-accent)' }}>
                           <IndIcon className="h-6 w-6" />
                         </div>
                         <h3 className="text-base font-extrabold mb-3" style={{ color: '#000000' }}>{ind.label}</h3>
                         <div className="space-y-2">
                           {ind.points.map((point) => (
                             <div key={point} className="flex items-center gap-2 text-xs font-medium" style={{ color: 'rgba(0,0,0,0.7)' }}>
-                              <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: '#CEA041' }} />
+                              <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                               {point}
                             </div>
                           ))}
@@ -382,17 +382,17 @@ export default function TargetAudience() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#CEA041' }}>Growth Journey</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: '#000000' }}>
+            <span className="inline-block rounded-full px-4 py-1 text-xs font-semibold tracking-widest uppercase" style={{ backgroundColor: '#000000', color: '#FFFFFF' }}>Growth Journey</span>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: 'var(--color-accent)' }}>
               From Foundation To Scale
             </h2>
           </motion.div>
 
           <div className="relative">
-            <div className="hidden lg:block absolute top-[44px] left-0 right-0 h-px" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
+            <div className="hidden lg:block absolute top-[13px] left-0 right-0 h-px" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
               <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
                 transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full origin-left" style={{ background: 'linear-gradient(90deg, #FD7C06, #CEA041, #FD7C06)' }} />
+                className="h-full origin-left" style={{ background: 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light), var(--color-accent))' }} />
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -401,14 +401,14 @@ export default function TargetAudience() {
                   viewport={{ once: true }} transition={{ delay: idx * 0.12 }} className="relative">
                   <div className="hidden lg:flex relative z-10 h-[26px] items-center mb-6">
                     <div className="h-6 w-6 rounded-full bg-white border-2 flex items-center justify-center"
-                      style={{ borderColor: '#CEA041' }}>
-                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: '#CEA041' }} />
+                      style={{ borderColor: 'var(--color-accent-light)' }}>
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--color-accent-light)' }} />
                     </div>
                   </div>
 
                   <div className="rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                     style={{ backgroundColor: '#FFFFFF', border: '1px solid rgba(0,0,0,0.06)' }}>
-                    <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#CEA041' }}>{stage.stage}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--color-accent-light)' }}>{stage.stage}</span>
                     <h3 className="text-lg font-extrabold mt-1" style={{ color: '#000000' }}>{stage.title}</h3>
                     <p className="text-xs mt-2" style={{ color: 'rgba(0,0,0,0.5)' }}>{stage.desc}</p>
                   </div>
@@ -419,36 +419,7 @@ export default function TargetAudience() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#000000' }}>
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: 'rgba(253,124,6,0.08)' }} />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Ready to Grow Your Business?
-          </h2>
-          <p className="mt-4 text-lg max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.6)' }}>
-            Let us help you build the foundation for sustainable success.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-              style={{ backgroundColor: '#FD7C06' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#CEA041'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FD7C06'}>
-              Start Your Journey <ArrowRight className="h-4 w-4" />
-            </a>
-            <a href="/services"
-              className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300"
-              style={{ borderColor: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.7)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#FD7C06'; e.currentTarget.style.color = '#FFFFFF' }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}>
-              View Our Services
-            </a>
-          </div>
-        </div>
-      </section>
+
     </>
   )
 }

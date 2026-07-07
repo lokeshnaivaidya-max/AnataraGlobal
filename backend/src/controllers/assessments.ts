@@ -86,31 +86,17 @@ export const saveAnswers = async (req: AuthenticatedRequest, res: Response): Pro
       return;
     }
 
-    // Upsert answers
-    for (const ans of answers) {
-      const existingAns = await prisma.assessmentAnswer.findFirst({
-        where: { assessmentId: id, questionKey: ans.questionKey },
+    await prisma.$transaction(async (tx) => {
+      await tx.assessmentAnswer.deleteMany({ where: { assessmentId: id } });
+      await tx.assessmentAnswer.createMany({
+        data: answers.map((ans: { questionKey: string; answerValue: any; comments?: string }) => ({
+          assessmentId: id,
+          questionKey: ans.questionKey,
+          answerValue: ans.answerValue,
+          comments: ans.comments || null,
+        })),
       });
-
-      if (existingAns) {
-        await prisma.assessmentAnswer.update({
-          where: { id: existingAns.id },
-          data: {
-            answerValue: ans.answerValue,
-            comments: ans.comments || null,
-          },
-        });
-      } else {
-        await prisma.assessmentAnswer.create({
-          data: {
-            assessmentId: id,
-            questionKey: ans.questionKey,
-            answerValue: ans.answerValue,
-            comments: ans.comments || null,
-          },
-        });
-      }
-    }
+    });
 
     res.status(200).json({ status: 'success', message: 'Answers saved successfully' });
   } catch (error) {
@@ -215,8 +201,7 @@ export const submitAndCalculateScores = async (req: AuthenticatedRequest, res: R
       const msme = await prisma.msmeBusiness.findUnique({ where: { userId } });
       if (msme) {
         // Record financial health assessment score
-        const answersDiag = answersMap as any;
-        const financeScore = Number(answersDiag.finance || 5);
+        const financeScore = Number(answersMap.finance || 5);
         const cashFlow = Math.min(10, Math.max(0, financeScore + 1)) * 10;
         const profitability = Math.min(10, Math.max(0, financeScore - 1)) * 10;
         const leverage = Math.min(10, Math.max(0, financeScore)) * 10;
@@ -239,7 +224,7 @@ export const submitAndCalculateScores = async (req: AuthenticatedRequest, res: R
         });
 
         // Set compliance
-        const legalScore = Number(answersDiag.legal || 5);
+        const legalScore = Number(answersMap.legal || 5);
         await prisma.msmeCompliance.upsert({
           where: { businessId: msme.id },
           update: {

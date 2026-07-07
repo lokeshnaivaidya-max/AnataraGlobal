@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
 import { Link } from 'wouter'
 import type { ReactNode } from 'react'
 
@@ -27,10 +26,11 @@ export default function AuthLayout({
           className="text-center mb-8"
         >
           <Link href="/" className="inline-flex items-center gap-2.5 group">
-            <div className="relative flex items-center">
-              <Sparkles className="h-5 w-5" style={{ color: '#FD7C06' }} />
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full animate-pulse-glow" style={{ backgroundColor: 'rgba(253,124,6,0.4)' }} />
-            </div>
+            <img
+              src="/image.png"
+              alt="Antara Global"
+              className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-110"
+            />
             <span className="text-xl font-black tracking-tight" style={{ color: '#000000' }}>
               ANTARA{' '}
               <span className="font-light" style={{ color: '#FD7C06' }}>GLOBAL</span>

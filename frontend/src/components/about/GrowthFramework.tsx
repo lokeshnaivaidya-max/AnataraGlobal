@@ -27,9 +27,10 @@ export default function GrowthFramework() {
             <Sparkles className="h-3.5 w-3.5" />
             Premium Ecosystem Services
           </span>
-          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight" style={{ color: '#FD7C06' }}>
-            Strategic Guidance. <br />
-            Capital Readiness. Sustainable Growth.
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+            <span style={{ color: 'var(--color-accent)' }}>Strategic Guidance.</span><br />
+            <span style={{ color: 'var(--color-accent)' }}>Capital Readiness.</span><br />
+            <span style={{ color: 'var(--color-accent)' }}>Sustainable Growth.</span>
           </h2>
           <p className="mt-5 text-base leading-relaxed max-w-2xl mx-auto" style={{ color: 'rgba(0,0,0,0.6)' }}>
             Antara Global helps businesses strengthen their foundations, prepare for opportunities, connect with relevant ecosystems, and build scalable growth through strategy, knowledge, partnerships, and capital connectivity.
@@ -52,14 +53,14 @@ export default function GrowthFramework() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative rounded-3xl p-8 sm:p-10 shadow-2xl overflow-hidden" style={{ backgroundColor: '#FD7C06' }}
+          className="relative rounded-3xl p-8 sm:p-10 shadow-2xl overflow-hidden" style={{ backgroundColor: '#000000' }}
         >
-          <div className="absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          <div className="absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-white/5 blur-3xl" />
+          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(to right, transparent, var(--color-accent), transparent)' }} />
 
           <div className="relative">
-            <div className="flex items-center gap-3 mb-8 pb-5 border-b border-white/10">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold" style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFFFFF' }}>∞</div>
+            <div className="flex items-center gap-3 mb-8 pb-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold border" style={{ backgroundColor: '#000000', borderColor: 'var(--color-accent)', color: '#FFFFFF' }}>∞</div>
               <h3 className="text-sm font-bold text-white tracking-wide">Ecosystem Flow</h3>
               <span className="text-[10px] text-white/50 ml-auto hidden sm:block">From foundation to growth</span>
             </div>
@@ -72,7 +73,7 @@ export default function GrowthFramework() {
                     {i < flowSteps.length - 1 && (
                       <div className="hidden sm:block absolute top-5 left-[60%] w-[calc(80%)] h-px" style={{ borderTop: '1px dashed rgba(255,255,255,0.25)' }} />
                     )}
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-lg text-xs font-black transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl" style={{ color: '#FD7C06' }}>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg text-xs font-black transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl border" style={{ backgroundColor: '#000000', borderColor: '#FFFFFF', color: '#FFFFFF' }}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <span className="text-[9px] font-bold mt-2 mb-0.5 text-white/60">{item.step}</span>
